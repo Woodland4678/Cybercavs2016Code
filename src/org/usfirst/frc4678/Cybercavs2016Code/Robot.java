@@ -35,6 +35,38 @@ public class Robot extends IterativeRobot {
 		}
 		return prefs.getDouble("pickupWheelsPower", 0.7);
 	}
+	
+	public static double pickupWristPosition() {
+		Preferences prefs = Preferences.getInstance();
+		if (!prefs.containsKey("pickupWristPosition")) {
+			prefs.putDouble("pickupWristPosition", 70);
+		}
+		return prefs.getDouble("pickupWristPosition", 70);
+	}
+	
+	public static double restWristPosition() {
+		Preferences prefs = Preferences.getInstance();
+		if (!prefs.containsKey("restWristPosition")) {
+			prefs.putDouble("restWristPosition", 0);
+		}
+		return prefs.getDouble("restWristPosition", 0);
+	}
+	
+	public static double pickupElbowPosition() {
+		Preferences prefs = Preferences.getInstance();
+		if (!prefs.containsKey("pickupElbowPosition")) {
+			prefs.putDouble("pickupElbowPosition", 70);
+		}
+		return prefs.getDouble("pickupElbowPosition", 70);
+	}
+	
+	public static double restElbowPosition() {
+		Preferences prefs = Preferences.getInstance();
+		if (!prefs.containsKey("restElbowPosition")) {
+			prefs.putDouble("restElbowPosition", 0);
+		}
+		return prefs.getDouble("restElbowPosition", 0);
+	}
 
 	public static double latchReadyPosition() {
 		Preferences prefs = Preferences.getInstance();

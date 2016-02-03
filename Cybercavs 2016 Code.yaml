@@ -63,7 +63,7 @@ Children:
           validators: &id005 [CANID]
           value: '0'
       Base: CAN Talon
-      Name: pickupLifterMotor
+      Name: pickupElbowMotor
     - Children: []
       Properties:
         CAN ID: !!robotbuilder.data.properties.ChoicesProperty
