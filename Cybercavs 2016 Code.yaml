@@ -104,7 +104,7 @@ Children:
         validators: null
         value: *id006
     Base: Subsystem
-    Name: ArmMotors
+    Name: PickupArm
   - Children:
     - Children: []
       Properties:
