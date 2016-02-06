@@ -31,9 +31,9 @@ public class Robot extends IterativeRobot {
 	public static double pickupWheelsPower() {
 		Preferences prefs = Preferences.getInstance();
 		if (!prefs.containsKey("pickupWheelsPower")) {
-			prefs.putDouble("pickupWheelsPower", 0.7);
+			prefs.putDouble("pickupWheelsPower", 3);
 		}
-		return prefs.getDouble("pickupWheelsPower", 0.7);
+		return prefs.getDouble("pickupWheelsPower", 3);
 	}
 	
 	public static double pickupWristPosition() {
@@ -60,12 +60,12 @@ public class Robot extends IterativeRobot {
 		return prefs.getDouble("pickupElbowPosition", 121332);
 	}
 	
-	public static double restElbowPosition() {
+	public static int restElbowPosition() {
 		Preferences prefs = Preferences.getInstance();
 		if (!prefs.containsKey("restElbowPosition")) {
-			prefs.putDouble("restElbowPosition", 66567.000);
+			prefs.putInt("restElbowPosition", 66567);
 		}
-		return prefs.getDouble("restElbowPosition", 66567.000);
+		return prefs.getInt("restElbowPosition", 66567);
 	}
 
 	public static double latchReadyPosition() {
@@ -106,6 +106,22 @@ public class Robot extends IterativeRobot {
 			prefs.putDouble("winchUnwoundDistance", 0);
 		}
 		return prefs.getDouble("winchUnwoundDistance", 0);
+	}
+	
+	public static double spitOutWristPosition() {
+		Preferences prefs = Preferences.getInstance();
+		if (!prefs.containsKey("spitOutWristPosition")) {
+			prefs.putDouble("spitOutWristPosition", -284041);
+		}
+		return prefs.getDouble("spitOutWristPosition", -284041);
+	}
+	
+	public static int spitOutElbowPosition() {
+		Preferences prefs = Preferences.getInstance();
+		if (!prefs.containsKey("spitOutElbowPosition")) {
+			prefs.putInt("spitOutElbowPosition", 28328);
+		}
+		return prefs.getInt("spitOutElbowPosition", 28328);
 	}
 
 	Command autonomousCommand;
