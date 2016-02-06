@@ -53,39 +53,7 @@ public class Pickup extends Command {
 
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
-		switch (stepNumber) {
-		case 0:
-			if (elbowEncoderValue >= Robot.pickupElbowPosition()) {
-				stepNumber++;
-			} else {
-				Robot.pickupArm.rotateElbowToPickupPosition();
-				elbowEncoderValue = Robot.pickupArm.getElbowPosition() - originalElbowEncoderValue;
-			}
-			if (wristEncoderValue <= Robot.pickupWristPosition()) {
-				Robot.pickupArm.rotateWristToPickupPosition();
-				wristEncoderValue = Robot.pickupArm.getElbowPosition() - originalWristEncoderValue;
-			}
-		case 1:
-			if (delayForStep1 < 100) {
-				delayForStep1++;
-			} else {
-				stepNumber++;
-			}
-		case 2:
-			if (elbowEncoderValue <= Robot.restElbowPosition()) {
-				stepNumber++;
-			} else {
-				Robot.pickupArm.rotateElbowToRestPosition();
-				elbowEncoderValue = Robot.pickupArm.getElbowPosition() - originalElbowEncoderValue;
-			}
-			if (wristEncoderValue >= Robot.restWristPosition()) {
-				Robot.pickupArm.rotateWristToRestPosition();
-				wristEncoderValue = Robot.pickupArm.getElbowPosition() - originalWristEncoderValue;
-			}
-		case 3:
-			isFinished();
-		}
-
+		Robot.pickupArm.pickupPosition();
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
