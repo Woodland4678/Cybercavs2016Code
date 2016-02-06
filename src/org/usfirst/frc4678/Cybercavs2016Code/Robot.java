@@ -39,9 +39,9 @@ public class Robot extends IterativeRobot {
 	public static double pickupWristPosition() {
 		Preferences prefs = Preferences.getInstance();
 		if (!prefs.containsKey("pickupWristPosition")) {
-			prefs.putDouble("pickupWristPosition", -5957);
+			prefs.putDouble("pickupWristPosition", 70);
 		}
-		return prefs.getDouble("pickupWristPosition", -5957);
+		return prefs.getDouble("pickupWristPosition", 70);
 	}
 	
 	public static double restWristPosition() {
@@ -55,17 +55,17 @@ public class Robot extends IterativeRobot {
 	public static double pickupElbowPosition() {
 		Preferences prefs = Preferences.getInstance();
 		if (!prefs.containsKey("pickupElbowPosition")) {
-			prefs.putDouble("pickupElbowPosition", 121332);
+			prefs.putDouble("pickupElbowPosition", 70);
 		}
-		return prefs.getDouble("pickupElbowPosition", 121332);
+		return prefs.getDouble("pickupElbowPosition", 70);
 	}
 	
 	public static double restElbowPosition() {
 		Preferences prefs = Preferences.getInstance();
 		if (!prefs.containsKey("restElbowPosition")) {
-			prefs.putDouble("restElbowPosition", 66567.000);
+			prefs.putDouble("restElbowPosition", 50000);
 		}
-		return prefs.getDouble("restElbowPosition", 66567.000);
+		return prefs.getDouble("restElbowPosition", 50000);
 	}
 
 	public static double latchReadyPosition() {
