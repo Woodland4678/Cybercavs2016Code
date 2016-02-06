@@ -45,6 +45,9 @@ public class DriveTrain extends Command {
 
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
+		SmartDashboard.putNumber("Pickup Elbow Position", Robot.pickupArm.getElbowPosition());
+		SmartDashboard.putNumber("Pickup Wrist Position", Robot.pickupArm.getWristPosition());
+		SmartDashboard.putNumber("Pickup Wheels Position", Robot.pickupArm.getPickupWheelsPosition());
 		joyStickX = Robot.oi.driverGamepad.getX();
 		joyStickY = Robot.oi.driverGamepad.getY();
 		rightPower = (joyStickY * Math.abs(joyStickY)) + (joyStickX * joyStickX * joyStickX);

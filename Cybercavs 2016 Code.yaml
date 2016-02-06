@@ -61,7 +61,7 @@ Children:
           default: '2'
           name: CAN ID
           validators: &id005 [CANID]
-          value: '0'
+          value: '5'
       Base: CAN Talon
       Name: pickupElbowMotor
     - Children: []
@@ -71,24 +71,18 @@ Children:
           default: '2'
           name: CAN ID
           validators: *id005
-          value: '1'
+          value: '4'
       Base: CAN Talon
       Name: pickupWristMotor
     - Children: []
       Properties:
-        Type: !!robotbuilder.data.properties.ChoicesProperty
-          choices: *id001
-          default: Talon
-          name: Type
-          validators: null
-          value: Talon
-        Output Channel (PWM): !!robotbuilder.data.properties.ChoicesProperty
-          choices: *id002
-          default: '0'
-          name: Output Channel (PWM)
-          validators: *id003
-          value: '2'
-      Base: Speed Controller
+        CAN ID: !!robotbuilder.data.properties.ChoicesProperty
+          choices: *id004
+          default: '2'
+          name: CAN ID
+          validators: *id005
+          value: '6'
+      Base: CAN Talon
       Name: pickupWheels
     Properties:
       Default command parameters: !!robotbuilder.data.properties.ParametersProperty
@@ -218,13 +212,13 @@ Children:
           name: Command
           type: Command
           validators: *id008
-          value: Pickup
+          value: CalibratePickup
         When to Run: !!robotbuilder.data.properties.ChoicesProperty
           choices: *id009
           default: whileHeld
           name: When to Run
           validators: null
-          value: whileHeld
+          value: whenPressed
       Base: Joystick Button
       Name: DriverBtn2
     Properties:
@@ -250,6 +244,24 @@ Children:
   Base: OI
   Name: Operator Interface
 - Children:
+  - Children: []
+    Properties:
+      Parameters: !!robotbuilder.data.properties.ParametersProperty
+        default: []
+        name: Parameters
+        validators: null
+        value: []
+      Requires: !!robotbuilder.data.properties.TypeSelectionProperty {default: None,
+        name: Requires, type: Subsystem, validators: null, value: PickupArm}
+      Parameter presets: !!robotbuilder.data.properties.ParameterSetProperty
+        default: &id012 []
+        name: Parameter presets
+        validators: null
+        value: *id012
+      Button on SmartDashboard: !!robotbuilder.data.properties.BooleanProperty {default: true,
+        name: Button on SmartDashboard, validators: null, value: true}
+    Base: Command
+    Name: CalibratePickup
   - Children: []
     Properties:
       Parameters: !!robotbuilder.data.properties.ParametersProperty

@@ -32,7 +32,7 @@ public class RobotMap {
     public static SpeedController robotDriverightMotor;
     public static CANTalon pickupArmpickupElbowMotor;
     public static CANTalon pickupArmpickupWristMotor;
-    public static SpeedController pickupArmpickupWheels;
+    public static CANTalon pickupArmpickupWheels;
     public static SpeedController catapultwinchMotor;
     public static Servo catapultlatchServo;
     public static AnalogPotentiometer catapultwinchPosition;
@@ -47,14 +47,14 @@ public class RobotMap {
         robotDriverightMotor = new Talon(1);
         LiveWindow.addActuator("RobotDrive", "rightMotor", (Talon) robotDriverightMotor);
         
-        pickupArmpickupElbowMotor = new CANTalon(0);
+        pickupArmpickupElbowMotor = new CANTalon(5);
         LiveWindow.addActuator("PickupArm", "pickupElbowMotor", pickupArmpickupElbowMotor);
         
-        pickupArmpickupWristMotor = new CANTalon(1);
+        pickupArmpickupWristMotor = new CANTalon(4);
         LiveWindow.addActuator("PickupArm", "pickupWristMotor", pickupArmpickupWristMotor);
         
-        pickupArmpickupWheels = new Talon(2);
-        LiveWindow.addActuator("PickupArm", "pickupWheels", (Talon) pickupArmpickupWheels);
+        pickupArmpickupWheels = new CANTalon(6);
+        LiveWindow.addActuator("PickupArm", "pickupWheels", pickupArmpickupWheels);
         
         catapultwinchMotor = new Talon(4);
         LiveWindow.addActuator("Catapult", "winchMotor", (Talon) catapultwinchMotor);

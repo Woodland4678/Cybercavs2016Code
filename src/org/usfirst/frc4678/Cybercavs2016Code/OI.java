@@ -67,12 +67,13 @@ public class OI {
         driverGamepad = new Joystick(0);
         
         driverBtn2 = new JoystickButton(driverGamepad, 2);
-        driverBtn2.whileHeld(new Pickup());
+        driverBtn2.whenPressed(new CalibratePickup());
         driverBtn8 = new JoystickButton(driverGamepad, 8);
         driverBtn8.whenPressed(new Pickup());
 
 
         // SmartDashboard Buttons
+        SmartDashboard.putData("CalibratePickup", new CalibratePickup());
         SmartDashboard.putData("AutonomousCommand", new AutonomousCommand());
         SmartDashboard.putData("DriveTrain", new DriveTrain());
         SmartDashboard.putData("Pickup", new Pickup());
