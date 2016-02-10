@@ -54,10 +54,10 @@ public class Pickup extends Command {
 
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
-		Robot.pickupArm.wristPickupPosition();
+		Robot.pickupArm.setWristPosition(Robot.pickupWristPosition());
 		if (count > 40) {
-			Robot.pickupArm.pickupSpeed(1);
-			Robot.pickupArm.elbowPickupPosition();
+			Robot.pickupArm.setPickupWheels(12);
+			Robot.pickupArm.setElbowPosition(Robot.pickupElbowPosition());
 		}
 		System.out.println("Setting wheels to move");
 		count++;

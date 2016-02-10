@@ -54,8 +54,8 @@ public class SpitOut extends Command {
 		case 0:
 			Robot.pickupArm.setElbowPosition(Robot.spitOutElbowPosition());
 			if (count > 15 && Robot.pickupArm.getElbowPosition() < 65000) {		
-				Robot.pickupArm.pickupSpeed(-1);
-				Robot.pickupArm.wristSpitOutPosition();
+				Robot.pickupArm.setPickupWheels(-12);
+				Robot.pickupArm.setWristPosition(Robot.spitOutWristPosition());
 			}
 			if (count > 30) {
 				spitState++;

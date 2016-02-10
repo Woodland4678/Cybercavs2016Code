@@ -62,83 +62,43 @@ public class PickupArm extends Subsystem {
 		// setDefaultCommand(new MySpecialCommand());
 	}
 
-	public int getElbowPosition() {
-		return pickupElbowMotor.getEncPosition();
+	//////////////////////////////////////
+	////////// Access functions//////////
+	/////////////////////////////////////
+	
+	
+	public int getElbowPosition() { return pickupElbowMotor.getEncPosition(); }
+
+	public int getWristPosition() {return pickupWristMotor.getEncPosition(); }
+
+	public int getPickupWheelsPosition() {return pickupWheels.getEncPosition(); }
+
+	public double getCurrent(int channel) { return pdp.getCurrent(channel);}
+
+	////////////////////////////////////////////////////
+	////////// Functions to set Arms positions//////////
+	////////////////////////////////////////////////////
+	
+	
+	public void setElbowPosition(int position) {
+		System.out.println("Setting Elbow Position!");
+		pickupElbowMotor.configPeakOutputVoltage(+10f, -10f);
+		pickupElbowMotor.setPID(0.03, 0, 0);
+		pickupElbowMotor.set(position);
 	}
 
-	public int getWristPosition() {
-		return pickupWristMotor.getEncPosition();
+	public void setWristPosition(int position) {
+		pickupWristMotor.changeControlMode(TalonControlMode.Position);
+		pickupElbowMotor.configPeakOutputVoltage(+7f, -7f);
+		pickupElbowMotor.setPID(0.03, 0, 0);
+		pickupWristMotor.set(position);
 	}
-
-	public int getPickupWheelsPosition() {
-		return pickupWheels.getEncPosition();
-	}
-
-	public void spinIntakeWheels() {
+	public void setPickupWheels(int voltage) {
+		pickupWheels.changeControlMode(TalonControlMode.Voltage);
 		System.out.println("Called spinIntakeWheels Function");
-		pickupWheels.set(Robot.pickupWheelsPower());
+		pickupWheels.set(voltage);
 	}
-
-	public void stopIntakeWheels() {
-		pickupWheels.disable();
-	}
-
-	public void rotateElbowToPickupPosition() {
-		pickupElbowMotor.changeControlMode(TalonControlMode.Position);
-		pickupElbowMotor.set(Robot.pickupElbowPosition());
-	}
-
-	public void rotateElbowToRestPosition() {
-		pickupElbowMotor.changeControlMode(TalonControlMode.Position);
-		pickupElbowMotor.set(Robot.restElbowPosition());
-	}
-
-	public void rotateWristToPickupPosition() {
-		pickupWristMotor.changeControlMode(TalonControlMode.Position);
-		pickupWristMotor.set(Robot.pickupWristPosition());
-	}
-
-	public void rotateWristToRestPosition() {
-		pickupWristMotor.changeControlMode(TalonControlMode.Position);
-		pickupWristMotor.set(Robot.restWristPosition());
-	}
-
-	public double getCurrent(int channel) {
-		return pdp.getCurrent(channel);
-	}
-
-	public void pickupSpeed(int direction) {
-		pickupWheels.set(direction * Robot.pickupWheelsPower());
-	}
-
-	public void elbowPickupPosition() {
-		pickupElbowMotor.configPeakOutputVoltage(+7f, -7f);
-		pickupElbowMotor.setPID(0.03, 0, 0);
-		pickupElbowMotor.set(Robot.pickupElbowPosition());
-	}
-
-	public void wristPickupPosition() {
-		pickupWristMotor.configPeakOutputVoltage(+4f, -4f);
-		pickupWristMotor.setPID(0.03, 0, 0);
-		pickupWristMotor.set(Robot.pickupWristPosition());
-	}
-
-	public void spitOutSpeed() {
-		pickupWheels.set(-Robot.pickupWheelsPower());
-	}
-
-	public void elbowSpitOutPosition() {
-		pickupElbowMotor.configPeakOutputVoltage(+7f, -7f);
-		pickupElbowMotor.setPID(0.03, 0, 0);
-		pickupElbowMotor.set(Robot.spitOutElbowPosition());
-	}
-
-	public void wristSpitOutPosition() {
-		pickupWristMotor.configPeakOutputVoltage(+9f, -9f);
-		pickupWristMotor.setPID(0.03, 0, 0);
-		pickupWristMotor.set(Robot.spitOutWristPosition());
-	}
-
+	
 	public void stopArmMotors() {
 		pickupElbowMotor.disable();
 		pickupWristMotor.disable();
@@ -320,11 +280,8 @@ public class PickupArm extends Subsystem {
 		}
 	}
 	
-	public void setElbowPosition(int position) {
-		System.out.println("Setting Elbow Position!");
-		pickupElbowMotor.configPeakOutputVoltage(+10f, -10f);
-		pickupElbowMotor.setPID(0.03, 0, 0);
-		pickupElbowMotor.set(position);
+	public void stopIntakeWheels() {
+		pickupWheels.disable();
 	}
 
 }
