@@ -48,6 +48,8 @@ public class DriveTrain extends Command {
 		SmartDashboard.putNumber("Pickup Elbow Position", Robot.pickupArm.getElbowPosition());
 		SmartDashboard.putNumber("Pickup Wrist Position", Robot.pickupArm.getWristPosition());
 		SmartDashboard.putNumber("Pickup Wheels Position", Robot.pickupArm.getPickupWheelsPosition());
+		SmartDashboard.putNumber("Left Wheels Position", Robot.robotDrive.getLeftEncoder());
+		SmartDashboard.putNumber("Right Wheels Position", Robot.robotDrive.getRightEncoder());
 		joyStickX = Robot.oi.driverGamepad.getX();
 		joyStickY = Robot.oi.driverGamepad.getY();
 		rightPower = (joyStickY * Math.abs(joyStickY)) + (joyStickX * joyStickX * joyStickX);
