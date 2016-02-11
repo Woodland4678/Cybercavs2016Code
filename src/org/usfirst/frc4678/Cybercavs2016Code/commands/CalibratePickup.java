@@ -41,14 +41,6 @@ public class CalibratePickup extends Command {
     	Robot.pickupArm.resetCalibrateState(); 	
     }
 
-	private void waitSeconds(int seconds) {
-		try {
-			Thread.sleep(seconds*1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-	}
-
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	Robot.pickupArm.calibratePickupArm();
@@ -67,5 +59,14 @@ public class CalibratePickup extends Command {
     // subsystems is scheduled to run
     protected void interrupted() {
     	end();
+    }
+    
+    @SuppressWarnings("unused")
+	private void waitSeconds(int seconds) {
+    	try {
+    		Thread.sleep(seconds*1000);
+    	} catch (InterruptedException e) {
+    		e.printStackTrace();
+    	}
     }
 }

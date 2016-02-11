@@ -14,6 +14,7 @@ package org.usfirst.frc4678.Cybercavs2016Code;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.Servo;
@@ -38,6 +39,7 @@ public class RobotMap {
     public static CANTalon pickupArmpickupElbowMotor;
     public static CANTalon pickupArmpickupWristMotor;
     public static CANTalon pickupArmpickupWheels;
+    public static DigitalInput pickupArmballSensor;
     public static SpeedController catapultwinchMotor;
     public static Servo catapultlatchServo;
     public static AnalogPotentiometer catapultwinchPosition;
@@ -68,6 +70,9 @@ public class RobotMap {
         
         pickupArmpickupWheels = new CANTalon(6);
         LiveWindow.addActuator("PickupArm", "pickupWheels", pickupArmpickupWheels);
+        
+        pickupArmballSensor = new DigitalInput(4);
+        LiveWindow.addSensor("PickupArm", "ballSensor", pickupArmballSensor);
         
         catapultwinchMotor = new Talon(4);
         LiveWindow.addActuator("Catapult", "winchMotor", (Talon) catapultwinchMotor);

@@ -12,13 +12,10 @@ package org.usfirst.frc4678.Cybercavs2016Code.subsystems;
 
 import org.usfirst.frc4678.Cybercavs2016Code.Robot;
 import org.usfirst.frc4678.Cybercavs2016Code.RobotMap;
-import org.usfirst.frc4678.Cybercavs2016Code.commands.*;
 
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.SpeedController;
-import edu.wpi.first.wpilibj.Talon;
-
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 /**

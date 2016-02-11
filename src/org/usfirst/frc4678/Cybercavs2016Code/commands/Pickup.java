@@ -10,13 +10,9 @@
 
 package org.usfirst.frc4678.Cybercavs2016Code.commands;
 
-import edu.wpi.first.wpilibj.CANTalon;
-import edu.wpi.first.wpilibj.PowerDistributionPanel;
-import edu.wpi.first.wpilibj.SpeedController;
-import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc4678.Cybercavs2016Code.Robot;
-import org.usfirst.frc4678.Cybercavs2016Code.RobotMap;
-import org.usfirst.frc4678.Cybercavs2016Code.subsystems.PickupArm;
+
+import edu.wpi.first.wpilibj.command.Command;
 
 /**
  *
@@ -55,9 +51,10 @@ public class Pickup extends Command {
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
 		Robot.pickupArm.setWristPosition(Robot.pickupWristPosition());
+		Robot.pickupArm.setPickupWheels(Robot.pickupWheelsPower());
 		if (count > 40) {
-			Robot.pickupArm.setPickupWheels(12);
-			Robot.pickupArm.setElbowPosition(Robot.pickupElbowPosition());
+			System.out.println("starting sense ball function");
+			Robot.pickupArm.senseBall();
 		}
 		System.out.println("Setting wheels to move");
 		count++;

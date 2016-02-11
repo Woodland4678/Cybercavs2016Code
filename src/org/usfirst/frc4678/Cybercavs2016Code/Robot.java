@@ -23,14 +23,12 @@ import org.usfirst.frc4678.Cybercavs2016Code.subsystems.*;
  * functions corresponding to each mode, as described in the IterativeRobot
  * documentation. If you change the name of this class or the package after
  * creating this project, you must also update the manifest file in the resource
- * directory.
- * hi
+ * directory. hi
  */
 public class Robot extends IterativeRobot {
 
-	
 	////////////////////////////////////////
-	//////////Parameters for Elbow//////////
+	////////// Parameters for Elbow//////////
 	////////////////////////////////////////
 
 	public static int pickupElbowPosition() {
@@ -40,6 +38,7 @@ public class Robot extends IterativeRobot {
 		}
 		return prefs.getInt("pickupElbowPosition", 121332);
 	}
+
 	public static int restElbowPosition() {
 		Preferences prefs = Preferences.getInstance();
 		if (!prefs.containsKey("restElbowPosition")) {
@@ -47,6 +46,7 @@ public class Robot extends IterativeRobot {
 		}
 		return prefs.getInt("restElbowPosition", 66567);
 	}
+
 	public static int spitOutElbowPosition() {
 		Preferences prefs = Preferences.getInstance();
 		if (!prefs.containsKey("spitOutElbowPosition")) {
@@ -54,11 +54,11 @@ public class Robot extends IterativeRobot {
 		}
 		return prefs.getInt("spitOutElbowPosition", 28328);
 	}
-	
+
 	////////////////////////////////////////
-	//////////Parameters for Wrist//////////
+	////////// Parameters for Wrist//////////
 	////////////////////////////////////////
-	
+
 	public static int pickupWristPosition() {
 		Preferences prefs = Preferences.getInstance();
 		if (!prefs.containsKey("pickupWristPosition")) {
@@ -66,6 +66,7 @@ public class Robot extends IterativeRobot {
 		}
 		return prefs.getInt("pickupWristPosition", -5957);
 	}
+
 	public static double restWristPosition() {
 		Preferences prefs = Preferences.getInstance();
 		if (!prefs.containsKey("restWristPosition")) {
@@ -73,6 +74,7 @@ public class Robot extends IterativeRobot {
 		}
 		return prefs.getDouble("restWristPosition", 50000);
 	}
+
 	public static int spitOutWristPosition() {
 		Preferences prefs = Preferences.getInstance();
 		if (!prefs.containsKey("spitOutWristPosition")) {
@@ -80,11 +82,11 @@ public class Robot extends IterativeRobot {
 		}
 		return prefs.getInt("spitOutWristPosition", -284041);
 	}
-	
+
 	///////////////////////////////////////////
-	//////////Parameters for Catapult//////////
+	////////// Parameters for Catapult//////////
 	//////////////////////////////////////////
-	
+
 	public static double latchReadyPosition() {
 		Preferences prefs = Preferences.getInstance();
 		if (!prefs.containsKey("latchReadyPostion")) {
@@ -92,6 +94,7 @@ public class Robot extends IterativeRobot {
 		}
 		return prefs.getDouble("pickupWheelsPower", 0);
 	}
+
 	public static double latchShootPosition() {
 		Preferences prefs = Preferences.getInstance();
 		if (!prefs.containsKey("latchShootPosition")) {
@@ -99,6 +102,7 @@ public class Robot extends IterativeRobot {
 		}
 		return prefs.getDouble("pickupWheelsPower", 90);
 	}
+
 	public static double winchPower() {
 		Preferences prefs = Preferences.getInstance();
 		if (!prefs.containsKey("winchPower")) {
@@ -106,6 +110,7 @@ public class Robot extends IterativeRobot {
 		}
 		return prefs.getDouble("winchPower", 0.8);
 	}
+
 	public static double winchWoundDistance() {
 		Preferences prefs = Preferences.getInstance();
 		if (!prefs.containsKey("winchWoundDistance")) {
@@ -113,6 +118,7 @@ public class Robot extends IterativeRobot {
 		}
 		return prefs.getDouble("winchWoundDistance", 9);
 	}
+
 	public static double winchUnwoundDistance() {
 		Preferences prefs = Preferences.getInstance();
 		if (!prefs.containsKey("winchUnwoundDistance")) {
@@ -120,11 +126,11 @@ public class Robot extends IterativeRobot {
 		}
 		return prefs.getDouble("winchUnwoundDistance", 0);
 	}
-	
+
 	///////////////////////////////////
-	//////////Misc Parameters//////////
+	////////// Misc Parameters//////////
 	///////////////////////////////////
-	
+
 	public static double pickupWheelsPower() {
 		Preferences prefs = Preferences.getInstance();
 		if (!prefs.containsKey("pickupWheelsPower")) {
@@ -132,8 +138,55 @@ public class Robot extends IterativeRobot {
 		}
 		return prefs.getDouble("pickupWheelsPower", 3);
 	}
-	
 
+	public static double encoderClicksPerCentimeter() {
+		Preferences prefs = Preferences.getInstance();
+		if (!prefs.containsKey("encoderClicksPerCentimeter")) {
+			prefs.putDouble("encoderClicksPerCentimeter", 7.2);
+		}
+		return prefs.getDouble("encoderClicksPerCentimeter", 7.2);
+	}
+
+	public static int encoderChangePerTurn() {
+		Preferences prefs = Preferences.getInstance();
+		if (!prefs.containsKey("encoderChangePerTurn")) {
+			prefs.putInt("encoderChangePerTurn", 3000);
+		}
+		return prefs.getInt("encoderChangePerTurn", 3000);
+	}
+    
+    public static int targetLightSensorValue() {
+        Preferences prefs = Preferences.getInstance();
+        if (!prefs.containsKey("targetLightSensorValue")) {
+            prefs.putInt("targetLightSensorValue", 400);
+        }
+        return prefs.getInt("targetLightSensorValue", 400);
+    }
+	
+    public static int lightSensorMargin() {
+        Preferences prefs = Preferences.getInstance();
+        if (!prefs.containsKey("lightSensorMargin")) {
+            prefs.putInt("lightSensorMargin", 50);
+        }
+        return prefs.getInt("lightSensorMargin", 50);
+    }
+    
+    public static double goToBoxTurnSpeed() {
+        Preferences prefs = Preferences.getInstance();
+        if (!prefs.containsKey("goToBoxTurnSpeed")) {
+            prefs.putDouble("goToBoxTurnSpeed", .05);
+        }
+        return prefs.getDouble("goToBoxTurnSpeed", .05);
+    }
+
+    public static int autoTurnReductionSpeed() {
+        Preferences prefs = Preferences.getInstance();
+        if (!prefs.containsKey("autoTurnReductionSpeed")) {
+            prefs.putInt("autoTurnReductionSpeed", 2);
+        }
+        return prefs.getInt("autoTurnReductionSpeed", 2);
+    }
+    
 	Command autonomousCommand;
 
 	public static OI oi;
