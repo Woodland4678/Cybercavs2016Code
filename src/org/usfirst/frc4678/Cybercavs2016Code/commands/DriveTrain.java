@@ -68,10 +68,10 @@ public class DriveTrain extends Command {
 		SmartDashboard.putNumber("Gyro Position: ", Robot.robotDrive.getGyroPosition());
 		joyStickX = Robot.oi.driverGamepad.getX();
 		joyStickY = Robot.oi.driverGamepad.getY();
-		//rightPower = (joyStickY * Math.abs(joyStickY)) + (joyStickX * joyStickX * joyStickX); leaving these out as it makes driveTrain too sensitive
-		//leftPower = (joyStickY * Math.abs(joyStickY)) - (joyStickX * joyStickX * joyStickX);
-		rightPower = joyStickY - joyStickX;
-		leftPower = joyStickY + joyStickX;
+		rightPower = (joyStickY * Math.abs(joyStickY)) + (joyStickX * joyStickX * joyStickX);
+		leftPower = (joyStickY * Math.abs(joyStickY)) - (joyStickX * joyStickX * joyStickX);
+		//rightPower = joyStickY - joyStickX;
+		//leftPower = joyStickY + joyStickX;
 		Robot.robotDrive.setRightMotor(rightPower);
 		Robot.robotDrive.setLeftMotor(leftPower);
 		//SmartDashboard.putNumber("garbagePosition", Robot.trashMagnet.getGarbagePosition());
