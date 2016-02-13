@@ -277,8 +277,8 @@ public class RobotDrive extends Subsystem {
     	return false;
     }
     
-    public int getFrontLightSensorValue(){
-    	return 
+    public double getFrontLightSensorValue(){
+    	return frontLightSensor.getValue();
     }
 }
 
