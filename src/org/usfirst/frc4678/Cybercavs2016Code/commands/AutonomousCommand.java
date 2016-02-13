@@ -69,29 +69,29 @@ public class AutonomousCommand extends Command {
 	private void rampartsAuto() {
 		switch(rampartCase) {
 		case MOVE_TO_OUTER_WORKS:
-			if (Robot.robotDrive.goToDistance(140, 140, 0.5, 30, 30, 0.2, 0.2)) {//188
+			if (Robot.robotDrive.goToDistance(140, 140, 0.5, 30, 30, 0.2, 0.2)) {
 				rampartCase++;
 			}
 			break;
 		case TRAVERSE_OUTER_WORKS:
 			Robot.robotDrive.goToDistance(1000, 1000, 0.2, 0, 50, 0.2, 0.2);
-			if (Robot.robotDrive.isFlat()) {
+			if (Robot.robotDrive.isFlat()) { //if both light sensors see carpet, it means we are flat on the other side of the outer works
 				rampartCase++;
 			}
 			break;
 		case STRAIGHTEN_OUT:
 			
-			if (count > 15) {
+			if (count > 15) { //just provides a slight wait before the robot turns
 				Robot.robotDrive.resetGyro();
 				rampartCase++;
 			}
 			if (count > 5) {
-				Robot.robotDrive.gyroTurn(0);
+				Robot.robotDrive.gyroTurn(0); //just in case we got turned when we traversed the other works
 			}
 			count++;
 			break;
 		case TURN_90:
-			Robot.robotDrive.gyroTurn(90);
+			Robot.robotDrive.gyroTurn(90); // this will depend on the position we are in, likely change this later
 			break;
 		}
 	}

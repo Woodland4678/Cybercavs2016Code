@@ -311,16 +311,6 @@ public class RobotDrive extends Subsystem {
 	}
 
 	public boolean isFlat() {
-		// double gyroVal = turnGyro.getAngle();
-		// if (count > 5) {
-		// return true;
-		// }
-		// if (Math.abs(turnGyro.getAngle()) < 3) {
-		// count++;
-		// } else {
-		// count = 0;
-		// }
-		// return false;
 		if (checkFrontLightSensorIsOnCarpet()
 				&& checkBackLightSensorIsOnCarpet()) {
 			return true;
