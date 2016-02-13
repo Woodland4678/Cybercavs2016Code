@@ -15,7 +15,7 @@ import org.usfirst.frc4678.Cybercavs2016Code.RobotMap;
 import org.usfirst.frc4678.Cybercavs2016Code.commands.DriveTrain;
 
 import edu.wpi.first.wpilibj.AnalogGyro;
-import edu.wpi.first.wpilibj.BuiltInAccelerometer;
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -279,6 +279,10 @@ public class RobotDrive extends Subsystem {
     
     public double getFrontLightSensorValue(){
     	return frontLightSensor.getValue();
+    }
+    
+    public double getBackLightSensorValue(){
+    	return backLightSensor.getValue();
     }
 }
 
