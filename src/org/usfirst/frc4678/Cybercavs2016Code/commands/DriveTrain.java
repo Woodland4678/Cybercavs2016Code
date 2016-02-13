@@ -66,6 +66,8 @@ public class DriveTrain extends Command {
 		SmartDashboard.putNumber("Accelerometer Y: ", Robot.robotDrive.getBuiltInAccelY());
 		SmartDashboard.putNumber("Accelerometer Z: ", Robot.robotDrive.getBuiltInAccelZ());
 		SmartDashboard.putNumber("Gyro Position: ", Robot.robotDrive.getGyroPosition());
+		SmartDashboard.putNumber("Front Light sensor: ", Robot.robotDrive.getFrontLightSensorValue());
+		SmartDashboard.putNumber("Back Light sensor: ", Robot.robotDrive.getBackLightSensorValue());
 		joyStickX = Robot.oi.driverGamepad.getX();
 		joyStickY = Robot.oi.driverGamepad.getY();
 		rightPower = (joyStickY * Math.abs(joyStickY)) + (joyStickX * joyStickX * joyStickX);

@@ -186,6 +186,13 @@ public class Robot extends IterativeRobot {
         }
         return prefs.getInt("autoTurnReductionSpeed", 2);
     }
+    public static int autoMode() {
+        Preferences prefs = Preferences.getInstance();
+        if (!prefs.containsKey("autoMode")) {
+            prefs.putInt("autoMode", 0);
+        }
+        return prefs.getInt("autoMode", 0);
+    }
     
 	Command autonomousCommand;
 
