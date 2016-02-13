@@ -38,30 +38,40 @@ public class AutonomousCommand extends Command {
 
 	// Called just before this Command runs the first time
 	protected void initialize() {
+		Robot.robotDrive.resetGyro();
 
 	}
 
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
-		/*switch(moatCase)  {
+		switch(moatCase)  {
 		case 0:
+			//Robot.robotDrive.resetGyro();
 			if (Robot.robotDrive.goToDistance(130, 130, 0.5, 30, 30, 0.2, 0.2)) {//188
 				moatCase++;
 			}
 			break;
 		case 1:
-			if (Robot.robotDrive.goToDistance(320, 320, 0.37, 0, 270, 0.37, 0.3)) {
+			Robot.robotDrive.goToDistance(2000, 2000, 0.37, 0, 270, 0.37, 0.3);
+			if (Robot.robotDrive.checkIfFlat()) {
 				moatCase++;
 			}
 			break;
 		case 2:
+			if (count > 15) {
+				Robot.robotDrive.resetGyro();
+				moatCase++;
+			}
+			count++;
+			break;
+		case 3:
 			//if (Robot.robotDrive.gyroTurn(90))  {
 				//moatCase++;
 			//}
 			break;
-		}*/
+		}
 		
-		switch(rampartCase) {
+		/*switch(rampartCase) {
 		case 0:
 			if (Robot.robotDrive.goToDistance(140, 140, 0.5, 30, 30, 0.2, 0.2)) {//188
 				rampartCase++;
@@ -81,11 +91,11 @@ public class AutonomousCommand extends Command {
 			count++;
 			break;
 		case 3:
-			if (Robot.robotDrive.gyroTurn(85))  {
+			//if (//Robot.robotDrive.gyroTurn(85))  {
 				rampartCase++;
-			}
+			//}
 			break;
-		} 
+		} */
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
