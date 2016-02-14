@@ -45,19 +45,13 @@ public class Pickup extends Command {
 		Robot.pickupArm.setPickupWheelsMode(7);
 		Robot.pickupArm.setElbowMode(5);
 		Robot.pickupArm.setWristMode(5);
+//		Robot.pickupArm.resetPickupState();
 		count = 0;
 	}
 
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
-		Robot.pickupArm.setWristPosition(Robot.pickupWristPosition());
-		Robot.pickupArm.setPickupWheels(Robot.pickupWheelsPower());
-		if (count > 40) {
-			System.out.println("starting sense ball function");
-			Robot.pickupArm.senseBall();
-		}
-		System.out.println("Setting wheels to move");
-		count++;
+		Robot.pickupArm.pickup();
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
@@ -73,5 +67,6 @@ public class Pickup extends Command {
 	// Called when another command which requires one or more of the same
 	// subsystems is scheduled to run
 	protected void interrupted() {
+		end();
 	}
 }

@@ -34,17 +34,17 @@ public class Robot extends IterativeRobot {
 	public static int pickupElbowPosition() {
 		Preferences prefs = Preferences.getInstance();
 		if (!prefs.containsKey("pickupElbowPosition")) {
-			prefs.putInt("pickupElbowPosition", 121332);
+			prefs.putInt("pickupElbowPosition", 42461);
 		}
-		return prefs.getInt("pickupElbowPosition", 121332);
+		return prefs.getInt("pickupElbowPosition", 42461);
 	}
 
-	public static int restElbowPosition() {
+	public static int holdElbowPosition() {
 		Preferences prefs = Preferences.getInstance();
-		if (!prefs.containsKey("restElbowPosition")) {
-			prefs.putInt("restElbowPosition", 66567);
+		if (!prefs.containsKey("holdElbowPosition")) {
+			prefs.putInt("holdElbowPosition", 1417);
 		}
-		return prefs.getInt("restElbowPosition", 66567);
+		return prefs.getInt("holdElbowPosition", 1417);
 	}
 
 	public static int spitOutElbowPosition() {
@@ -67,12 +67,12 @@ public class Robot extends IterativeRobot {
 		return prefs.getInt("pickupWristPosition", -5957);
 	}
 
-	public static double restWristPosition() {
+	public static int holdWristPosition() {
 		Preferences prefs = Preferences.getInstance();
 		if (!prefs.containsKey("restWristPosition")) {
-			prefs.putDouble("restWristPosition", 50000);
+			prefs.putInt("restWristPosition", 2717);
 		}
-		return prefs.getDouble("restWristPosition", 50000);
+		return prefs.getInt("restWristPosition", 2717);
 	}
 
 	public static int spitOutWristPosition() {
@@ -81,6 +81,20 @@ public class Robot extends IterativeRobot {
 			prefs.putInt("spitOutWristPosition", -284041);
 		}
 		return prefs.getInt("spitOutWristPosition", -284041);
+	}
+	public static int wristPullInPosition() {
+		Preferences prefs = Preferences.getInstance();
+		if (!prefs.containsKey("wristPullInPosition")) {
+			prefs.putInt("wristPullInPosition", 19257);
+		}
+		return prefs.getInt("wristPullInPosition", 19257);
+	}
+	public static int wristLiftPosition() {
+		Preferences prefs = Preferences.getInstance();
+		if (!prefs.containsKey("wristLiftPosition")) {
+			prefs.putInt("wristLiftPosition", 16822);
+		}
+		return prefs.getInt("wristLiftPosition", 16822);
 	}
 
 	///////////////////////////////////////////

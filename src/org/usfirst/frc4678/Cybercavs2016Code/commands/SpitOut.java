@@ -50,31 +50,6 @@ public class SpitOut extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() { 	
-    	switch (spitState) {
-		case 0:
-			Robot.pickupArm.setElbowPosition(Robot.spitOutElbowPosition());
-			if (count > 15 && Robot.pickupArm.getElbowPosition() < 65000) {		
-				Robot.pickupArm.setPickupWheels(-12);
-				Robot.pickupArm.setWristPosition(Robot.spitOutWristPosition());
-			}
-			if (count > 30) {
-				spitState++;
-				count = 0;
-			}
-			
-		break;
-		case 1:
-			System.out.println("In case 1!!!!!!!");
-			System.out.println("Elbow position: " + Robot.pickupArm.getElbowPosition());
-			Robot.pickupArm.setElbowPosition(Robot.restElbowPosition());
-			if (count > 100) {
-				spitState++;
-			}
-		break;
-		case 2:
-		break;
-		}
-		count++;
     }
 
     // Make this return true when this Command no longer needs to run execute()

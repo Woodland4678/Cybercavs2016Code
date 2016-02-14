@@ -46,6 +46,7 @@ public class RobotMap {
     public static CANTalon pickupArmpickupWristMotor;
     public static CANTalon pickupArmpickupWheels;
     public static DigitalInput pickupArmballSensor;
+    public static DigitalInput pickupArmbackBallSensor;
     public static SpeedController catapultwinchMotor;
     public static Servo catapultlatchServo;
     public static AnalogPotentiometer catapultwinchPosition;
@@ -89,6 +90,9 @@ public class RobotMap {
         
         pickupArmballSensor = new DigitalInput(4);
         LiveWindow.addSensor("PickupArm", "ballSensor", pickupArmballSensor);
+        
+        pickupArmbackBallSensor = new DigitalInput(5);
+        LiveWindow.addSensor("PickupArm", "backBallSensor", pickupArmbackBallSensor);
         
         catapultwinchMotor = new Talon(4);
         LiveWindow.addActuator("Catapult", "winchMotor", (Talon) catapultwinchMotor);
