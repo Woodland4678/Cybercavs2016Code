@@ -93,6 +93,30 @@ public class RobotDrive extends Subsystem {
 		// setDefaultCommand(new MySpecialCommand());
 	}
 
+	//////////////////////////////////////
+	////////// Access Functions//////////
+	/////////////////////////////////////
+	
+	public int getLeftEncoder() {return leftEncoder.get();}
+
+	public int getRightEncoder() {return rightEncoder.get();}
+
+	public double getBuiltInAccelX() {return accel.getX();}
+
+	public double getBuiltInAccelY() {return accel.getY();}
+
+	public double getBuiltInAccelZ() {return accel.getZ();}
+	
+	public double getFrontLightSensorValue() {return frontLightSensor.getValue();}
+
+	public double getBackLightSensorValue() {return backLightSensor.getValue();}
+	
+	public double getGyroPosition() {return turnGyro.getAngle();}
+	
+	/////////////////////////////////////
+	////////// Setter functions//////////
+	/////////////////////////////////////
+	
 	public void setRightMotor(double power) {
 		rightMotor.set(power);
 	}
@@ -100,27 +124,15 @@ public class RobotDrive extends Subsystem {
 	public void setLeftMotor(double power) {
 		leftMotor.set(-power);
 	}
-
-	public int getLeftEncoder() {
-		return leftEncoder.get();
+	
+	public void resetGyro() {
+		turnGyro.reset();
 	}
-
-	public int getRightEncoder() {
-		return rightEncoder.get();
-	}
-
-	public double getBuiltInAccelX() {
-		return accel.getX();
-	}
-
-	public double getBuiltInAccelY() {
-		return accel.getY();
-	}
-
-	public double getBuiltInAccelZ() {
-		return accel.getZ();
-	}
-
+	
+	/////////////////////////////////////////
+	//////////autonomous functions//////////
+	///////////////////////////////////////
+	
 	// To use this method, you keep calling it until it returns true
 	public boolean goToDistance(double rightCentimeters,
 			double leftCentimeters, double power, int rampUpDistance,
@@ -288,6 +300,15 @@ public class RobotDrive extends Subsystem {
 		return false;
 	}
 
+	public boolean isFlat() {
+		if (checkFrontLightSensorIsOnCarpet()
+				&& checkBackLightSensorIsOnCarpet()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	public boolean gyroTurn(double target) {
 		gyroTarget = target;
 		gyroError = gyroTarget - turnGyro.getAngle();
@@ -300,31 +321,6 @@ public class RobotDrive extends Subsystem {
 		}
 		return false;
 
-	}
-
-	public void resetGyro() {
-		turnGyro.reset();
-	}
-
-	public double getGyroPosition() {
-		return turnGyro.getAngle();
-	}
-
-	public boolean isFlat() {
-		if (checkFrontLightSensorIsOnCarpet()
-				&& checkBackLightSensorIsOnCarpet()) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	public double getFrontLightSensorValue() {
-		return frontLightSensor.getValue();
-	}
-
-	public double getBackLightSensorValue() {
-		return backLightSensor.getValue();
 	}
 
 	public boolean checkFrontLightSensorIsOnCarpet() {

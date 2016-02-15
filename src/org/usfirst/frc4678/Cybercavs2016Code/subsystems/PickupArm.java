@@ -62,49 +62,28 @@ public class PickupArm extends Subsystem {
 	////////// Access functions//////////
 	/////////////////////////////////////
 
-	public int getElbowPosition() {
-		return pickupElbowMotor.getEncPosition();
-	}
+	public int getElbowPosition() {	return pickupElbowMotor.getEncPosition();}
 
-	public int getWristPosition() {
-		return pickupWristMotor.getEncPosition();
-	}
+	public int getWristPosition() {return pickupWristMotor.getEncPosition();}
 
-	public int getPickupWheelsPosition() {
-		return pickupWheels.getEncPosition();
-	}
+	public int getPickupWheelsPosition() {	return pickupWheels.getEncPosition();}
 
-	public double getCurrent(int channel) {
-		return pdp.getCurrent(channel);
-	}
+	public double getCurrent(int channel) {	return pdp.getCurrent(channel);}
+	
+	public double getWristError() {return pickupWristMotor.getError();}
+	
+	public String getArmMode() {return armMode;}
 
-	////////////////////////////////////////////////////
-	////////// Functions to set Arms positions//////////
-	////////////////////////////////////////////////////
-
-	public void setElbowPosition(int position) {
-		pickupElbowMotor.configPeakOutputVoltage(+8f, -8f);
-		pickupElbowMotor.setPID(0.15, 0, 0);
-		pickupElbowMotor.set(position);
-	}
-
-	public void setWristPosition(int position) {
-		pickupWristMotor.configPeakOutputVoltage(+8f, -8f);
-		pickupWristMotor.setPID(0.15, 0, 0);
-		pickupWristMotor.setAllowableClosedLoopErr(600);
-		pickupWristMotor.set(position);
-	}
-
-	public void setPickupWheels(double voltage) {
-		pickupWheels.set(voltage);
-	}
-
-	public void stopArmMotors() {
-		pickupElbowMotor.disable();
-		pickupWristMotor.disable();
-		pickupWheels.disable();
-	}
-
+	public int getWristAngular() {return pickupWristMotor.getPulseWidthPosition();}
+	
+	public int getElbowAngular() {return pickupElbowMotor.getPulseWidthPosition();}
+	
+	public boolean getBackSensor() {return backBallSensor.get();}
+	
+	/////////////////////////////////////
+	////////// Setter functions//////////
+	/////////////////////////////////////
+	
 	public void setPickupWheelsMode(int mode) {
 		if (mode == 0) {
 			pickupWheels.changeControlMode(TalonControlMode.Current);
@@ -185,23 +164,22 @@ public class PickupArm extends Subsystem {
 			pickupWristMotor.changeControlMode(TalonControlMode.Voltage);
 		}
 	}
-
-	public void stopIntakeWheels() {
-		pickupWheels.disable();
+	
+	public void setElbowPosition(int position) {
+		pickupElbowMotor.configPeakOutputVoltage(+8f, -8f); //max and min power
+		pickupElbowMotor.setPID(0.15, 0, 0); //PID values
+		pickupElbowMotor.set(position); // allowable error in the PID position movement
 	}
 
-	public void resetArmEncValues() {
-		pickupElbowMotor.setEncPosition(0);
-		pickupWristMotor.setEncPosition(0);
+	public void setWristPosition(int position) {
+		pickupWristMotor.configPeakOutputVoltage(+8f, -8f); //max and min power
+		pickupWristMotor.setPID(0.15, 0, 0); // PID values
+		pickupWristMotor.setAllowableClosedLoopErr(600); // allowable error in the PID position movement
+		pickupWristMotor.set(position);
 	}
-	public int getWristAngular() {
-		return pickupWristMotor.getPulseWidthPosition();
-	}
-	public int getElbowAngular() {
-		return pickupElbowMotor.getPulseWidthPosition();
-	}
-	public boolean getBackSensor() {
-		return backBallSensor.get();
+
+	public void setPickupWheels(double voltage) {
+		pickupWheels.set(voltage);
 	}
 	public void resetPickupState() {
 		pickupState = 0;
@@ -209,47 +187,64 @@ public class PickupArm extends Subsystem {
 	public void resetSpitState() {
 		spitState = 0;
 	}
+	public void resetArmEncValues() {
+		pickupElbowMotor.setEncPosition(0);
+		pickupWristMotor.setEncPosition(0);
+	}
+	public void setArmMode(String Mode) {
+		armMode = Mode;
+	}
 	public void setPickupInitPos() {
 		pickupWristMotor.setEncPosition(pickupWristMotor.getPulseWidthPosition());
 		pickupElbowMotor.setEncPosition(pickupElbowMotor.getPulseWidthPosition());
 	}
+	
+	////////////////////////////////////////////////////
+	////////// Functions to set Arms positions//////////
+	////////////////////////////////////////////////////
+	
+
+	
+	//////////////////////////////////////////////
+	//////////Arm Positioning functions//////////
+	////////////////////////////////////////////
 	public void pickup() {
 		switch(pickupState) {
-		case 0:
+		case 0: //moves Arm to higher position and waits for wrist to be in position
 			setPickupWheels(Robot.pickupWheelsPower());
 			setWristPosition(Robot.wristPullInPosition());
-			if (pickupElbowMotor.getEncPosition() > 10000) {
+			if (pickupElbowMotor.getEncPosition() > 10000) {  
 				setWristPosition(Robot.wristPullInPosition());
-				if (pickupWristMotor.getEncPosition() > 5229) {
+				if (pickupWristMotor.getEncPosition() > 5229) { //detects if wrist is in position so that the elbow may continue moving
 					setElbowPosition(Robot.pickupElbowPosition());
 				}
 			}
 			else {
-				setElbowPosition(Robot.pickupElbowPosition() - 25000);
+				setElbowPosition(Robot.pickupElbowPosition() - 25000);//moves arm to specific location until the wrist is in position so we don't go over 15 in
 			}
-			if (!backBallSensor.get()) {
+			if (!backBallSensor.get()) { //starts incrementing count once the back sensor sees the ball
 				count++;			
 			}
 			else {
 				count = 0;
 			}
-			if (count > 15) {
+			if (count > 15) { // after 15 counts (~1/4 of a second) it assumes the ball is centered and proceeds to pick up the ball
 				pickupState++;
 				count = 0;
 			}
 			System.out.println("Count: " + count);
 		break;
-		case 1:
+		case 1://moves the wrist out and the elbow down to lift the ball over the bumper
 			//System.out.println("IN CASE 1!!!!");
-			setWristPosition(Robot.wristPullInPosition() + 1000);
+			setWristPosition(Robot.wristPullInPosition() + 1000); 
 			setElbowPosition(Robot.pickupElbowPosition() + 2000);
 			if (!ballSensor.get()) {
 				pickupState++;
 			}
 		break;
-		case 2:
+		case 2: //Once elbow is high enough it will wait for the ball the settle in the catapult
 			//System.out.println("IN CASE 2!!!!!");	
-			setElbowPosition(Robot.holdElbowPosition() + 5000);
+			setElbowPosition(Robot.holdElbowPosition() + 5000); //moves arm to this position to allow the ball to have time to settle in the robot
 			count++;
 			if (count > 50) {
 				setPickupWheels(0);
@@ -261,38 +256,42 @@ public class PickupArm extends Subsystem {
 	}
 	public void holdPosition() {
 		setWristPosition(Robot.holdWristPosition());
-		if (pickupWristMotor.getPosition() > -22000) {
+		if (pickupWristMotor.getPosition() > -22000) { //moves wrist first just in case the wrist is below the elbow
 			setElbowPosition(Robot.holdElbowPosition());
 		}
 		setPickupWheels(0);
 	}
 	public void spitOut() {
 		switch(spitState) {
-		case 0:	
+		case 0:	//reverses wheels, moves elbow
 			setPickupWheels(-Robot.pickupWheelsPower());
 			setElbowPosition(Robot.spitOutElbowPosition());
-			if (Math.abs(pickupElbowMotor.getError()) < 700) {
+			if (Math.abs(pickupElbowMotor.getError()) < 700) { //this is in the make sure the arm moves before the wrist so the wrist doesn't crash against the robot
 				spitState++;
 			}
 		break;
-		case 1:
+		case 1: // once elbow is moved begin the move wrist
 			setWristPosition(Robot.spitOutWristPosition());
-			if (pickupWristMotor.getEncPosition() < -35000) {
+			if (pickupWristMotor.getEncPosition() < -35000) { // if wrist is in desired position is will continue
 				spitState++;
 			}
 		break;
-		case 2:
+		case 2: //move elbow up to give the ball more push out the robot
 			System.out.println("In case 2!!!!!!!!!!!");
-			setElbowPosition(Robot.spitOutElbowPosition() + 8500);
+			setElbowPosition(Robot.spitOutElbowPosition() + 8500); 
 		}
 	}
-	public void setArmMode(String Mode) {
-		armMode = Mode;
+	
+	///////////////////////////////////
+	//////////Misc Functions//////////
+	/////////////////////////////////
+	
+	public void stopArmMotors() {
+		pickupElbowMotor.disable();
+		pickupWristMotor.disable();
+		pickupWheels.disable();
 	}
-	public String getArmMode() {
-		return armMode;
-	}
-	public double getWristError() {
-		return pickupWristMotor.getError();
+	public void stopIntakeWheels() {
+		pickupWheels.disable();
 	}
 }
