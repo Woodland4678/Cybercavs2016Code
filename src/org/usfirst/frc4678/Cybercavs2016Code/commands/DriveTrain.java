@@ -51,7 +51,7 @@ public class DriveTrain extends Command {
 
 	// Called just before this Command runs the first time
 	protected void initialize() {
-		Robot.pickupArm.setPickupInitPos();
+//		Robot.pickupArm.setPickupInitPos();
 		
 	}
 
@@ -71,6 +71,7 @@ public class DriveTrain extends Command {
 		SmartDashboard.putNumber("Wrist Angular Position: ", Robot.pickupArm.getWristAngular());
 		SmartDashboard.putNumber("Elbow Angular Position: ", Robot.pickupArm.getElbowAngular());
 		SmartDashboard.putBoolean("Back ball distance ", Robot.pickupArm.getBackSensor());
+		SmartDashboard.putNumber("Wrist Error: ", Robot.pickupArm.getWristError());
 		joyStickX = Robot.oi.driverGamepad.getX();
 		joyStickY = Robot.oi.driverGamepad.getY();
 		rightPower = (joyStickY * Math.abs(joyStickY)) + (joyStickX * joyStickX * joyStickX);

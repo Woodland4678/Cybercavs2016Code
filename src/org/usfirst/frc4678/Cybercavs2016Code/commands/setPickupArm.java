@@ -44,15 +44,21 @@ public class setPickupArm extends Command {
     }
 
     // Called repeatedly when this Command is scheduled to run
-    protected void execute() {
+    protected void execute() { //This is the default command of the pickup arm, it will always run
     	if (Robot.pickupArm.getArmMode() == "Pickup") {
     		Robot.pickupArm.pickup();
     	}
     	else if (Robot.pickupArm.getArmMode() == "Hold") {
     		Robot.pickupArm.holdPosition();
     	}
-    	else {
-    		Robot.pickupArm.setArmMode("Hold");
+    	else if (Robot.pickupArm.getArmMode() =="spitOut") {
+    		Robot.pickupArm.spitOut();
+    	}
+    	else {//dicks
+//    		Robot.pickupArm.setArmMode("Hold");
+    	}
+    	if (Robot.oi.getDriverGamepad().getRawButton(9)) {
+    		Robot.pickupArm.setPickupWheels(-Robot.pickupWheelsPower());
     	}
     	//System.out.println("Current Arm Mode: " + Robot.pickupArm.getArmMode());
     }

@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  */
 public class PickupArm extends Subsystem {
 	public int pickupState = 0;
+	public int spitState = 0;
 	PowerDistributionPanel pdp = new PowerDistributionPanel();
 	int count = 0;
 	String armMode;
@@ -90,7 +91,7 @@ public class PickupArm extends Subsystem {
 	public void setWristPosition(int position) {
 		pickupWristMotor.configPeakOutputVoltage(+8f, -8f);
 		pickupWristMotor.setPID(0.15, 0, 0);
-		pickupWristMotor.setAllowableClosedLoopErr(700);
+		pickupWristMotor.setAllowableClosedLoopErr(600);
 		pickupWristMotor.set(position);
 	}
 
@@ -205,6 +206,9 @@ public class PickupArm extends Subsystem {
 	public void resetPickupState() {
 		pickupState = 0;
 	}
+	public void resetSpitState() {
+		spitState = 0;
+	}
 	public void setPickupInitPos() {
 		pickupWristMotor.setEncPosition(pickupWristMotor.getPulseWidthPosition());
 		pickupElbowMotor.setEncPosition(pickupElbowMotor.getPulseWidthPosition());
@@ -214,7 +218,15 @@ public class PickupArm extends Subsystem {
 		case 0:
 			setPickupWheels(Robot.pickupWheelsPower());
 			setWristPosition(Robot.wristPullInPosition());
-			setElbowPosition(Robot.pickupElbowPosition());
+			if (pickupElbowMotor.getEncPosition() > 10000) {
+				setWristPosition(Robot.wristPullInPosition());
+				if (pickupWristMotor.getEncPosition() > 5229) {
+					setElbowPosition(Robot.pickupElbowPosition());
+				}
+			}
+			else {
+				setElbowPosition(Robot.pickupElbowPosition() - 25000);
+			}
 			if (!backBallSensor.get()) {
 				count++;			
 			}
@@ -239,7 +251,7 @@ public class PickupArm extends Subsystem {
 			//System.out.println("IN CASE 2!!!!!");	
 			setElbowPosition(Robot.holdElbowPosition() + 5000);
 			count++;
-			if (count > 15) {
+			if (count > 50) {
 				setPickupWheels(0);
 				setArmMode("Hold");
 				count = 0;
@@ -249,15 +261,38 @@ public class PickupArm extends Subsystem {
 	}
 	public void holdPosition() {
 		setWristPosition(Robot.holdWristPosition());
-		setElbowPosition(Robot.holdElbowPosition());
+		if (pickupWristMotor.getPosition() > -22000) {
+			setElbowPosition(Robot.holdElbowPosition());
+		}
 		setPickupWheels(0);
 	}
 	public void spitOut() {
+		switch(spitState) {
+		case 0:	
+			setPickupWheels(-Robot.pickupWheelsPower());
+			setElbowPosition(Robot.spitOutElbowPosition());
+			if (Math.abs(pickupElbowMotor.getError()) < 700) {
+				spitState++;
+			}
+		break;
+		case 1:
+			setWristPosition(Robot.spitOutWristPosition());
+			if (pickupWristMotor.getEncPosition() < -35000) {
+				spitState++;
+			}
+		break;
+		case 2:
+			System.out.println("In case 2!!!!!!!!!!!");
+			setElbowPosition(Robot.spitOutElbowPosition() + 8500);
+		}
 	}
 	public void setArmMode(String Mode) {
 		armMode = Mode;
 	}
 	public String getArmMode() {
 		return armMode;
+	}
+	public double getWristError() {
+		return pickupWristMotor.getError();
 	}
 }

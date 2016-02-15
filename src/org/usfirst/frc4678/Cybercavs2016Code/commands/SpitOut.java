@@ -41,11 +41,8 @@ public class SpitOut extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	spitState = 0;
-    	Robot.pickupArm.setPickupWheelsMode(7);
-		Robot.pickupArm.setElbowMode(5);
-		Robot.pickupArm.setWristMode(5);
-		count = 0;
+    	Robot.pickupArm.resetSpitState();
+    	Robot.pickupArm.setArmMode("spitOut");
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -54,7 +51,7 @@ public class SpitOut extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return false;
+        return true;
     }
 
     // Called once after isFinished returns true
