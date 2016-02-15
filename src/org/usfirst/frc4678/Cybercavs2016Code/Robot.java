@@ -34,9 +34,9 @@ public class Robot extends IterativeRobot {
 	public static int pickupElbowPosition() {
 		Preferences prefs = Preferences.getInstance();
 		if (!prefs.containsKey("pickupElbowPosition")) {
-			prefs.putInt("pickupElbowPosition", 42461);
+			prefs.putInt("pickupElbowPosition", 39500);
 		}
-		return prefs.getInt("pickupElbowPosition", 42461);
+		return prefs.getInt("pickupElbowPosition", 39500);
 	}
 
 	public static int holdElbowPosition() {
@@ -92,9 +92,9 @@ public class Robot extends IterativeRobot {
 	public static int wristLiftPosition() {
 		Preferences prefs = Preferences.getInstance();
 		if (!prefs.containsKey("wristLiftPosition")) {
-			prefs.putInt("wristLiftPosition", 16822);
+			prefs.putInt("wristLiftPosition", 17500);
 		}
-		return prefs.getInt("wristLiftPosition", 16822);
+		return prefs.getInt("wristLiftPosition", 17500);
 	}
 
 	///////////////////////////////////////////
