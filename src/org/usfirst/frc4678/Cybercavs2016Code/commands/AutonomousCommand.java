@@ -12,9 +12,7 @@ package org.usfirst.frc4678.Cybercavs2016Code.commands;
 
 import org.usfirst.frc4678.Cybercavs2016Code.Robot;
 
-import edu.wpi.first.wpilibj.command.Command;
-
-public class AutonomousCommand extends Command {
+public class AutonomousCommand extends AbstractCommand {
 
 	private static final int TURN_90 = 3;
 	private static final int TRAVERSE_OUTER_WORKS = 1;

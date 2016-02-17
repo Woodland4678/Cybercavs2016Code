@@ -11,13 +11,12 @@
 
 package org.usfirst.frc4678.Cybercavs2016Code.commands;
 
-import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc4678.Cybercavs2016Code.Robot;
 
 /**
  *
  */
-public class SpitOut extends Command {
+public class SpitOut extends AbstractCommand {
 	
 	int count = 0;
 	int spitState;
