@@ -12,10 +12,12 @@ package org.usfirst.frc4678.Cybercavs2016Code.commands;
 
 import org.usfirst.frc4678.Cybercavs2016Code.Robot;
 
+import edu.wpi.first.wpilibj.command.Command;
+
 /**
  *
  */
-public class Pickup extends AbstractCommand {
+public class Pickup extends Command {
 
 	public int stepNumber = 0;
 	int count = 0;

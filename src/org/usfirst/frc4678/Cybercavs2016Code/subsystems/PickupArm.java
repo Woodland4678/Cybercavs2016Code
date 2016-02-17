@@ -267,7 +267,6 @@ public class PickupArm extends Subsystem {
 			setPickupWheels(-Robot.pickupWheelsPower());
 			setElbowPosition(Robot.spitOutElbowPosition());
 			if (Math.abs(pickupElbowMotor.getError()) < 700) { //this is in the make sure the arm moves before the wrist so the wrist doesn't crash against the robot
-				System.out.println("In case 0!!!!");
 				spitState++;
 			}
 		break;
@@ -276,8 +275,6 @@ public class PickupArm extends Subsystem {
 			if (pickupWristMotor.getEncPosition() < -32000) { // if wrist is in desired position is will continue
 				spitState++;
 			}
-			System.out.println("In case 1!!!!");
-
 		break;
 		case 2: //move elbow up to give the ball more push out the robot
 			System.out.println("In case 2!!!!!!!!!!!");

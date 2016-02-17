@@ -10,11 +10,20 @@
 
 package org.usfirst.frc4678.Cybercavs2016Code.commands;
 
-import org.usfirst.frc4678.Cybercavs2016Code.Robot;
-
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class DriveTrain extends AbstractCommand {
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
+
+import org.usfirst.frc4678.Cybercavs2016Code.Robot;
+
+public class DriveTrain extends Command {
 
 	double joyStickX;
 	double joyStickY;
