@@ -272,7 +272,7 @@ public class PickupArm extends Subsystem {
 		break;
 		case 1: // once elbow is moved begin the move wrist
 			setWristPosition(Robot.spitOutWristPosition());
-			if (pickupWristMotor.getEncPosition() < -35000) { // if wrist is in desired position is will continue
+			if (pickupWristMotor.getEncPosition() < -32000) { // if wrist is in desired position is will continue
 				spitState++;
 			}
 		break;

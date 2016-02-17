@@ -118,11 +118,11 @@ public class RobotDrive extends Subsystem {
 	/////////////////////////////////////
 	
 	public void setRightMotor(double power) {
-		rightMotor.set(power);
+		rightMotor.set(-power);
 	}
 
 	public void setLeftMotor(double power) {
-		leftMotor.set(-power);
+		leftMotor.set(power);
 	}
 	
 	public void resetGyro() {
