@@ -44,9 +44,9 @@ public class TestDistanceCode extends Command {
 
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
-		if (isFinished == false) {
-			isFinished = Robot.robotDrive.goToDistance(100, 100, 0.5, 30, 30, 0.2, 0.2);
-		}
+//		if (isFinished == false) {
+//			isFinished = Robot.robotDrive.goToDistance(100, 100, 0.5, 30, 30, 0.2, 0.2);
+//		}
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
@@ -56,8 +56,8 @@ public class TestDistanceCode extends Command {
 
 	// Called once after isFinished returns true
 	protected void end() {
-		Robot.robotDrive.setLeftMotor(0);
-		Robot.robotDrive.setRightMotor(0);
+//		Robot.robotDrive.setLeftMotor(0);
+//		Robot.robotDrive.setRightMotor(0);
 	}
 
 	// Called when another command which requires one or more of the same
