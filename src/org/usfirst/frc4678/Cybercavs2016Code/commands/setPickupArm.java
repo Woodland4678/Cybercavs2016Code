@@ -45,13 +45,13 @@ public class SetPickupArm extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() { //This is the default command of the pickup arm, it will always run
-    	if (Robot.pickupArm.getArmMode() == "Pickup") {
+    	if ((Robot.pickupArm.getArmMode()) == ("Pickup")) {
     		Robot.pickupArm.pickup();
     	}
-    	else if (Robot.pickupArm.getArmMode() == "Hold") {
+    	else if ((Robot.pickupArm.getArmMode()) == ("Hold")) {
     		Robot.pickupArm.holdPosition();
     	}
-    	else if (Robot.pickupArm.getArmMode() =="spitOut") {
+    	else if ((Robot.pickupArm.getArmMode()) == ("spitOut")) {
     		Robot.pickupArm.spitOut();
     	}
     	else {//dicks
