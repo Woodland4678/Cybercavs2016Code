@@ -54,28 +54,33 @@ public class Catapult extends Subsystem {
 	}
 
 	public boolean shootBoulder() {
-		switch (shooterState) {
-		case 0: //releases the catapult and waits 1 second
-			if (count < 50) {
-				latchServo.set(Robot.latchShootPosition());
-			} else {
-				count = 0;
-				shooterState++;
+	if (Robot.pickupArm.getElbowPosition() > 28000) { //makes sure arm is out of the way before shooting
+			switch (shooterState) {
+			case 0: //releases the catapult and waits 1 second
+				if (count < 50) {
+					latchServo.set(Robot.latchShootPosition());
+				} else {
+					count = 0;
+					shooterState++;
+				}
+				count++;
+				break;
+			case 1: //runs command to pull the catapult back down
+				if (windWinch() == true) {
+					shooterState++;
+				}
+				break;
+			case 2: //runs command to unwind winch once catapult is locked in
+				if (unwindWinch() == true) {
+					shooterState++;
+				}
+				break;
+			case 3: //resets shooter state and ends the function 
+				shooterState = 0;
+				return true;
 			}
-			count++;
-			break;
-		case 1: //runs command to pull the catapult back down
-			if (windWinch() == true) {
-				shooterState++;
-			}
-			break;
-		case 2: //runs command to unwind winch once catapult is locked in
-			if (unwindWinch() == true) {
-				shooterState++;
-			}
-			break;
-		case 3: //resets shooter state
-			shooterState = 0;
+		}
+		else {
 			return true;
 		}
 		return false;
@@ -87,15 +92,24 @@ public class Catapult extends Subsystem {
 		switch(windState) {
 		case 0: //continuously checks until the limit switch is no longer clicked
 			//!checkLatchSwitch.get() means it is false, which means it is clicked in
-			if (!checkLatchSwitch.get()) {
-				winchMotor.set(Robot.winchPower()); //pulls catapult down until switch unclicked
-			}
-			else if (checkLatchSwitch.get()) {
+			if ((Robot.winchWoundDistance() > winchPosition.get())) {
 				windState++;
 			}
+			else if (!checkLatchSwitch.get()) {
+				winchMotor.set(Robot.winchPower()); //pulls catapult down until switch unclicked
+			}
+			else if ((checkLatchSwitch.get())) {
+				windState++;
+			}
+			System.out.println("case 0 winch pos: " + winchPosition.get() + "target: " + Robot.winchWoundDistance());
 			break;
 		case 1: //Starts checking until switch is clicked again (which means the catapult is in place)
-			if (checkLatchSwitch.get()) {
+			if ((Robot.winchWoundDistance() > winchPosition.get())) {
+				winchMotor.disable();
+				windState = 0;
+				return true; 
+			}
+			else if (checkLatchSwitch.get()) {
 				winchMotor.set(Robot.winchPower());
 			}		
 			else if (!checkLatchSwitch.get()) { //once clicked the catapult is in place and winding in is done.
@@ -103,6 +117,7 @@ public class Catapult extends Subsystem {
 				windState = 0;
 				return true; 
 			}
+			System.out.println("case 1 winch pos: " + winchPosition.get()  + "target: " + Robot.winchWoundDistance());
 			break;
 		}
 		return false;

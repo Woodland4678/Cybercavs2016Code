@@ -16,10 +16,10 @@ import org.usfirst.frc4678.Cybercavs2016Code.commands.CalibratePickup;
 import org.usfirst.frc4678.Cybercavs2016Code.commands.DriveTrain;
 import org.usfirst.frc4678.Cybercavs2016Code.commands.HoldBallMode;
 import org.usfirst.frc4678.Cybercavs2016Code.commands.Pickup;
+import org.usfirst.frc4678.Cybercavs2016Code.commands.PickupArmTesting;
 import org.usfirst.frc4678.Cybercavs2016Code.commands.SetPickupArm;
 import org.usfirst.frc4678.Cybercavs2016Code.commands.Shoot;
 import org.usfirst.frc4678.Cybercavs2016Code.commands.SpitOut;
-import org.usfirst.frc4678.Cybercavs2016Code.commands.TestDistanceCode;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -80,7 +80,7 @@ public class OI {
         driverBtn7 = new JoystickButton(driverGamepad, 7);
         driverBtn7.whenPressed(new Shoot());
         driverBtn3 = new JoystickButton(driverGamepad, 3);
-        driverBtn3.whenPressed(new TestDistanceCode());
+        driverBtn3.whileHeld(new PickupArmTesting());
         driverBtn1 = new JoystickButton(driverGamepad, 1);
         driverBtn1.whenPressed(new SpitOut());
         driverBtn2 = new JoystickButton(driverGamepad, 2);
@@ -96,7 +96,7 @@ public class OI {
         SmartDashboard.putData("Pickup", new Pickup());
         SmartDashboard.putData("Shoot", new Shoot());
         SmartDashboard.putData("SpitOut", new SpitOut());
-        SmartDashboard.putData("TestDistanceCode", new TestDistanceCode());
+        SmartDashboard.putData("PickupArmTesting", new PickupArmTesting());
         SmartDashboard.putData("SetPickupArm", new SetPickupArm());
         SmartDashboard.putData("HoldBallMode", new HoldBallMode());
 

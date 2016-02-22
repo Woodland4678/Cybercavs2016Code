@@ -404,13 +404,13 @@ Children:
           name: Command
           type: Command
           validators: *id018
-          value: TestDistanceCode
+          value: PickupArmTesting
         When to Run: !!robotbuilder.data.properties.ChoicesProperty
           choices: *id019
           default: whileHeld
           name: When to Run
           validators: null
-          value: whenPressed
+          value: whileHeld
       Base: Joystick Button
       Name: DriverBtn3
     - Children: []
@@ -581,7 +581,7 @@ Children:
         validators: null
         value: []
       Requires: !!robotbuilder.data.properties.TypeSelectionProperty {default: None,
-        name: Requires, type: Subsystem, validators: null, value: RobotDrive}
+        name: Requires, type: Subsystem, validators: null, value: PickupArm}
       Parameter presets: !!robotbuilder.data.properties.ParameterSetProperty
         default: []
         name: Parameter presets
@@ -590,7 +590,7 @@ Children:
       Button on SmartDashboard: !!robotbuilder.data.properties.BooleanProperty {default: true,
         name: Button on SmartDashboard, validators: null, value: true}
     Base: Command
-    Name: TestDistanceCode
+    Name: PickupArmTesting
   - Children: []
     Properties:
       Parameters: !!robotbuilder.data.properties.ParametersProperty

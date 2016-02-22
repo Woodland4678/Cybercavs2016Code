@@ -70,6 +70,7 @@ public class DriveTrain extends Command {
 		SmartDashboard.putBoolean("Back ball distance ", Robot.pickupArm.getBackSensor());
 		SmartDashboard.putNumber("Wrist Error: ", Robot.pickupArm.getWristError());
 		SmartDashboard.putBoolean("check switch: ", Robot.catapult.getLatchSwitch());
+		Robot.pickupArm.pickupSpeedPosition();
 		joyStickX = Robot.oi.driverGamepad.getX();
 		joyStickY = Robot.oi.driverGamepad.getY();
 //		rightPower = joyStickY + joyStickX;
