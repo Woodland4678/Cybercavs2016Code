@@ -64,6 +64,7 @@ public class OI {
     public JoystickButton driverBtn2;
     public JoystickButton driverBtn1;
     public JoystickButton driverBtn3;
+    public JoystickButton driverBtn7;
     public Joystick driverGamepad;
     public Joystick operatorGamepad;
 
@@ -76,6 +77,8 @@ public class OI {
         
         driverGamepad = new Joystick(0);
         
+        driverBtn7 = new JoystickButton(driverGamepad, 7);
+        driverBtn7.whenPressed(new Shoot());
         driverBtn3 = new JoystickButton(driverGamepad, 3);
         driverBtn3.whenPressed(new TestDistanceCode());
         driverBtn1 = new JoystickButton(driverGamepad, 1);

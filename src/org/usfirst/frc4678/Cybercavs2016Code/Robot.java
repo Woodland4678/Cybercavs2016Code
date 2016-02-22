@@ -105,41 +105,49 @@ public class Robot extends IterativeRobot {
 	public static double latchReadyPosition() {
 		Preferences prefs = Preferences.getInstance();
 		if (!prefs.containsKey("latchReadyPostion")) {
-			prefs.putDouble("latchReadyPostion", 0);
+			prefs.putDouble("latchReadyPostion", 0.205);
 		}
-		return prefs.getDouble("pickupWheelsPower", 0);
+		return prefs.getDouble("latchReadyPostion", 0.205);
 	}
 
 	public static double latchShootPosition() {
 		Preferences prefs = Preferences.getInstance();
 		if (!prefs.containsKey("latchShootPosition")) {
-			prefs.putDouble("latchShootPosition", 90);
+			prefs.putDouble("latchShootPosition", 0.4);
 		}
-		return prefs.getDouble("pickupWheelsPower", 90);
+		return prefs.getDouble("latchShootPosition", 0.4);
+	}
+	
+	public static double latchLockPosition() { //position to lower server after latch to ensure it doesn't launch prematurely
+		Preferences prefs = Preferences.getInstance();
+		if (!prefs.containsKey("latchLockPosition")) {
+			prefs.putDouble("latchLockPosition", 0);
+		}
+		return prefs.getDouble("latchLockPosition", 0);
 	}
 
 	public static double winchPower() {
 		Preferences prefs = Preferences.getInstance();
 		if (!prefs.containsKey("winchPower")) {
-			prefs.putDouble("winchPower", 0.8);
+			prefs.putDouble("winchPower", 0.2);
 		}
-		return prefs.getDouble("winchPower", 0.8);
+		return prefs.getDouble("winchPower", 0.2);
 	}
 
 	public static double winchWoundDistance() {
 		Preferences prefs = Preferences.getInstance();
 		if (!prefs.containsKey("winchWoundDistance")) {
-			prefs.putDouble("winchWoundDistance", 9);
+			prefs.putDouble("winchWoundDistance", 1.5);
 		}
-		return prefs.getDouble("winchWoundDistance", 9);
+		return prefs.getDouble("winchWoundDistance", 1.5);
 	}
 
 	public static double winchUnwoundDistance() {
 		Preferences prefs = Preferences.getInstance();
 		if (!prefs.containsKey("winchUnwoundDistance")) {
-			prefs.putDouble("winchUnwoundDistance", 0);
+			prefs.putDouble("winchUnwoundDistance", 4);
 		}
-		return prefs.getDouble("winchUnwoundDistance", 0);
+		return prefs.getDouble("winchUnwoundDistance", 4);
 	}
 
 	///////////////////////////////////
