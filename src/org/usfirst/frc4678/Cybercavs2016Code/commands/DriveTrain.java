@@ -59,9 +59,9 @@ public class DriveTrain extends Command {
 		SmartDashboard.putNumber("Pickup Wheels Position", Robot.pickupArm.getPickupWheelsPosition());
 		SmartDashboard.putNumber("Left Wheels Position", Robot.robotDrive.getLeftEncoder());
 		SmartDashboard.putNumber("Right Wheels Position", Robot.robotDrive.getRightEncoder());
-		SmartDashboard.putNumber("Accelerometer X: ", Robot.robotDrive.getBuiltInAccelX());
-		SmartDashboard.putNumber("Accelerometer Y: ", Robot.robotDrive.getBuiltInAccelY());
-		SmartDashboard.putNumber("Accelerometer Z: ", Robot.robotDrive.getBuiltInAccelZ());
+//		SmartDashboard.putNumber("Accelerometer X: ", Robot.robotDrive.getBuiltInAccelX());
+//		SmartDashboard.putNumber("Accelerometer Y: ", Robot.robotDrive.getBuiltInAccelY());
+//		SmartDashboard.putNumber("Accelerometer Z: ", Robot.robotDrive.getBuiltInAccelZ());
 		SmartDashboard.putNumber("Gyro Position: ", Robot.robotDrive.getGyroPosition());
 		SmartDashboard.putNumber("Front Light sensor: ", Robot.robotDrive.getFrontLightSensorValue());
 		SmartDashboard.putNumber("Back Light sensor: ", Robot.robotDrive.getBackLightSensorValue());
@@ -70,7 +70,6 @@ public class DriveTrain extends Command {
 		SmartDashboard.putBoolean("Back ball distance ", Robot.pickupArm.getBackSensor());
 		SmartDashboard.putNumber("Wrist Error: ", Robot.pickupArm.getWristError());
 		SmartDashboard.putBoolean("check switch: ", Robot.catapult.getLatchSwitch());
-		Robot.pickupArm.pickupSpeedPosition();
 		joyStickX = Robot.oi.driverGamepad.getX();
 		joyStickY = Robot.oi.driverGamepad.getY();
 //		rightPower = joyStickY + joyStickX;

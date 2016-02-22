@@ -101,7 +101,7 @@ public class Catapult extends Subsystem {
 			else if ((checkLatchSwitch.get())) {
 				windState++;
 			}
-			System.out.println("case 0 winch pos: " + winchPosition.get() + "target: " + Robot.winchWoundDistance());
+			//System.out.println("case 0 winch pos: " + winchPosition.get() + "target: " + Robot.winchWoundDistance());
 			break;
 		case 1: //Starts checking until switch is clicked again (which means the catapult is in place)
 			if ((Robot.winchWoundDistance() > winchPosition.get())) {
@@ -117,7 +117,7 @@ public class Catapult extends Subsystem {
 				windState = 0;
 				return true; 
 			}
-			System.out.println("case 1 winch pos: " + winchPosition.get()  + "target: " + Robot.winchWoundDistance());
+			//System.out.println("case 1 winch pos: " + winchPosition.get()  + "target: " + Robot.winchWoundDistance());
 			break;
 		}
 		return false;
