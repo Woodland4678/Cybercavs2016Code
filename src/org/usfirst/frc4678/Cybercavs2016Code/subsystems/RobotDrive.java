@@ -67,7 +67,9 @@ public class RobotDrive extends Subsystem {
 	private final NetworkTable grip = NetworkTable.getTable("GRIP");
 	private double WIDTH = 320.0;
 	private double CENTERX = WIDTH / 2;
-	private double PIXEL_ENCODER_RATIO = -1.4;
+	private double PIXEL_ENCODER_RATIO = Robot.pixelsPerEncoderChange();
+	private double AUTOAIM_TURN_RATE = Robot.autoAimTurnRate();
+	private double AUTOAIM_MAX_POWER = Robot.autoAimMaxPower();
 	
 	enum AutoAimState {
 		INITIAL,
@@ -356,7 +358,7 @@ public class RobotDrive extends Subsystem {
 	
 	public void setTurnPower(double power) {
     	setLeftMotor(power);
-    	setRightMotor(power);
+    	setRightMotor(-power);
     }
     
     public void autoAimInit() {
@@ -382,11 +384,11 @@ public class RobotDrive extends Subsystem {
     		case MOVING:
     			double deltaX = PIXEL_ENCODER_RATIO * (getRightEncoder() + getLeftEncoder()) / 2;
     			double ddeltaX = pixelsToTurn - deltaX;
-    			double power = -ddeltaX;
-    			if (power < -0.2) {
-    				power = -0.2;
-    			} else if (power > 0.2) {
-    				power = 0.2;
+    			double power = AUTOAIM_TURN_RATE * ddeltaX;
+    			if (power < -AUTOAIM_MAX_POWER) {
+    				power = -AUTOAIM_MAX_POWER;
+    			} else if (power > AUTOAIM_MAX_POWER) {
+    				power = AUTOAIM_MAX_POWER;
     			}
     			setTurnPower(power);
     	    	break;

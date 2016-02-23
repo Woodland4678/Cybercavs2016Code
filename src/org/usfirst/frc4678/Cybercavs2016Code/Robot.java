@@ -222,6 +222,30 @@ public class Robot extends IterativeRobot {
         return prefs.getInt("autoMode", 0);
     }
     
+    public static double pixelsPerEncoderChange() {
+    	Preferences prefs = Preferences.getInstance();
+        if (!prefs.containsKey("pixelsPerEncoderChange")) {
+            prefs.putDouble("pixelsPerEncoderChange", 1.4);
+        }
+        return prefs.getDouble("pixelsPerEncoderChange", 1.4);
+	}
+    
+    public static double autoAimTurnRate() {
+    	Preferences prefs = Preferences.getInstance();
+        if (!prefs.containsKey("autoAimTurnRate")) {
+            prefs.putDouble("autoAimTurnRate", 1);
+        }
+        return prefs.getDouble("autoAimTurnRate", 1);
+	}
+    
+    public static double autoAimMaxPower() {
+    	Preferences prefs = Preferences.getInstance();
+        if (!prefs.containsKey("autoAimMaxPower")) {
+            prefs.putDouble("autoAimMaxPower", 0.2);
+        }
+        return prefs.getDouble("autoAimMaxPower", 0.2);
+	}
+    
 	Command autonomousCommand;
 
 	public static USBCamera targetCam;
