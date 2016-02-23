@@ -411,9 +411,6 @@ public class PickupArm extends Subsystem {
 		pickupWristMotor.setEncPosition(wristStartPosition);
 		pickupElbowMotor.setEncPosition(elbowStartPosition);
 	}
-	public void pickupSpeedPosition() {
-		//System.out.println(pickupWristMotor.getEncPosition() + ", " + pickupWristMotor.getSpeed() + ", " + pickupElbowMotor.getEncPosition() + ", " + pickupElbowMotor.getSpeed());
-	}
 	public void pickupOsc() {
 		kElbow = 0.6;
 		kWrist = 0.6;
