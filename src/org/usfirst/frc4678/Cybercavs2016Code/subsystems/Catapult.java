@@ -54,7 +54,7 @@ public class Catapult extends Subsystem {
 	}
 
 	public boolean shootBoulder() {
-	if (Robot.pickupArm.getElbowPosition() > 28000) { //makes sure arm is out of the way before shooting
+	if ((Robot.pickupArm.getElbowPosition() > 28000) || (shooterState > 1)) { //makes sure arm is out of the way before shooting
 			switch (shooterState) {
 			case 0: //releases the catapult and waits 1 second
 				if (count < 50) {
@@ -81,6 +81,7 @@ public class Catapult extends Subsystem {
 			}
 		}
 		else {
+			winchMotor.disable();
 			return true;
 		}
 		return false;
@@ -135,5 +136,8 @@ public class Catapult extends Subsystem {
 	}
 	public boolean getLatchSwitch() {
 		return checkLatchSwitch.get();
+	}
+	public double getWinchPosition() {
+		return winchPosition.get();
 	}
 }

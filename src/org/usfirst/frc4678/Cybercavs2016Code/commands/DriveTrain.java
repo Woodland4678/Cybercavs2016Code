@@ -22,10 +22,13 @@ public class DriveTrain extends Command {
 	double leftPower;
 	double rightPower;
 	public static final double MAX_POWER = 1;
+	public static final double MAX_SPEED = 2500;
 	public static final double LEFT_X_ADJUSTMENT = 1;
 	public static final double LEFT_Y_ADJUSTMENT = 1;
 	public static final double RIGHT_X_ADJUSTMENT = 1;
 	public static final double RIGHT_Y_ADJUSTMENT = 1;
+	private static final double STRAIGHT_SPEED_FACTOR = 1.0/12500.0;
+	private static final double TURNING_SPEED_FACTOR = 5.0/25000.0;
 
 	// List<String> lines = Arrays.asList("accelerometer X: " +
 	// Robot.robotDrive.getBuiltInAccelX(), "The second line");
@@ -70,29 +73,92 @@ public class DriveTrain extends Command {
 		SmartDashboard.putBoolean("Back ball distance ", Robot.pickupArm.getBackSensor());
 		SmartDashboard.putNumber("Wrist Error: ", Robot.pickupArm.getWristError());
 		SmartDashboard.putBoolean("check switch: ", Robot.catapult.getLatchSwitch());
+		SmartDashboard.putNumber("winch position ", Robot.catapult.getWinchPosition());
+		SmartDashboard.putNumber("left drive train speed: ", Robot.robotDrive.getLeftSpeed());
+		SmartDashboard.putNumber("Right drive train speed: ", Robot.robotDrive.getRightSpeed());
 		joyStickX = Robot.oi.driverGamepad.getX();
 		joyStickY = Robot.oi.driverGamepad.getY();
+		SmartDashboard.putNumber("joystick X: ", joyStickX);
+		SmartDashboard.putNumber("joystick Y: ", joyStickY);
+		SmartDashboard.putNumber("Right Power ", Robot.robotDrive.getRightPower());
+		SmartDashboard.putNumber("Left Power ", Robot.robotDrive.getLeftPower());
 //		rightPower = joyStickY + joyStickX;
 //		leftPower = joyStickY - joyStickX;
 		// Y only
-		// leftPower = joyStickY * MAX_POWER * LEFT_Y_ADJUSTMENT;
-		// rightPower = joyStickY * MAX_POWER * RIGHT_Y_ADJUSTMENT;
+//		leftPower = Math.sin(joyStickY) * MAX_POWER * LEFT_Y_ADJUSTMENT;
+//		rightPower = Math.sin(joyStickY) * MAX_POWER * RIGHT_Y_ADJUSTMENT;
 		// X only
-		// leftPower = -joyStickX * MAX_POWER * LEFT_X_ADJUSTMENT;
-		// rightPower = joyStickX * MAX_POWER * RIGHT_X_ADJUSTMENT;
+//		 leftPower = Math.sin(-joyStickX) * MAX_POWER * LEFT_X_ADJUSTMENT;
+//		 rightPower = Math.sin(joyStickX) * MAX_POWER * RIGHT_X_ADJUSTMENT;
 		// Add them together
-		leftPower = joyStickY * MAX_POWER * LEFT_Y_ADJUSTMENT - joyStickX * MAX_POWER * LEFT_X_ADJUSTMENT;
-		rightPower = joyStickY * MAX_POWER * RIGHT_Y_ADJUSTMENT + joyStickX * MAX_POWER * RIGHT_X_ADJUSTMENT;
-		;
-		Robot.robotDrive.setRightMotor(rightPower);
-		Robot.robotDrive.setLeftMotor(leftPower);
+//		leftPower = Math.sin(joyStickY) * MAX_POWER * LEFT_Y_ADJUSTMENT - Math.sin(joyStickX) * MAX_POWER * LEFT_X_ADJUSTMENT;
+//		rightPower = Math.sin(joyStickY) * MAX_POWER * RIGHT_Y_ADJUSTMENT + Math.sin(joyStickX) * MAX_POWER * RIGHT_X_ADJUSTMENT;
+//		Robot.robotDrive.setRightMotor(rightPower);
+//		Robot.robotDrive.setLeftMotor(leftPower);
 		// SmartDashboard.putNumber("garbagePosition",
 		// Robot.trashMagnet.getGarbagePosition());
 		/*
 		 * try { Files.write(file, lines, Charset.forName("UTF-8")); } catch
-		 * (IOException e) { // TODO Auto-generated catch block
+		 * (IOException e) { 
 		 * e.printStackTrace(); }
 		 */
+		// Y only
+//		if(Math.abs(joyStickY) < 0.0085){
+//			joyStickY = 0;
+//		}
+//		double expectedLeftSpeed = Math.sin(joyStickY) * MAX_SPEED * LEFT_Y_ADJUSTMENT;
+//		double expectedRightSpeed = Math.sin(joyStickY) * MAX_SPEED * RIGHT_Y_ADJUSTMENT;
+//		double currentLeftSpeed = Robot.robotDrive.getLeftSpeed();
+//		double currentRightSpeed = Robot.robotDrive.getRightSpeed();
+//		double currentLeftPower = Robot.robotDrive.getLeftPower();
+//		double currentRightPower = Robot.robotDrive.getRightPower();
+//		
+//		currentLeftPower = currentLeftPower + STRAIGHT_SPEED_FACTOR * (currentLeftSpeed - expectedLeftSpeed); 
+//		currentRightPower = currentRightPower + STRAIGHT_SPEED_FACTOR * (currentRightSpeed - expectedRightSpeed);
+		
+		// X only
+		
+		double expectedLeftSpeed = joyStickX * MAX_SPEED * LEFT_X_ADJUSTMENT;
+		double expectedRightSpeed = -joyStickX * MAX_SPEED * RIGHT_X_ADJUSTMENT;
+		double currentLeftSpeed = Robot.robotDrive.getLeftSpeed();
+		double currentRightSpeed = Robot.robotDrive.getRightSpeed();
+		double currentLeftPower = Robot.robotDrive.getLeftPower();
+		double currentRightPower = Robot.robotDrive.getRightPower();
+		
+		currentLeftPower = currentLeftPower + TURNING_SPEED_FACTOR * (currentLeftSpeed - expectedLeftSpeed); 
+		currentRightPower = currentRightPower + TURNING_SPEED_FACTOR * (currentRightSpeed - expectedRightSpeed);
+		
+		if(Math.abs(currentLeftPower) < 0.025){
+			currentLeftPower = 0;
+		}
+		if(Math.abs(currentRightPower) < 0.025){
+			currentRightPower = 0;
+		}
+		if(Math.abs(joyStickX) < 0.0085){
+			currentLeftPower = 0;
+			currentRightPower = 0;
+		}
+		
+		Robot.robotDrive.setLeftMotor(currentLeftPower);
+		Robot.robotDrive.setRightMotor(currentRightPower);
+		
+//		double expectedLeftSpeed = (joyStickX) * 2500;
+//		double expectedRightSpeed = (-joyStickX) * 2500;
+//		double currentLeftSpeed = Robot.robotDrive.getLeftSpeed();
+//		double currentRightSpeed = Robot.robotDrive.getRightSpeed();
+//		double currentLeftPower = Robot.robotDrive.getLeftPower();
+//		double currentRightPower = Robot.robotDrive.getRightPower();
+//		double leftError = currentLeftSpeed - expectedLeftSpeed;
+//		double rightError = currentRightSpeed - expectedRightSpeed;	
+//		
+//			currentLeftPower = currentLeftPower + TURNING_SPEED_FACTOR * (leftError); 
+//			currentRightPower = currentRightPower + TURNING_SPEED_FACTOR * (rightError);
+//		if (joyStickX < 0.0085) {
+//			currentLeftPower = 0;
+//			currentRightPower = 0;
+//		}
+//		Robot.robotDrive.setLeftMotor(currentLeftPower);
+//		Robot.robotDrive.setRightMotor(currentRightPower);
 	}
 
 	// Make this return true when this Command no longer needs to run execute()

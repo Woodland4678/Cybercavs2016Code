@@ -46,6 +46,11 @@ public class ManipulatorArm extends Subsystem {
         // Set the default command for a subsystem here.
         // setDefaultCommand(new MySpecialCommand());
     }
+   
+	//////////////////////////////////////
+	//////////Setter Functions//////////
+	/////////////////////////////////////
+    
     public void setManipulatorWrist(int position) {
     	manipulatorWrist.configPeakOutputVoltage(+8f, -8f); //max and min power
     	manipulatorWrist.setPID(0.1, 0, 0); //PID values
@@ -84,7 +89,6 @@ public class ManipulatorArm extends Subsystem {
 			manipulatorElbow.changeControlMode(TalonControlMode.Voltage);
 		}
 	}
-
 	public void setManipulatorWristMode(int mode) {
 		if (mode == 0) {
 			manipulatorWrist.changeControlMode(TalonControlMode.Current);
@@ -111,6 +115,7 @@ public class ManipulatorArm extends Subsystem {
 			manipulatorWrist.changeControlMode(TalonControlMode.Voltage);
 		}
 	}
+	
 	//////////////////////////////////////
 	//////////Accessor Functions//////////
 	/////////////////////////////////////

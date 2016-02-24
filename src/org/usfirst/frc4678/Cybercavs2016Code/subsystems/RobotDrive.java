@@ -60,6 +60,8 @@ public class RobotDrive extends Subsystem {
 	double gyroError;
 	double gyroPower = 0.75;
 	double previousAccelVal = 1000;
+	double leftPower = 0;
+	double rightPower = 0;
 	int count = 0;
 	boolean Auton;
 
@@ -113,16 +115,22 @@ public class RobotDrive extends Subsystem {
 	
 	public double getGyroPosition() {return turnGyro.getAngle();}
 	
+	public double getRightPower() {return rightPower;}
+	
+	public double getLeftPower() {return leftPower;}
+	
 	/////////////////////////////////////
 	////////// Setter functions//////////
 	/////////////////////////////////////
 	
 	public void setRightMotor(double power) {
 		rightMotor.set(-power);
+		rightPower = power;
 	}
 
 	public void setLeftMotor(double power) {
 		leftMotor.set(power);
+		leftPower = power;
 	}
 	
 	public void resetGyro() {
@@ -337,5 +345,11 @@ public class RobotDrive extends Subsystem {
 		} else {
 			return false;
 		}
+	}
+	public double getLeftSpeed() {
+		return leftEncoder.getRate();
+	}
+	public double getRightSpeed() {
+		return rightEncoder.getRate();
 	}
 }
