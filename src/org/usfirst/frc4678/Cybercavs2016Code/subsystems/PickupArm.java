@@ -352,33 +352,54 @@ public class PickupArm extends Subsystem {
 				setArmMode("Hold");
 				count = 0;
 			}
+			if (count > 10) {
+				setPickupWheels(0);
+			}
 		break;
 		}
 	}
 	public void holdPosition() {
-		setWristPosition(wristHoldPosition);
 		if (pickupWristMotor.getPosition() > -22000) { //moves wrist first just in case the wrist is below the elbow
 			setElbowPosition(elbowHoldPosition);
+		}
+		if (pickupElbowMotor.getEncPosition() < 13000) {
+			setWristPosition(wristHoldPosition);
+		}
+		else {
+			setWristPosition(wristHoldPosition + 16000);
 		}
 		setPickupWheels(0);
 	}
 	public void spitOut() {
 		switch(spitState) {
-		case 0:	//reverses wheels, moves elbow
+//		case 0:	//reverses wheels, moves elbow
+//			setPickupWheels(-Robot.pickupWheelsPower());
+//			setElbowPosition(elbowSpitOutPosition);
+//			if (Math.abs(pickupElbowMotor.getError()) < 700) { //this is in the make sure the arm moves before the wrist so the wrist doesn't crash against the robot
+//				spitState++;
+//			}
+//		break;
+//		case 1: // once elbow is moved begin the move wrist
+//			setWristPosition(wristSpitOutPosition);
+//			if (pickupWristMotor.getEncPosition() < -34500) { // if wrist is in desired position is will continue
+//				spitState++;
+//			}
+//		break;
+//		case 2: //move elbow up to give the ball more push out the robot
+//			setElbowPosition(elbowSpitOutPosition + 8500); 
+		
+		case 0:
 			setPickupWheels(-Robot.pickupWheelsPower());
-			setElbowPosition(elbowSpitOutPosition);
-			if (Math.abs(pickupElbowMotor.getError()) < 700) { //this is in the make sure the arm moves before the wrist so the wrist doesn't crash against the robot
+			setWristPosition(Robot.holdWristPosition());
+			if (count > 2) {
 				spitState++;
 			}
-		break;
-		case 1: // once elbow is moved begin the move wrist
-			setWristPosition(wristSpitOutPosition);
-			if (pickupWristMotor.getEncPosition() < -34500) { // if wrist is in desired position is will continue
-				spitState++;
-			}
-		break;
-		case 2: //move elbow up to give the ball more push out the robot
-			setElbowPosition(elbowSpitOutPosition + 8500); 
+			count++;
+			break;
+		case 1:
+			setElbowPosition(Robot.holdElbowPosition() + 11000);
+			setWristPosition(Robot.holdWristPosition() + 13000);
+			break;
 		}
 	}
 	
@@ -436,6 +457,6 @@ public class PickupArm extends Subsystem {
 		pickupWristMotor.set(wristSpeed + (kWrist * wristPositionError));
 	
 		
-		System.out.println(wristPositionError + ", " + wristPosition + ", " + wristSpeed + ", " + elbowPositionError + ", " + elbowPosition +", " + elbowSpeed);
+		//System.out.println(wristPositionError + ", " + wristPosition + ", " + wristSpeed + ", " + elbowPositionError + ", " + elbowPosition +", " + elbowSpeed);
 	}
 }
