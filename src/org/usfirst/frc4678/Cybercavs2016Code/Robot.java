@@ -246,6 +246,22 @@ public class Robot extends IterativeRobot {
         return prefs.getDouble("autoAimMaxPower", 0.2);
 	}
     
+    public static int cameraExposure() {
+    	Preferences prefs = Preferences.getInstance();
+        if (!prefs.containsKey("cameraExposure")) {
+            prefs.putInt("cameraExposure", -11);
+        }
+        return prefs.getInt("cameraExposure", -11);
+	}
+    
+    public static int cameraBrightness() {
+    	Preferences prefs = Preferences.getInstance();
+        if (!prefs.containsKey("cameraBrightness")) {
+            prefs.putInt("cameraBrightness", 0);
+        }
+        return prefs.getInt("cameraBrightness", 0);
+	}
+    
 	Command autonomousCommand;
 
 	public static USBCamera targetCam;
@@ -281,10 +297,12 @@ public class Robot extends IterativeRobot {
 		oi = new OI();
 
 		try {
+			// Change camera settings before starting grip
 	    	targetCam = new USBCamera("cam0");
-	    	targetCam.setExposureManual(-11);
-			targetCam.setBrightness(0);
+	    	targetCam.setExposureManual(cameraExposure());
+			targetCam.setBrightness(cameraBrightness());
 			targetCam.updateSettings();
+			// Close camera so grip can connect to it
 			targetCam.closeCamera();
 	    } catch (VisionException e) {
 	    	e.printStackTrace();
