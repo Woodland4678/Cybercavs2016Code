@@ -283,6 +283,7 @@ public class Robot extends IterativeRobot {
 
 		try {
 	    	targetCam = new USBCamera("cam0");
+	    	targetCam.setExposureManual(-11);
 			targetCam.setBrightness(0);
 			targetCam.updateSettings();
 			targetCam.closeCamera();
