@@ -384,8 +384,6 @@ public class RobotDrive extends Subsystem {
     public boolean autoAim() {
     	switch(state) {
     		case INITIAL:
-    			leftEncoder.reset();
-    			leftEncoder.reset();
     			double[] currentCenterXs = grip.getNumberArray("myContoursReport/centerX", new double[]{});
     	    	if (currentCenterXs.length == 0) {
     	    		setTurnPower(0);
@@ -394,10 +392,12 @@ public class RobotDrive extends Subsystem {
     	    	
     	    	pixelsToTurn = currentCenterXs[0] - CENTERX;
     	    	System.out.println("pixelsToTurn:" + pixelsToTurn);
+    	    	leftEncoder.reset();
+    			rightEncoder.reset();
     			state = AutoAimState.MOVING;
     			break;
     		case MOVING:
-    			double deltaX = PIXEL_ENCODER_RATIO * (getRightEncoder() + getLeftEncoder()) / 2;
+    			double deltaX = PIXEL_ENCODER_RATIO * (getLeftEncoder() - getRightEncoder()) / 2;
     			double ddeltaX = pixelsToTurn - deltaX;
     			double power = AUTOAIM_TURN_RATE * ddeltaX;
     			if (power < -AUTOAIM_MAX_POWER) {
