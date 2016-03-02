@@ -111,10 +111,10 @@ public class RobotMap {
         catapultcheckLatchSwitch = new DigitalInput(6);
         LiveWindow.addSensor("Catapult", "checkLatchSwitch", catapultcheckLatchSwitch);
         
-        manipulatorArmmanipulatorElbow = new CANTalon(0);
+        manipulatorArmmanipulatorElbow = new CANTalon(1);
         LiveWindow.addActuator("ManipulatorArm", "manipulatorElbow", manipulatorArmmanipulatorElbow);
         
-        manipulatorArmmanipulatorWrist = new CANTalon(1);
+        manipulatorArmmanipulatorWrist = new CANTalon(2);
         LiveWindow.addActuator("ManipulatorArm", "manipulatorWrist", manipulatorArmmanipulatorWrist);
         
         cameracameraLights = new Relay(0);

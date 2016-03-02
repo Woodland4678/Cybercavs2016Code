@@ -76,6 +76,11 @@ public class DriveTrain extends Command {
 		SmartDashboard.putNumber("winch position ", Robot.catapult.getWinchPosition());
 		SmartDashboard.putNumber("left drive train speed: ", Robot.robotDrive.getLeftSpeed());
 		SmartDashboard.putNumber("Right drive train speed: ", Robot.robotDrive.getRightSpeed());
+		SmartDashboard.putNumber("Manipulator Elbow Angular Position: ", Robot.manipulatorArm.getManipulatorElbowAngular());
+		SmartDashboard.putNumber("Manipulator Wrist Angular Position: ", Robot.manipulatorArm.getManipulatorWristAngular());
+		SmartDashboard.putNumber("Manipulator Elbow Encoder Position: ", Robot.manipulatorArm.getManipulatorElbowPosition());
+		SmartDashboard.putNumber("Manipulator Wrist Encoder Position: ", Robot.manipulatorArm.getManipulatorWristPosition());
+		
 		joyStickX = Robot.oi.driverGamepad.getX();
 		joyStickY = Robot.oi.driverGamepad.getY();
 		SmartDashboard.putNumber("joystick X: ", joyStickX);
