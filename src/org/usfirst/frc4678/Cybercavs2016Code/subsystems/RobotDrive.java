@@ -352,4 +352,8 @@ public class RobotDrive extends Subsystem {
 	public double getRightSpeed() {
 		return rightEncoder.getRate();
 	}
+	public void resetEncoders() {
+		leftEncoder.reset();
+		rightEncoder.reset();
+	}
 }
