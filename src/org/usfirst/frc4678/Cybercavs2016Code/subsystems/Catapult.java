@@ -58,7 +58,8 @@ public class Catapult extends Subsystem {
 	if (Robot.oi.getDriverGamepad().getRawButton(10)) {
 		forceShoot = true;
 	}
-	if ((Robot.pickupArm.getElbowPosition() > 28000) || (shooterState > 1) || (forceShoot)) { //makes sure arm is out of the way before shooting
+	// conditions to continue: pickup arm and manipulator arm out of the way, or its unwinding or its a force shoot
+	if (((Robot.pickupArm.getElbowPosition() > 28000) && (Robot.manipulatorArm.getManipulatorElbowPosition() > 40000)) || (shooterState > 1) || (forceShoot)) { //makes sure arm is out of the way before shooting
 			switch (shooterState) {
 			case 0: //releases the catapult and waits 1 second
 				if (count < 50) {

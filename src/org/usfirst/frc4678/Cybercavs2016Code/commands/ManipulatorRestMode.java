@@ -37,6 +37,8 @@ public class ManipulatorRestMode extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
+    	Robot.manipulatorArm.setManipulatorWristMode(5);
+    	Robot.manipulatorArm.setManipulatorElbowMode(5);
     	Robot.manipulatorArm.setManipulatorMode("Rest");
     }
 
@@ -46,7 +48,7 @@ public class ManipulatorRestMode extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return false;
+        return true;
     }
 
     // Called once after isFinished returns true

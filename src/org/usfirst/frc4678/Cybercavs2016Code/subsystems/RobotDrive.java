@@ -370,6 +370,11 @@ public class RobotDrive extends Subsystem {
 	public double getRightSpeed() {
 		return rightEncoder.getRate();
 	}
+    
+	public void resetEncoders() {
+		leftEncoder.reset();
+		rightEncoder.reset();
+	}
 	
 	public void setTurnPower(double power) {
     	setLeftMotor(power);
@@ -392,8 +397,7 @@ public class RobotDrive extends Subsystem {
     	    	
     	    	pixelsToTurn = currentCenterXs[0] - CENTERX;
     	    	System.out.println("pixelsToTurn:" + pixelsToTurn);
-    	    	leftEncoder.reset();
-    			rightEncoder.reset();
+    	    	resetEncoders();
     			state = AutoAimState.MOVING;
     			break;
     		case MOVING:

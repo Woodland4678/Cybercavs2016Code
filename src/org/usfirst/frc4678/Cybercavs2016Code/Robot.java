@@ -60,6 +60,14 @@ public class Robot extends IterativeRobot {
 		}
 		return prefs.getInt("spitOutElbowPosition", 10438);
 	}
+	
+	public static int lowBarElbowPosition() {
+		Preferences prefs = Preferences.getInstance();
+		if (!prefs.containsKey("lowBarElbowPosition")) {
+			prefs.putInt("lowBarElbowPosition", 43000);
+		}
+		return prefs.getInt("lowBarElbowPosition", 43000);
+	}
 
 	////////////////////////////////////////
 	////////// Parameters for Wrist//////////
@@ -95,13 +103,7 @@ public class Robot extends IterativeRobot {
 		}
 		return prefs.getInt("wristPullInPosition", 19257);
 	}
-	public static int wristLiftPosition() {
-		Preferences prefs = Preferences.getInstance();
-		if (!prefs.containsKey("wristLiftPosition")) {
-			prefs.putInt("wristLiftPosition", 17500);
-		}
-		return prefs.getInt("wristLiftPosition", 17500);
-	}
+
 
 	///////////////////////////////////////////
 	////////// Parameters for Catapult//////////
@@ -269,6 +271,11 @@ public class Robot extends IterativeRobot {
         }
         return prefs.getDouble("servoPosition", 0);
     }
+    
+	///////////////////////////////////////////
+	////////// Manipulator Parameters//////////
+	///////////////////////////////////////////
+    
     public static int manipulatorWristRestPosition() {
         Preferences prefs = Preferences.getInstance();
         if (!prefs.containsKey("manipulatorWristRestPosition")) {
@@ -286,9 +293,9 @@ public class Robot extends IterativeRobot {
     public static int manipulatorElbowShootPosition() {
         Preferences prefs = Preferences.getInstance();
         if (!prefs.containsKey("manipulatorElbowShootPosition")) {
-            prefs.putInt("manipulatorElbowShootPosition", 49000);
+            prefs.putInt("manipulatorElbowShootPosition", 42967);
         }
-        return prefs.getInt("manipulatorElbowShootPosition", 49000);
+        return prefs.getInt("manipulatorElbowShootPosition", 42967);
     }
     public static int manipulatorWristTestPosition() {
         Preferences prefs = Preferences.getInstance();
@@ -296,6 +303,13 @@ public class Robot extends IterativeRobot {
             prefs.putInt("manipulatorWristTestPosition", -32000);
         }
         return prefs.getInt("manipulatorWristTestPosition", -32000);
+    }
+    public static int manipulatorWristDrawBridgePosition() {
+        Preferences prefs = Preferences.getInstance();
+        if (!prefs.containsKey("manipulatorWristDrawBridgePosition")) {
+            prefs.putInt("manipulatorWristDrawBridgePosition", -16634);
+        }
+        return prefs.getInt("manipulatorWristDrawBridgePosition", -16634);
     }
 	Command autonomousCommand;
 

@@ -45,10 +45,16 @@ public class SetManipulatorArm extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	if (Robot.manipulatorArm.getManipulatorMode() == "ShootMode") {
-    		Robot.manipulatorArm.readyShootMode();
+    		Robot.manipulatorArm.readyToShoot();
     	}
     	else if(Robot.manipulatorArm.getManipulatorMode() == "Rest") {
     		Robot.manipulatorArm.restMode();
+    	}
+    	else if(Robot.manipulatorArm.getManipulatorMode() == "CategoryC") {
+    		Robot.manipulatorArm.categoryC();
+    	}
+    	else if(Robot.manipulatorArm.getManipulatorMode() == "Portcullis") {
+    		Robot.manipulatorArm.portcullis();
     	}
     }
 
