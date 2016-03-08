@@ -68,6 +68,7 @@ public class ManipulatorArm extends Subsystem {
     int wristPortcullisPosition = Robot.manipulatorWristRestPosition() - 8887;
     
     static double[][] portcullis = new double[][]{
+    		{5.0,2689,2191,110,106},
     		{2.0,-9483.0, 68573.0, 110.0, 106.0},
     		{2.0,-9560.0, 62045.0, 110.0, 106.0},
     		{2.0,-9562.0, 55137.0, 110.0, 106.0},
@@ -148,13 +149,13 @@ public class ManipulatorArm extends Subsystem {
 	/////////////////////////////////////
     
     public void setManipulatorWrist(double position) {
-    	manipulatorWrist.configPeakOutputVoltage(+4f, -4f); //max and min power
+    	manipulatorWrist.configPeakOutputVoltage(+8f, -8f); //max and min power
     	manipulatorWrist.setPID(0.1, 0, 0); //PID values
     	manipulatorWrist.setAllowableClosedLoopErr(20);
     	manipulatorWrist.set(position); // allowable error in the PID position movement
     }
     public void setManipulatorElbow(double position) {
-    	manipulatorElbow.configPeakOutputVoltage(+4f, -4f); //max and min power
+    	manipulatorElbow.configPeakOutputVoltage(+8f, -8f); //max and min power
     	manipulatorElbow.setPID(0.1, 0, 0); //PID values
     	manipulatorElbow.setAllowableClosedLoopErr(20);
     	manipulatorElbow.set(position); // allowable error in the PID position movement
@@ -229,6 +230,10 @@ public class ManipulatorArm extends Subsystem {
 	public int getManipulatorElbowAngular() {return manipulatorElbow.getPulseWidthPosition();}
 	
 	public String getManipulatorMode() {return manipulatorMode;}
+	
+	public double getWristSpeed() {return manipulatorWrist.getSpeed();}
+	
+	public double getElbowSpeed() {return manipulatorElbow.getSpeed();}
 	
 	//////////////////////////////////////
 	//////////Movement Functions//////////
@@ -430,16 +435,16 @@ public class ManipulatorArm extends Subsystem {
 		    { // We have valid data points.  Calculate target positions and speeds.
 		    pos1 = interp(find_time, start_time, end_time, start_pos1, end_pos1); // interpolate for pos1
 		    // Calculate speed assuming we will maintain the same average speed for this section
-		    speed1 = (end_pos1 - start_pos1) / (end_time - start_time) * speed_multiplier;
+		    speed1 = (end_pos1 - start_pos1) / (end_time - start_time) * speed_multiplier / 5.0;
 		
 		    pos2 = interp(find_time, start_time, end_time, start_pos2, end_pos2); // interpolate for pos2
-		    speed2 = (end_pos2 - start_pos2) / (end_time - start_time) * speed_multiplier;
+		    speed2 = (end_pos2 - start_pos2) / (end_time - start_time) * speed_multiplier / 5.0;
 		
 		    pos3 = interp(find_time, start_time, end_time, start_pos3, end_pos3); // interpolate for pos2
-		    speed3 = (end_pos3 - start_pos3) / (end_time - start_time) * speed_multiplier;
+		    speed3 = (end_pos3 - start_pos3) / (end_time - start_time) * speed_multiplier / 5.0;
 		
 		    pos4 = interp(find_time, start_time, end_time, start_pos4, end_pos4); // interpolate for pos2
-		    speed4 = (end_pos4 - start_pos4) / (end_time - start_time) * speed_multiplier;
+		    speed4 = (end_pos4 - start_pos4) / (end_time - start_time) * speed_multiplier / 5.0;
 		
 		    wristPos = pos1;
 		    elbowPos = pos2;
