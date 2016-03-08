@@ -21,6 +21,19 @@ public class DriveTrain extends Command {
 	double joyStickY;
 	double leftPower;
 	double rightPower;
+	int MAX_DECCELERATION_SPEED = 10;
+	double POWER_REDUCTION = 0.5;
+	double AUTO_SPEED_ADJUSTMENT_SPEED = 0.003;
+	double ACCELERATION_LIMITING_ADJUSTMENT_SPEED = 0.005;
+	double AUTO_SPEED_TARGET = 15;
+	boolean checkedLast = false;
+	double maxPowerForAcceleration = 0.3;
+	double autoSpeedLeftPower = 0.1;
+	double autoSpeedRightPower = 0.1;
+	double autoSpeedLastLeftPosition = 0;
+	double autoSpeedLastRightPosition = 0;
+	double leftSpeedChange;
+	double rightSpeedChange;
 	public static final double MAX_POWER = 1;
 	public static final double MAX_SPEED = 2500;
 	public static final double LEFT_X_ADJUSTMENT = 1;
@@ -124,29 +137,29 @@ public class DriveTrain extends Command {
 		
 		// X only
 		
-		double expectedLeftSpeed = joyStickX * MAX_SPEED * LEFT_X_ADJUSTMENT;
-		double expectedRightSpeed = -joyStickX * MAX_SPEED * RIGHT_X_ADJUSTMENT;
-		double currentLeftSpeed = Robot.robotDrive.getLeftSpeed();
-		double currentRightSpeed = Robot.robotDrive.getRightSpeed();
-		double currentLeftPower = Robot.robotDrive.getLeftPower();
-		double currentRightPower = Robot.robotDrive.getRightPower();
-		
-		currentLeftPower = currentLeftPower + TURNING_SPEED_FACTOR * (currentLeftSpeed - expectedLeftSpeed); 
-		currentRightPower = currentRightPower + TURNING_SPEED_FACTOR * (currentRightSpeed - expectedRightSpeed);
-		
-		if(Math.abs(currentLeftPower) < 0.025){
-			currentLeftPower = 0;
-		}
-		if(Math.abs(currentRightPower) < 0.025){
-			currentRightPower = 0;
-		}
-		if(Math.abs(joyStickX) < 0.0085){
-			currentLeftPower = 0;
-			currentRightPower = 0;
-		}
-		
-		Robot.robotDrive.setLeftMotor(currentLeftPower);
-		Robot.robotDrive.setRightMotor(currentRightPower);
+//		double expectedLeftSpeed = joyStickX * MAX_SPEED * LEFT_X_ADJUSTMENT;
+//		double expectedRightSpeed = -joyStickX * MAX_SPEED * RIGHT_X_ADJUSTMENT;
+//		double currentLeftSpeed = Robot.robotDrive.getLeftSpeed();
+//		double currentRightSpeed = Robot.robotDrive.getRightSpeed();
+//		double currentLeftPower = Robot.robotDrive.getLeftPower();
+//		double currentRightPower = Robot.robotDrive.getRightPower();
+//		
+//		currentLeftPower = currentLeftPower + TURNING_SPEED_FACTOR * (currentLeftSpeed - expectedLeftSpeed); 
+//		currentRightPower = currentRightPower + TURNING_SPEED_FACTOR * (currentRightSpeed - expectedRightSpeed);
+//		
+//		if(Math.abs(currentLeftPower) < 0.025){
+//			currentLeftPower = 0;
+//		}
+//		if(Math.abs(currentRightPower) < 0.025){
+//			currentRightPower = 0;
+//		}
+//		if(Math.abs(joyStickX) < 0.0085){
+//			currentLeftPower = 0;
+//			currentRightPower = 0;
+//		}
+//		
+//		Robot.robotDrive.setLeftMotor(currentLeftPower);
+//		Robot.robotDrive.setRightMotor(currentRightPower);
 		
 //		double expectedLeftSpeed = (joyStickX) * 2500;
 //		double expectedRightSpeed = (-joyStickX) * 2500;
@@ -165,6 +178,101 @@ public class DriveTrain extends Command {
 //		}
 //		Robot.robotDrive.setLeftMotor(currentLeftPower);
 //		Robot.robotDrive.setRightMotor(currentRightPower);
+		if (Robot.oi.getDriverGamepad().getPOV() == -1) {
+			 leftPower = joyStickY + joyStickX;
+			 rightPower = joyStickY - joyStickX;
+		     if (rightPower > 1) {
+		    	 rightPower = 0.99;
+		     }
+		     else if (rightPower < -1) {
+		    	 rightPower = -0.99;
+		     }
+		     if (leftPower > 1) {
+		    	 leftPower = 0.99;
+		     }
+		     else if (leftPower < -1) {
+		    	 leftPower = -0.99;
+		     }
+		     if ((Math.abs(joyStickY) < 0.01) && (Math.abs(joyStickX) > 0.005)) {
+		    	 if (rightPower > 0.6) {
+			    	 rightPower = 0.6;
+			     }
+			     else if (rightPower < -0.6) {
+			    	 rightPower = -0.6;
+			     }
+			     if (leftPower > 0.6) {
+			    	 leftPower = 0.6;
+			     }
+			     else if (leftPower < -0.6) {
+			    	 leftPower = -0.6;
+			     }
+			     if (joyStickX < 0.285 && joyStickX > 0.07) {
+			    	 rightPower = -0.2;
+			    	 leftPower = 0.2;
+			     }
+			     else if (joyStickX > -0.285 && joyStickX < -0.07) {
+			    	 rightPower = 0.2;
+			    	 leftPower = -0.2;
+			     }
+			     
+		     }
+		     System.out.println("leftPower, RightPower: " + leftPower + ", " + rightPower);
+		     Robot.robotDrive.setLeftMotor(-leftPower);
+			 Robot.robotDrive.setRightMotor(-rightPower);
+		}
+		else { //d-pad driving
+			if (!checkedLast) {//Only check every other time, to get a more accurate encoder reading
+				rightSpeedChange = Math.abs(Math.abs(Robot.robotDrive.getRightEncoder()) - Math.abs(autoSpeedLastRightPosition));
+	    		leftSpeedChange = Math.abs(Math.abs(Robot.robotDrive.getLeftEncoder()) - Math.abs(autoSpeedLastLeftPosition));
+	    		
+	    		if (rightSpeedChange > AUTO_SPEED_TARGET + 1) {
+	    			autoSpeedRightPower -= AUTO_SPEED_ADJUSTMENT_SPEED;
+	    		} else if (rightSpeedChange < AUTO_SPEED_TARGET - 1) {
+	    			autoSpeedRightPower += AUTO_SPEED_ADJUSTMENT_SPEED;
+	    		}
+	    		
+	    		if (leftSpeedChange > AUTO_SPEED_TARGET + 1) {
+	    			autoSpeedLeftPower -= AUTO_SPEED_ADJUSTMENT_SPEED;
+	    		} else if (leftSpeedChange < AUTO_SPEED_TARGET - 1) {
+	    			autoSpeedLeftPower += AUTO_SPEED_ADJUSTMENT_SPEED;
+	    		}
+	    		
+	    		if (autoSpeedLeftPower > 0.4) {
+	    			autoSpeedLeftPower = 0.4;
+	    		}
+	    		
+	    		if (autoSpeedRightPower > 0.4) {
+	    			autoSpeedRightPower = 0.4;
+	    		}
+	    		
+	    		autoSpeedLastRightPosition = Robot.robotDrive.getRightEncoder();
+	    		autoSpeedLastLeftPosition = Robot.robotDrive.getLeftEncoder();
+			}
+			
+			checkedLast = !checkedLast;
+			
+			leftPower = autoSpeedLeftPower;
+			rightPower = autoSpeedRightPower;
+			
+			switch (Robot.oi.getDriverGamepad().getPOV()) {
+			
+			case 0:
+			break;
+			case 90:
+				leftPower *= -1;
+			break;
+			case 180:
+				rightPower *= -1;
+				leftPower *= -1;
+			break;
+			case 270:
+				rightPower *= -1;
+			break;
+			}
+			Robot.robotDrive.setLeftMotor(leftPower);
+			Robot.robotDrive.setRightMotor(rightPower);
+		}
+	
 	}
 
 	// Make this return true when this Command no longer needs to run execute()

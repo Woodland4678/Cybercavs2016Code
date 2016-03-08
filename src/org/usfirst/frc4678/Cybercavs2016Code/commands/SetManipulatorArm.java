@@ -54,7 +54,7 @@ public class SetManipulatorArm extends Command {
     		Robot.manipulatorArm.categoryC();
     	}
     	else if(Robot.manipulatorArm.getManipulatorMode() == "Portcullis") {
-    		Robot.manipulatorArm.portcullis();
+    		Robot.manipulatorArm.portcullis1();
     	}
     }
 

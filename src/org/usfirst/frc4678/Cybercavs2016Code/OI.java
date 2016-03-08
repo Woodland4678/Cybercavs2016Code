@@ -30,6 +30,7 @@ import org.usfirst.frc4678.Cybercavs2016Code.commands.Shoot;
 import org.usfirst.frc4678.Cybercavs2016Code.commands.SpitOut;
 import org.usfirst.frc4678.Cybercavs2016Code.commands.TurnOnLightRing;
 import org.usfirst.frc4678.Cybercavs2016Code.commands.readyForPortcullis;
+import org.usfirst.frc4678.Cybercavs2016Code.commands.sallyPort;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -94,7 +95,7 @@ public class OI {
         operatorGamepad = new Joystick(1);
         
         operatorBtn4 = new JoystickButton(operatorGamepad, 4);
-        operatorBtn4.whenPressed(new readyForPortcullis());
+        operatorBtn4.whileHeld(new sallyPort());
         joystickButton2 = new JoystickButton(operatorGamepad, 3);
         joystickButton2.whenPressed(new ManipulatorShootMode());
         operatorBtn2 = new JoystickButton(operatorGamepad, 2);
@@ -130,6 +131,7 @@ public class OI {
         SmartDashboard.putData("ManipulatorCategoryCMode", new ManipulatorCategoryCMode());
         SmartDashboard.putData("PickupArmLowBarPosition", new PickupArmLowBarPosition());
         SmartDashboard.putData("readyForPortcullis", new readyForPortcullis());
+        SmartDashboard.putData("sallyPort", new sallyPort());
         SmartDashboard.putData("AutoAim", new AutoAim());
         SmartDashboard.putData("TurnOnLightRing", new TurnOnLightRing());
 
