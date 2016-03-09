@@ -149,13 +149,13 @@ public class ManipulatorArm extends Subsystem {
 	/////////////////////////////////////
     
     public void setManipulatorWrist(double position) {
-    	manipulatorWrist.configPeakOutputVoltage(+8f, -8f); //max and min power
+    	manipulatorWrist.configPeakOutputVoltage(+3f, -3f); //max and min power
     	manipulatorWrist.setPID(0.1, 0, 0); //PID values
     	manipulatorWrist.setAllowableClosedLoopErr(20);
     	manipulatorWrist.set(position); // allowable error in the PID position movement
     }
     public void setManipulatorElbow(double position) {
-    	manipulatorElbow.configPeakOutputVoltage(+8f, -8f); //max and min power
+    	manipulatorElbow.configPeakOutputVoltage(+3f, -3f); //max and min power
     	manipulatorElbow.setPID(0.1, 0, 0); //PID values
     	manipulatorElbow.setAllowableClosedLoopErr(20);
     	manipulatorElbow.set(position); // allowable error in the PID position movement

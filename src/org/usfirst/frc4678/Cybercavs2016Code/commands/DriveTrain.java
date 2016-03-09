@@ -34,6 +34,7 @@ public class DriveTrain extends Command {
 	double autoSpeedLastRightPosition = 0;
 	double leftSpeedChange;
 	double rightSpeedChange;
+	double temp = 0;
 	public static final double MAX_POWER = 1;
 	public static final double MAX_SPEED = 2500;
 	public static final double LEFT_X_ADJUSTMENT = 1;
@@ -193,7 +194,7 @@ public class DriveTrain extends Command {
 		     else if (leftPower < -1) {
 		    	 leftPower = -0.99;
 		     }
-		     if ((Math.abs(joyStickY) < 0.01) && (Math.abs(joyStickX) > 0.005)) {
+		     if ((Math.abs(joyStickY) < 0.01) && (Math.abs(joyStickX) > 0.005)) { //if only using X (i.e turning only) limit power to 60%
 		    	 if (rightPower > 0.6) {
 			    	 rightPower = 0.6;
 			     }
@@ -206,7 +207,7 @@ public class DriveTrain extends Command {
 			     else if (leftPower < -0.6) {
 			    	 leftPower = -0.6;
 			     }
-			     if (joyStickX < 0.285 && joyStickX > 0.07) {
+			     if (joyStickX < 0.285 && joyStickX > 0.07) { //if joystickX in small enough range hardcode 20%
 			    	 rightPower = -0.2;
 			    	 leftPower = 0.2;
 			     }
@@ -216,9 +217,6 @@ public class DriveTrain extends Command {
 			     }
 			     
 		     }
-		     System.out.println("leftPower, RightPower: " + leftPower + ", " + rightPower);
-		     Robot.robotDrive.setLeftMotor(-leftPower);
-			 Robot.robotDrive.setRightMotor(-rightPower);
 		}
 		else { //d-pad driving
 			if (!checkedLast) {//Only check every other time, to get a more accurate encoder reading
@@ -251,10 +249,10 @@ public class DriveTrain extends Command {
 			
 			checkedLast = !checkedLast;
 			
-			leftPower = autoSpeedLeftPower;
-			rightPower = autoSpeedRightPower;
+			leftPower = -autoSpeedLeftPower;
+			rightPower = -autoSpeedRightPower;
 			
-			switch (Robot.oi.getDriverGamepad().getPOV()) {
+			switch (Robot.oi.getDriverGamepad().getPOV()) { //determines d-pad direction and changes power sign accordingly
 			
 			case 0:
 			break;
@@ -269,9 +267,14 @@ public class DriveTrain extends Command {
 				rightPower *= -1;
 			break;
 			}
-			Robot.robotDrive.setLeftMotor(leftPower);
-			Robot.robotDrive.setRightMotor(rightPower);
 		}
+		if (Robot.oi.getDriverGamepad().getRawButton(5)) { //mirrors drivetrain
+			temp = leftPower;
+			leftPower = -rightPower;
+			rightPower = -temp;
+		}
+		Robot.robotDrive.setLeftMotor(-leftPower);
+		Robot.robotDrive.setRightMotor(-rightPower);
 	
 	}
 
