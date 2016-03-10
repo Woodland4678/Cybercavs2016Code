@@ -66,6 +66,8 @@ public class ManipulatorArm extends Subsystem {
     int elbowPortcullisPosition = Robot.manipulatorElbowRestPosition() + 59846;
     int wristShootPosition = Robot.manipulatorWristRestPosition() - 9450;
     int wristPortcullisPosition = Robot.manipulatorWristRestPosition() - 8887;
+    int wristRestPosition = Robot.manipulatorWristRestPosition();
+    int elbowAfterShootPosition = Robot.manipulatorElbowRestPosition() + 23337;
     
     static double[][] portcullis = new double[][]{
     		{5.0,2689,2191,110,106},
@@ -149,13 +151,13 @@ public class ManipulatorArm extends Subsystem {
 	/////////////////////////////////////
     
     public void setManipulatorWrist(double position) {
-    	manipulatorWrist.configPeakOutputVoltage(+3f, -3f); //max and min power
+    	manipulatorWrist.configPeakOutputVoltage(+12f, -12f); //max and min power
     	manipulatorWrist.setPID(0.1, 0, 0); //PID values
     	manipulatorWrist.setAllowableClosedLoopErr(20);
     	manipulatorWrist.set(position); // allowable error in the PID position movement
     }
     public void setManipulatorElbow(double position) {
-    	manipulatorElbow.configPeakOutputVoltage(+3f, -3f); //max and min power
+    	manipulatorElbow.configPeakOutputVoltage(+12f, -12f); //max and min power
     	manipulatorElbow.setPID(0.1, 0, 0); //PID values
     	manipulatorElbow.setAllowableClosedLoopErr(20);
     	manipulatorElbow.set(position); // allowable error in the PID position movement
@@ -471,6 +473,15 @@ public class ManipulatorArm extends Subsystem {
         localTime = localTime +timeStep;
 
         }
+	}
+	public void afterShoot() {
+		setManipulatorElbow(elbowAfterShootPosition);
+		if (Math.abs(manipulatorElbow.getError()) < 100 && count > 10) {
+			setManipulatorWrist(wristRestPosition);
+			count = 0;
+		}
+		count++;
+		System.out.println("ELBOW ERROR: " + manipulatorElbow.getError());
 	}
 
 }

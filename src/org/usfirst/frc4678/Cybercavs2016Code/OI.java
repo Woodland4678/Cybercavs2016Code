@@ -116,7 +116,7 @@ public class OI {
         driverBtn8 = new JoystickButton(driverGamepad, 8);
         driverBtn8.whenPressed(new Shoot());
         driverBtn7 = new JoystickButton(driverGamepad, 7);
-        driverBtn7.whenPressed(new AutoAim());
+        driverBtn7.whileHeld(new AutoAim());
         driverBtn4 = new JoystickButton(driverGamepad, 4);
         driverBtn4.whenPressed(new PickupArmLowBarPosition());
         driverBtn3 = new JoystickButton(driverGamepad, 3);

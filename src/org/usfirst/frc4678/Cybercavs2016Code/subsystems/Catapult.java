@@ -59,12 +59,13 @@ public class Catapult extends Subsystem {
 		forceShoot = true;
 	}
 	// conditions to continue: pickup arm and manipulator arm out of the way, or its unwinding or its a force shoot
-	if (((Robot.pickupArm.getElbowPosition() > 28000) && (Robot.manipulatorArm.getManipulatorElbowPosition() > 40000)) || (shooterState > 1) || (forceShoot)) { //makes sure arm is out of the way before shooting
+	if (((Robot.pickupArm.getElbowPosition() > 28000) && (Robot.manipulatorArm.getManipulatorElbowPosition() > 25000)) || (shooterState > 1) || (forceShoot)) { //makes sure arm is out of the way before shooting
 			switch (shooterState) {
 			case 0: //releases the catapult and waits 1 second
 				if (count < 50) {
 					latchServo.set(Robot.latchShootPosition());
 				} else {
+					Robot.manipulatorArm.setManipulatorMode("AfterShoot");
 					count = 0;
 					shooterState++;
 				}
@@ -72,11 +73,13 @@ public class Catapult extends Subsystem {
 				break;
 			case 1: //runs command to pull the catapult back down
 				if (windWinch() == true) {
+					Robot.pickupArm.setArmMode("Hold");
 					shooterState++;
 				}
 				break;
 			case 2: //runs command to unwind winch once catapult is locked in
 				if (unwindWinch() == true) {
+					Robot.manipulatorArm.setManipulatorMode("Rest");
 					shooterState++;
 				}
 				break;

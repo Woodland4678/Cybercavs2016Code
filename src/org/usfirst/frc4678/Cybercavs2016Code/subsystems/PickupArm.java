@@ -36,6 +36,7 @@ public class PickupArm extends Subsystem {
 	int timeCount = 0;
 	boolean isPickupPosition = false;
 	boolean wristInPosition = false;
+	boolean elbowInLowPos = false;
 	double elbowPosition = 0;
 	double elbowSpeed = 0;
 	double wristPosition = 0;
@@ -150,11 +151,11 @@ public class PickupArm extends Subsystem {
 	int wristHoldPosition = Robot.holdWristPosition();
 	int wristPickupPosition = Robot.holdWristPosition() + 18413;
 	int wristSpitOutPosition = Robot.spitOutWristPosition();
-//	int wristLowBarPosition = Robot.holdWristPosition() + 0;
+	int wristLowBarPosition = Robot.holdWristPosition() + 20000;
 	int elbowHoldPosition = Robot.holdElbowPosition();
 	int elbowPickupPosition = Robot.holdElbowPosition() + 37112;
 	int elbowSpitOutPosition = Robot.spitOutElbowPosition();
-	int elbowLowBarPosition = Robot.holdElbowPosition() + 41000;
+	int elbowLowBarPosition = Robot.holdElbowPosition() + 41546;
 	int elbowShootPosition = Robot.holdElbowPosition() + 25938;
 
 	// Put methods for controlling this subsystem
@@ -437,7 +438,20 @@ public class PickupArm extends Subsystem {
 //			setPickupWheels(0);
 //			break;
 //		}
-		setElbowPosition(Robot.lowBarElbowPosition());
+		setElbowPosition(elbowLowBarPosition);
+		if (pickupElbowMotor.getError() < 200 && count > 10 || elbowInLowPos) {
+			count = 0;
+			pickupWristMotor.changeControlMode(TalonControlMode.Position);
+			pickupWristMotor.set(wristLowBarPosition);
+			elbowInLowPos = true;
+		}
+		else {
+			pickupWristMotor.changeControlMode(TalonControlMode.Voltage);
+			pickupWristMotor.set(0);
+		}
+		count++;
+		
+			
 		setPickupWheels(0);
 	}
 	public void readyToShoot() {
