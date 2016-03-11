@@ -304,22 +304,23 @@ public class PickupArm extends Subsystem {
 	
 	public void setElbowPosition(int position) {
 		if ((pickupElbowMotor.getPosition() < 11000) && (armMode == "Hold")) {
-			pickupElbowMotor.configPeakOutputVoltage(+3f, -3f); // lowers power when arm is close to hold position
+			pickupElbowMotor.configPeakOutputVoltage(+2f, -2f); // lowers power when arm is close to hold position
 		}
 		else {
-			pickupElbowMotor.configPeakOutputVoltage(+8f, -8f); //max and min power
+			pickupElbowMotor.configPeakOutputVoltage(+8f, -8f); //max and min power //was 8
 		}
-		pickupElbowMotor.setPID(0.9, 0, 0); //PID values
+		pickupElbowMotor.setPID(0.3, 0.0, 0.0); //PID values
 		pickupElbowMotor.setAllowableClosedLoopErr(20);
 		pickupElbowMotor.set(position); // allowable error in the PID position movement
 	}
 
 	public void setWristPosition(int position) {
 		if ((pickupElbowMotor.getPosition() < 11000) && (armMode == "Hold")) {
-			pickupWristMotor.configPeakOutputVoltage(+3.5f, -3.5f); // lowers power when arm close to hold
+			pickupWristMotor.configPeakOutputVoltage(+2f, -2f); // lowers power when arm close to hold
 		} else {
-			pickupWristMotor.configPeakOutputVoltage(+6f, -6f);  //max and min power
+			pickupWristMotor.configPeakOutputVoltage(6f, -6f);  //max and min power //was 6
 		}
+		
 		pickupWristMotor.setPID(0.7, 0, 0); // PID values
 		pickupWristMotor.setAllowableClosedLoopErr(20); // allowable error in the PID position movement
 		pickupWristMotor.set(position);
@@ -332,16 +333,26 @@ public class PickupArm extends Subsystem {
 	public void pickup() {
 		switch(pickupState) {
 		case 0: //moves Arm to higher position and waits for wrist to be in position
-			setWristPosition(wristPickupPosition);
-			if (pickupElbowMotor.getEncPosition() > 10000) {  //
+//			setWristPosition(wristPickupPosition);
+//			if (pickupElbowMotor.getEncPosition() > 10000) {  //
+//				setWristPosition(wristPickupPosition);
+//				if (pickupWristMotor.getEncPosition() > 5229) { //detects if wrist is in position so that the elbow may continue moving
+//					setElbowPosition(elbowPickupPosition);
+//					setPickupWheels(Robot.pickupWheelsPower());
+//				}
+//			}
+//			else {
+//				setElbowPosition(elbowPickupPosition - 25000);//moves arm to specific location until the wrist is in position so we don't go over 15 in
+//			}
+			setElbowPosition(elbowPickupPosition);
+			if (pickupElbowMotor.getEncPosition() > (elbowHoldPosition + 28000)) {
+				pickupWristMotor.changeControlMode(TalonControlMode.Position);
 				setWristPosition(wristPickupPosition);
-				if (pickupWristMotor.getEncPosition() > 5229) { //detects if wrist is in position so that the elbow may continue moving
-					setElbowPosition(elbowPickupPosition);
-					setPickupWheels(Robot.pickupWheelsPower());
-				}
+				setPickupWheels(Robot.pickupWheelsPower());
 			}
 			else {
-				setElbowPosition(elbowPickupPosition - 25000);//moves arm to specific location until the wrist is in position so we don't go over 15 in
+				pickupWristMotor.changeControlMode(TalonControlMode.Voltage);
+				pickupWristMotor.set(0);
 			}
 			if (!backBallSensor.get()) { //starts incrementing count once the back sensor sees the ball
 				count++;			
