@@ -96,17 +96,17 @@ public class SetManipulatorArm extends Command {
     		Robot.manipulatorArm.afterShoot();
     	}
     	if (Robot.manipulatorArm.getManipulatorMode() == "Manual") {
-    		if(operatorJoystickY > 0.2) {
-    			operatorJoystickY = 0.2;
+    		if(operatorJoystickY > 0.4) {
+    			operatorJoystickY = 0.4;
     		}
-    		if(operatorJoystickX > 0.2) {
-    			operatorJoystickX = 0.2;
+    		if(operatorJoystickX > 0.4) {
+    			operatorJoystickX = 0.4;
     		}
-    		if(operatorJoystickY < -0.2) {
-    			operatorJoystickY = -0.2;
+    		if(operatorJoystickY < -0.4) {
+    			operatorJoystickY = -0.4;
     		}
-    		if(operatorJoystickX < -0.2) {
-    			operatorJoystickX = -0.2;
+    		if(operatorJoystickX < -0.4) {
+    			operatorJoystickX = -0.4;
     		}
     		if (Math.abs(operatorJoystickX) < 0.01 && holdWristPos == false) {    			
     			Robot.manipulatorArm.setManipulatorWristMode(5);
@@ -117,7 +117,7 @@ public class SetManipulatorArm extends Command {
     			holdElbowPos = true;
     		}
     		elbowAngle = ((elbowPosition - 4000)/27379.75); // Get elbow angle in Radians
-    		wristAngle = ((2842 - wristPosition)/ 11589); // Get wrist angle in radians
+    		wristAngle = ((Robot.manipulatorWristRestPosition() - wristPosition)/ 11589); // Get wrist angle in radians
             // When wrist angle < 0.28, elbow angle must be < 0.73.  This changes to ensure we miss the bumper
             // in that wrist angle at 0.56 will miss the bumper when elbow is at 1.5 (nearly 90 deg straight up).
             // a linear relationship could be used here.  If Elbow is moving up, wrist min angle can be calculated
@@ -133,7 +133,7 @@ public class SetManipulatorArm extends Command {
                 operatorJoystickX = 0; // Prevent wrist from moving when angle is at or very near 0
             if ((wristAngle >= 3.1415)&&(operatorJoystickX > 0))
                 operatorJoystickX = 0; // And no further out than 180 degrees
-            if ((elbowAngle <= -0.03)&&(operatorJoystickY > 0))
+            if ((elbowAngle <= -0.02)&&(operatorJoystickY > 0))
                 operatorJoystickY = 0; // Limit downward elbow when we are just below the 0 degree point
             if ((elbowAngle >= 2.5)&&(operatorJoystickY < 0))
                 operatorJoystickY = 0; // Limit outward Elbow Position to about 135 degrees
@@ -155,25 +155,25 @@ public class SetManipulatorArm extends Command {
                 operatorJoystickX = 0; // Maybe check sign of this one too.
             
             // sin and cos math can be used to determine x and y positions relative to the pivot point.
-            // elbow is 15.5" between pivot points and wrist is 18" from pivot to arm end point.
+            // elbow is 16.5" between pivot points and wrist is 18" from pivot to arm end point.
             // x position (distance from elbow pivot out towards the front of the robot) can be calculated as 
-            // -15.5 * cos(elbowAngle) + 18 * cos(elbowAngle - wristAngle)
+            // -15.6 * cos(elbowAngle) + 18.5 * cos(elbowAngle - wristAngle)
             // y position (distance up from elbow pivot to end of wrist)
-            // 15.5 * sin(elbowAngle) + 18 * sin(elbowAngle - wristAngle)
+            // 16.5 * sin(elbowAngle) + 18.5 * sin(elbowAngle - wristAngle)
             // We will want to keep the x position < 17" or so to ensure we don't extend beyond the robot frame
             // to find the acceptable wrist angle, use this calculation: (The 17 may be changed to give more or less distance to elbow pivot)
-            acosof = (15.5*Math.cos(elbowAngle) + 17) / 18.0;
+            acosof = (16.5*Math.cos(elbowAngle) + 17) / 18.5;
             if ((acosof >= -1)&&(acosof <= 1)) { // when acoseof is in the range of -1 to 1, we have a possible wrist angle range to avoid
                 invalidwristrangemin = elbowAngle - Math.acos(acosof); // Calculate start of angle we need to keep wrist out of
                 invalidwristrangemax = elbowAngle + Math.acos(acosof); // Calculate end of angle we need to keep wrist out of
                 if ((wristAngle > invalidwristrangemin)&&(wristAngle < invalidwristrangemax)) { // need to get wrist out of invalid range
                     if (wristAngle - invalidwristrangemin < invalidwristrangemax - wristAngle) { // See which one we're closer to
-                        wristPosition = 2842 - invalidwristrangemin * 11589; // set position to the min location
+                        wristPosition = Robot.manipulatorWristRestPosition() - invalidwristrangemin * 11589; // set position to the min location
     		         	Robot.manipulatorArm.setManipulatorWristMode(5); // Go to Position Mode
         	         	holdWristPos = true;
                         }
                     else {
-                    	wristPosition = 2842 - invalidwristrangemax * 11589; // Set position to the max location
+                    	wristPosition = Robot.manipulatorWristRestPosition() - invalidwristrangemax * 11589; // Set position to the max location
                			Robot.manipulatorArm.setManipulatorWristMode(5); // Go to Position Mode
         	         	holdWristPos = true;
                     }
