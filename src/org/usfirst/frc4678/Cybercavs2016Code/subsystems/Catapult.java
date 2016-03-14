@@ -73,7 +73,9 @@ public class Catapult extends Subsystem {
 				break;
 			case 1: //runs command to pull the catapult back down
 				if (windWinch() == true) {
-					Robot.pickupArm.setArmMode("Hold");
+					if (Robot.pickupArm.getArmMode() != "Pickup") {
+						Robot.pickupArm.setArmMode("Hold");
+					}
 					shooterState++;
 				}
 				break;
