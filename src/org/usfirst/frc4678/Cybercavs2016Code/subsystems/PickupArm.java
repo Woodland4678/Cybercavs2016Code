@@ -399,7 +399,7 @@ public class PickupArm extends Subsystem {
 			pickupWristMotor.set(0);
 		}
 		setPickupWheels(0);
-		System.out.println("Elbow Error :" + pickupElbowMotor.getError());
+		//System.out.println("Elbow Error :" + pickupElbowMotor.getError());
 	}
 	public void spitOut() {
 		switch(spitState) {
@@ -493,9 +493,9 @@ public class PickupArm extends Subsystem {
 		if (elbowStartPosition < 0) {
 			elbowStartPosition = elbowStartPosition + 4096;
 		}
-		if (wristStartPosition < 1500) {
-			wristStartPosition = wristStartPosition + 4096;
-		}
+//		if (wristStartPosition < 1500) {
+//			wristStartPosition = wristStartPosition + 4096;
+//		}
 		pickupWristMotor.setPulseWidthPosition(wristStartPosition);
 		pickupElbowMotor.setPulseWidthPosition(elbowStartPosition);
 		pickupWristMotor.setEncPosition(wristStartPosition);

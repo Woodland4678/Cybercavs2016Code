@@ -23,6 +23,7 @@ import org.usfirst.frc4678.Cybercavs2016Code.commands.*;
 import org.usfirst.frc4678.Cybercavs2016Code.subsystems.*;
 
 import com.ni.vision.VisionException;
+import org.usfirst.frc4678.Cybercavs2016Code.commands.Shoot;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -376,8 +377,15 @@ public class Robot extends IterativeRobot {
 		// teleop starts running. If you want the autonomous to
 		// continue until interrupted by another command, remove
 		// this line or comment it out.
-		if (autonomousCommand != null)
+		if (autonomousCommand != null) {
 			autonomousCommand.cancel();
+		}
+		if (Robot.catapult.shooterState != 0) {
+			Robot.catapult.setShooterState(Robot.catapult.getPreviousShooterState());
+			Command cmd1 = new Shoot();
+			cmd1.start();
+		}
+		Robot.robotDrive.setIsInAuto(false);
 	}
 
 	/**

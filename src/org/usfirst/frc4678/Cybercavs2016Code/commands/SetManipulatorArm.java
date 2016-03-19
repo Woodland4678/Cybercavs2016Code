@@ -56,6 +56,9 @@ public class SetManipulatorArm extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	if (Robot.oi.operatorGamepad.getPOV() == 0) {
+    		Robot.manipulatorArm.setManipulatorMode("StraightUp");
+    	}
     	operatorJoystickX = Robot.oi.getOperatorGamepad().getX();
     	operatorJoystickY = Robot.oi.getOperatorGamepad().getY();
     	if (Math.abs(operatorJoystickX) > 0.01) {
@@ -94,6 +97,16 @@ public class SetManipulatorArm extends Command {
     		Robot.manipulatorArm.setManipulatorElbowMode(5);
     		Robot.manipulatorArm.setManipulatorWristMode(5);
     		Robot.manipulatorArm.afterShoot();
+    	}
+    	else if(Robot.manipulatorArm.getManipulatorMode() == "AfterShoot") {
+    		Robot.manipulatorArm.setManipulatorElbowMode(5);
+    		Robot.manipulatorArm.setManipulatorWristMode(5);
+    		Robot.manipulatorArm.afterShoot();
+    	}
+    	else if(Robot.manipulatorArm.getManipulatorMode() == "StraightUp") {
+    		Robot.manipulatorArm.setManipulatorElbowMode(5);
+    		Robot.manipulatorArm.setManipulatorWristMode(5);
+    		Robot.manipulatorArm.straightUp();
     	}
     	if (Robot.manipulatorArm.getManipulatorMode() == "Manual") {
     		if(operatorJoystickY > 0.4) {
@@ -192,7 +205,7 @@ public class SetManipulatorArm extends Command {
     			Robot.manipulatorArm.setManipulatorElbow(-operatorJoystickY);
     		}
     	}
-    	System.out.println(wristAngle + ", " + elbowAngle);
+    	//System.out.println(wristAngle + ", " + elbowAngle);
     	
     }
 
