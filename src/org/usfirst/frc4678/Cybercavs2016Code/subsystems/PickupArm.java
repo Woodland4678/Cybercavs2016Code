@@ -360,7 +360,7 @@ public class PickupArm extends Subsystem {
 			else {
 				count = 0;
 			}
-			if (count > 15) { // after 15 counts (~1/4 of a second) it assumes the ball is centered and proceeds to pick up the ball
+			if (count > 15 || Robot.oi.driverGamepad.getRawButton(12)) { // after 15 counts (~1/4 of a second) it assumes the ball is centered and proceeds to pick up the ball
 				pickupState++;
 				count = 0;
 			}

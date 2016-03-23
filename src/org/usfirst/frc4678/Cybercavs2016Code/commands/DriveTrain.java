@@ -95,6 +95,7 @@ public class DriveTrain extends Command {
 		SmartDashboard.putNumber("Manipulator Elbow Encoder Position: ", Robot.manipulatorArm.getManipulatorElbowPosition());
 		SmartDashboard.putNumber("Manipulator Wrist Encoder Position: ", Robot.manipulatorArm.getManipulatorWristPosition());
 		SmartDashboard.putNumber("pickup wheels speed ", Robot.pickupArm.getPickupWheelsSpeed());
+		SmartDashboard.putNumber("Gyro: ", Robot.robotDrive.getGyroAngle());
 		
 		joyStickX = Robot.oi.driverGamepad.getX();
 		joyStickY = Robot.oi.driverGamepad.getY();

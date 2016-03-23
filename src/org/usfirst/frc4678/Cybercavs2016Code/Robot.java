@@ -296,6 +296,13 @@ public class Robot extends IterativeRobot {
         }
         return prefs.getInt("manipulatorWristDrawBridgePosition", -16634);
     }
+    public static int autoPosition() {
+        Preferences prefs = Preferences.getInstance();
+        if (!prefs.containsKey("autoPosition")) {
+            prefs.putInt("autoPosition", 1);
+        }
+        return prefs.getInt("autoPosition", 1);
+    }
 	Command autonomousCommand;
 
 	public static OI oi;

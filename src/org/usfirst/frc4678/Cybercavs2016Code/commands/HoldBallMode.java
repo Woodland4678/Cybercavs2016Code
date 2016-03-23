@@ -37,7 +37,9 @@ public class HoldBallMode extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	Robot.pickupArm.setArmMode("Hold");
+    	if (Robot.catapult.shooterState >= 3 || Robot.catapult.shooterState == 0) {
+    		Robot.pickupArm.setArmMode("Hold");
+    	}
     }
 
     // Called repeatedly when this Command is scheduled to run

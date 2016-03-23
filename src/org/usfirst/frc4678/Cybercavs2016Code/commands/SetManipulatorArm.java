@@ -108,6 +108,16 @@ public class SetManipulatorArm extends Command {
     		Robot.manipulatorArm.setManipulatorWristMode(5);
     		Robot.manipulatorArm.straightUp();
     	}
+    	else if (Robot.manipulatorArm.getManipulatorMode() == "SallyPort") {
+    		Robot.manipulatorArm.setManipulatorElbowMode(5);
+    		Robot.manipulatorArm.setManipulatorWristMode(5);
+    		Robot.manipulatorArm.sallyPort();
+    	}
+    	else if (Robot.manipulatorArm.getManipulatorMode() == "ExitSallyPort") {
+    		Robot.manipulatorArm.setManipulatorElbowMode(5);
+    		Robot.manipulatorArm.setManipulatorWristMode(5);
+    		Robot.manipulatorArm.exitSallyPort();
+    	}
     	if (Robot.manipulatorArm.getManipulatorMode() == "Manual") {
     		if(operatorJoystickY > 0.4) {
     			operatorJoystickY = 0.4;
@@ -205,7 +215,7 @@ public class SetManipulatorArm extends Command {
     			Robot.manipulatorArm.setManipulatorElbow(-operatorJoystickY);
     		}
     	}
-    	//System.out.println(wristAngle + ", " + elbowAngle);
+    	System.out.println("IN SET MANIPULATOR ARM!!!!");
     	
     }
 

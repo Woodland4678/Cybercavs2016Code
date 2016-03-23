@@ -106,11 +106,11 @@ public class OI {
         operatorBtn4 = new JoystickButton(operatorGamepad, 4);
         operatorBtn4.whileHeld(new Portcullis());
         operatorBtn3 = new JoystickButton(operatorGamepad, 3);
-        operatorBtn3.whenPressed(new DrawBridge());
+        operatorBtn3.whileHeld(new DrawBridge());
         operatorBtn2 = new JoystickButton(operatorGamepad, 2);
         operatorBtn2.whenPressed(new ManipulatorRestMode());
         operatorBtn1 = new JoystickButton(operatorGamepad, 1);
-        operatorBtn1.whenPressed(new sallyPort());
+        operatorBtn1.whileHeld(new sallyPort());
         driverGamepad = new Joystick(0);
         
         driverBtn6 = new JoystickButton(driverGamepad, 6);

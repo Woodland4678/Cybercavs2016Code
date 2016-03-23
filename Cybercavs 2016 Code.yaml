@@ -630,7 +630,7 @@ Children:
           default: whileHeld
           name: When to Run
           validators: null
-          value: whenPressed
+          value: whileHeld
       Base: Joystick Button
       Name: OperatorBtn1
     - Children: []
@@ -688,7 +688,7 @@ Children:
           default: whileHeld
           name: When to Run
           validators: null
-          value: whenPressed
+          value: whileHeld
       Base: Joystick Button
       Name: OperatorBtn3
     - Children: []
@@ -1215,10 +1215,10 @@ Children:
       Requires: !!robotbuilder.data.properties.TypeSelectionProperty {default: None,
         name: Requires, type: Subsystem, validators: null, value: RobotDrive}
       Parameter presets: !!robotbuilder.data.properties.ParameterSetProperty
-        default: &id022 []
+        default: []
         name: Parameter presets
         validators: null
-        value: *id022
+        value: []
       Button on SmartDashboard: !!robotbuilder.data.properties.BooleanProperty {default: true,
         name: Button on SmartDashboard, validators: null, value: true}
     Base: Command
@@ -1233,10 +1233,10 @@ Children:
       Requires: !!robotbuilder.data.properties.TypeSelectionProperty {default: None,
         name: Requires, type: Subsystem, validators: null, value: RobotDrive}
       Parameter presets: !!robotbuilder.data.properties.ParameterSetProperty
-        default: &id023 []
+        default: []
         name: Parameter presets
         validators: null
-        value: *id023
+        value: []
       Button on SmartDashboard: !!robotbuilder.data.properties.BooleanProperty {default: true,
         name: Button on SmartDashboard, validators: null, value: true}
     Base: Command
