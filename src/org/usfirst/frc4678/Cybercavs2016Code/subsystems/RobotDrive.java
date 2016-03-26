@@ -366,17 +366,30 @@ public class RobotDrive extends Subsystem {
 			return false;
 		}
 	}
+	
+	public double gyro_I = 0;
+	public double MAXGYROPOWER = 0.4;
 
 	public boolean gyroTurn(double target) {
 		gyroTarget = target;
 		gyroError = gyroTarget - gyro.getAngle();
-		gyroPower = gyroError * 0.0155; // 0.0067 was pretty good
+		if (gyroError > 7.0) {
+			gyro_I = 0.0;
+		} else
+			gyro_I += gyroError * 0.005; // At 7.0 error, this is 0.007 in 0.25 seconds, 
+		gyroPower = gyroError * 0.03 + gyro_I; // 0.0067 was pretty good
+		if (gyroPower > MAXGYROPOWER)
+			gyroPower = MAXGYROPOWER;
+		if (gyroPower < -MAXGYROPOWER)
+			gyroPower = -MAXGYROPOWER;
 		setLeftMotor(-gyroPower);
 		setRightMotor(gyroPower);
-		if (Math.abs(gyroError) < 10) {
-			// System.out.println("THE GYRO TURNING HAS REACHED TARGET!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+		if (Math.abs(gyroError) < 5) {
+			Robot.robotDrive.setLeftMotor(0);
+			Robot.robotDrive.setRightMotor(0);
 			return true;
 		}
+		System.out.println(gyroError + ", " + gyro_I + ", " + gyroPower);
 		return false;
 
 	}
@@ -663,7 +676,7 @@ public class RobotDrive extends Subsystem {
    		if (rightpwr < -MAXPOWER)
    			rightpwr = -MAXPOWER;
    		
-   		//System.out.printf("LP=%6.2f RP=%6.2f LS=%6.2f RS=%6.2f LPWR=%6.2f RPWR=%6.2f Lerr:%6.2f=%6.2f-%6.2f Rerr:%6.2f=%6.2f-%6.2f \n",leftPos,rightPos,leftSpeed,rightSpeed,leftpwr,rightpwr,lefterr,leftPos,lastleftEncoder,righterr,rightPos,lastrightEncoder);
+   		System.out.printf("LP=%6.2f RP=%6.2f LS=%6.2f RS=%6.2f LPWR=%6.2f RPWR=%6.2f Lerr:%6.2f=%6.2f-%6.2f Rerr:%6.2f=%6.2f-%6.2f \n",leftPos,rightPos,leftSpeed,rightSpeed,leftpwr,rightpwr,lefterr,leftPos,lastleftEncoder,righterr,rightPos,lastrightEncoder);
     	setLeftMotor(-leftpwr);
     	setRightMotor(-rightpwr);
     	

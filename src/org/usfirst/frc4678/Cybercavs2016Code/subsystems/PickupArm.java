@@ -304,7 +304,7 @@ public class PickupArm extends Subsystem {
 	
 	public void setElbowPosition(int position) {
 		if ((pickupElbowMotor.getPosition() < 11000) && (armMode == "Hold")) {
-			pickupElbowMotor.configPeakOutputVoltage(+2f, -2f); // lowers power when arm is close to hold position
+			pickupElbowMotor.configPeakOutputVoltage(+3f, -3f); // lowers power when arm is close to hold position
 		}
 		else {
 			pickupElbowMotor.configPeakOutputVoltage(+8f, -8f); //max and min power //was 8
@@ -316,7 +316,7 @@ public class PickupArm extends Subsystem {
 
 	public void setWristPosition(int position) {
 		if ((pickupElbowMotor.getPosition() < 11000) && (armMode == "Hold")) {
-			pickupWristMotor.configPeakOutputVoltage(+2f, -2f); // lowers power when arm close to hold
+			pickupWristMotor.configPeakOutputVoltage(+4f, -4f); // lowers power when arm close to hold
 		} else {
 			pickupWristMotor.configPeakOutputVoltage(6f, -6f);  //max and min power //was 6
 		}

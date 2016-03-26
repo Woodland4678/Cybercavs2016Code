@@ -24,7 +24,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  */
 public class Catapult extends Subsystem {
 
-	public int shooterState = 0;
+	int shooterState = 0;
 	int windState = 0;
 	int count = 0;
 	int previousShooterState = 0;
@@ -56,6 +56,7 @@ public class Catapult extends Subsystem {
 	}
 
 	public boolean shootBoulder() {
+	previousShooterState = shooterState;
 	if (Robot.oi.getDriverGamepad().getRawButton(10)) {
 		forceShoot = true;
 	}
@@ -107,13 +108,14 @@ public class Catapult extends Subsystem {
 			winchMotor.disable();
 			return true;
 		}
-		System.out.println("Catapult case: " + shooterState);
+		//System.out.println("Catapult case: " + shooterState + "previous state: " + previousShooterState);
 		return false;
 		
 	}
 
 	// Greater than and Less than might be changed around
 	public boolean windWinch() {
+		
 		latchServo.set(Robot.latchReadyPosition());
 		switch(windState) {
 		case 0: //continuously checks until the limit switch is no longer clicked
@@ -180,4 +182,7 @@ public class Catapult extends Subsystem {
 	public int getPreviousShooterState() {
 		return previousShooterState;
 	}
+	public int getShooterState(){
+		return shooterState;
+	}	
 }

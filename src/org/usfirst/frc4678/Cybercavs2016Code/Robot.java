@@ -387,10 +387,11 @@ public class Robot extends IterativeRobot {
 		if (autonomousCommand != null) {
 			autonomousCommand.cancel();
 		}
-		if (Robot.catapult.shooterState != 0) {
+		if (Robot.catapult.getPreviousShooterState() != 0) {
 			Robot.catapult.setShooterState(Robot.catapult.getPreviousShooterState());
 			Command cmd1 = new Shoot();
 			cmd1.start();
+			
 		}
 		Robot.robotDrive.setIsInAuto(false);
 	}

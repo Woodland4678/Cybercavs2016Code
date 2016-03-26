@@ -207,13 +207,13 @@ public class ManipulatorArm extends Subsystem {
     
     public void setManipulatorWrist(double position) {
     	manipulatorWrist.configPeakOutputVoltage(+12f, -12f); //max and min power
-    	manipulatorWrist.setPID(0.23, 0, 0); //PID values
+    	manipulatorWrist.setPID(0.27, 0, 0); //PID values
     	manipulatorWrist.setAllowableClosedLoopErr(20);
     	manipulatorWrist.set(position); // allowable error in the PID position movement
     }
     public void setManipulatorElbow(double position) {
     	manipulatorElbow.configPeakOutputVoltage(+12f, -12f); //max and min power
-    	manipulatorElbow.setPID(0.23, 0, 0); //PID values
+    	manipulatorElbow.setPID(0.27, 0, 0); //PID values
     	manipulatorElbow.setAllowableClosedLoopErr(20);
     	manipulatorElbow.set(position); // allowable error in the PID position movement
     }
@@ -571,7 +571,7 @@ public class ManipulatorArm extends Subsystem {
 		switch(sallyState) {
 		case 0:
 			setManipulatorWrist(wristSallyReady);
-			if (manipulatorWrist.getError() < 100 && count > 10) {
+			if (manipulatorWrist.getError() < 250 && count > 10) {
 				setManipulatorElbow(elbowSallyReady);
 				sallyState++;
 				count = 0;
@@ -579,21 +579,29 @@ public class ManipulatorArm extends Subsystem {
 			count++;
 		break;
 		case 1:
-			if (manipulatorElbow.getError() < 100 && count > 10) {
+			if (manipulatorElbow.getError() < 250 && count > 10) {
 				sallyState++;
 				totalTime = 1.0;
 				timeCount = 0;
+				Robot.robotDrive.resetGoToDistanceState();
 			}
 			count ++;
 		break;
 		case 2:
 			timeCount += fpgaDiff;
-			encoderPosition = (encoderSallyMax - 0) * timeCount / totalTime + 0;
-			speed = ((encoderSallyMax - 0) / totalTime) / SPEED_FACTOR;
-//			Robot.robotDrive.DrivePath(encoderPosition, speed, encoderPosition, speed);
-			Robot.robotDrive.setRightMotor(-1);
-			Robot.robotDrive.setLeftMotor(-1);
-			if (Robot.robotDrive.getRightEncoder() > encoderSallyMax) {
+//			encoderPosition = (encoderSallyMax - 0) * timeCount / totalTime + 0;
+//			speed = ((encoderSallyMax - 0) / totalTime) / SPEED_FACTOR;
+////			Robot.robotDrive.DrivePath(encoderPosition, speed, encoderPosition, speed);
+//			Robot.robotDrive.setRightMotor(-1);
+//			Robot.robotDrive.setLeftMotor(-1);
+//			if (Robot.robotDrive.getRightEncoder() > encoderSallyMax) {
+//				Robot.robotDrive.setRightMotor(0);
+//				Robot.robotDrive.setLeftMotor(0);
+//				sallyState++;
+//				timeCount = 0;
+//				totalTime = 1.0;
+//			}
+			if (Robot.robotDrive.goToDistance(-120, -120, 0.95, 5, 5, 0.9, 0.9)) {
 				Robot.robotDrive.setRightMotor(0);
 				Robot.robotDrive.setLeftMotor(0);
 				sallyState++;
@@ -603,7 +611,7 @@ public class ManipulatorArm extends Subsystem {
 		break;
 		case 3:
 			timeCount++;
-			if (timeCount > 5) {
+			if (timeCount > 15) {
 				sallyState++;
 			}
 			break;
@@ -613,7 +621,7 @@ public class ManipulatorArm extends Subsystem {
 ////			Robot.robotDrive.DrivePath(encoderPosition, speed, encoderPosition, speed);
 //			Robot.robotDrive.setRightMotor(1);
 //			Robot.robotDrive.setLeftMotor(1);
-			Robot.robotDrive.goToDistance(1000, 1000, 1, 5, 5, 0.9, 0.9);
+			Robot.robotDrive.goToDistance(1000, 1000, 0.95, 5, 5, 0.9, 0.9);
 			if (Robot.robotDrive.getFrontLightSensorValue() > 1200) {
 				sallyState++;
 				Robot.robotDrive.setRightMotor(0);
