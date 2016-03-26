@@ -18,6 +18,7 @@ import org.usfirst.frc4678.Cybercavs2016Code.Robot;
  *
  */
 public class SetManipulatorArm extends Command {
+	int autoDefense = 0;
 	double operatorJoystickX = 0;
 	double operatorJoystickY = 0;
 	boolean holdWristPos = true;
@@ -50,6 +51,9 @@ public class SetManipulatorArm extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
+    	if (Robot.oi.getAutoSwitch().getRawButton(16)) {
+    		autoDefense += 1;
+    	}
 		Robot.manipulatorArm.setManipulatorElbowMode(5);
 		Robot.manipulatorArm.setManipulatorWristMode(5);
     }
@@ -215,8 +219,8 @@ public class SetManipulatorArm extends Command {
     			Robot.manipulatorArm.setManipulatorElbow(-operatorJoystickY);
     		}
     	}
-    	System.out.println("IN SET MANIPULATOR ARM!!!!");
-    	
+    	//System.out.println("IN SET MANIPULATOR ARM!!!!"+ ", " + "Angular wrist: " + Robot.manipulatorArm.getManipulatorWristAngular() + ", " + "Wrist encoder: " + Robot.manipulatorArm.getManipulatorWristPosition());
+    	//System.out.println("Auto defense: " + autoDefense);
     }
 
     // Make this return true when this Command no longer needs to run execute()

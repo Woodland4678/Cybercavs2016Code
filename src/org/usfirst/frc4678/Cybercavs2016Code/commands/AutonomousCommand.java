@@ -47,6 +47,7 @@ public class AutonomousCommand extends Command {
 	int moatCase = 0;
 	int lowBarCase = 0;
 	int drawBridgeCase = 0;
+	int sallyCase = 0;
 	double timeIdx = 0;
 	boolean isFinished = false;
 	double amountToTurn = 0;
@@ -77,10 +78,10 @@ public class AutonomousCommand extends Command {
 		autoMode = Robot.autoMode();
 		Robot.pickupArm.setArmMode("Hold");
 		if (Robot.autoPosition() == 2) {
-			amountToTurn = 45;
+			amountToTurn = 20;
 		}
 		else if (Robot.autoPosition() == 5) {
-			amountToTurn = -45;
+			amountToTurn = -20;
 		}
 		else {
 			amountToTurn = 0;
@@ -111,59 +112,60 @@ public class AutonomousCommand extends Command {
 			break;
 			
 		case 4:
-			switch(drawBridgeCase) {
+			drawBridgeAuto();
+			break;
+		case 5:
+			switch(sallyCase) {
 			case 0:
-				Robot.robotDrive.goToDistance(1000, 1000, 0.8, 30, 30, 0.4, 0.4);//188
+				Robot.robotDrive.goToDistance(1000, 1000, 0.5, 30, 30, 0.4, 0.4);//188
 				if (Robot.robotDrive.getFrontLightSensorValue() > 1200) {
 					Robot.robotDrive.resetGoToDistanceState();
 					count = 0;
-					drawBridgeCase++;
+					sallyCase++;
 				}
 				break;
 			case 1:
-				Robot.robotDrive.goToDistance(1000, 1000, 0.5, 30, 30, 0.4, 0.4);//188
+				Robot.robotDrive.goToDistance(1000, 1000, 0.3, 0, 0, 0.3, 0.3);//188
 				if (Math.abs(Robot.robotDrive.getLeftSpeed()) < 50 && count > 10) {
 					Robot.robotDrive.setLeftMotor(0);
 					Robot.robotDrive.setRightMotor(0);
 					Robot.manipulatorArm.setManipulatorElbowMode(5);
 			    	Robot.manipulatorArm.setManipulatorWristMode(5);
 			    	Robot.manipulatorArm.resetCount();
-			    	Robot.manipulatorArm.resetDrawBridgeState();
-					drawBridgeCase++;
+			    	Robot.manipulatorArm.resetSallyState();
+			    	Robot.robotDrive.resetGoToDistanceState();
+					sallyCase++;
 				}
 				count++;
 				break;
 			case 2:
-				if(Robot.manipulatorArm.drawBridge()) {
-					drawBridgeCase++;
+				if (Robot.manipulatorArm.sallyPort()) {
+					sallyCase++;
 				}
 				break;
 			case 3:
 				Robot.robotDrive.goToDistance(1000, 1000, 0.8, 30, 30, 0.4, 0.4);
 				if(Robot.robotDrive.isFlat()) {
-					drawBridgeCase++;
+					Robot.robotDrive.resetGoToDistanceState();
+					sallyCase++;
 				}
-				if (Math.abs(Robot.manipulatorArm.getElbowError()) < 2500 && count > 10) {
-					Robot.manipulatorArm.setManipulatorWrist(Robot.manipulatorWristRestPosition());
-				}
-				else {
-					Robot.manipulatorArm.setManipulatorWrist(Robot.manipulatorWristRestPosition() - 3500);
-				}
-			
-					count++;
-				Robot.manipulatorArm.setManipulatorElbow(Robot.manipulatorElbowRestPosition());
 				break;
 			case 4:
 				if (Robot.autoPosition() == 2) {
-					if (Robot.robotDrive.goToDistance(100, 100, 0.8, 30, 30, 0.4, 0.4)) {
-						drawBridgeCase++;
+					if (Robot.robotDrive.goToDistance(200, 200, 0.8, 30, 30, 0.4, 0.4)) {
+						Robot.robotDrive.resetGoToDistanceState();
+						sallyCase++;
 					}
+				}
+				else {
+					sallyCase++;
 				}
 				
 				break;	
 			case 5:
 				if(Robot.robotDrive.gyroTurn(amountToTurn)) {
-					drawBridgeCase++;
+					sallyCase++;
+					Robot.robotDrive.resetGoToDistanceState();
 				}
 				break;
 			case 6:
@@ -171,11 +173,11 @@ public class AutonomousCommand extends Command {
 				Robot.robotDrive.autoAimInit();
 				Robot.manipulatorArm.setManipulatorMode("ShootMode");
 				Robot.pickupArm.setArmMode("ShootMode");
-				drawBridgeCase++;
+				sallyCase++;
 				break;
 			case 7:
 				if(Robot.robotDrive.autoAim()) {
-					drawBridgeCase++;
+					sallyCase++;
 					Robot.camera.cameraLightsOff();
 				}
 				else {
@@ -186,17 +188,143 @@ public class AutonomousCommand extends Command {
 				Robot.catapult.shootBoulder();
 				count ++;
 				if (count > 20) { // just so it doens't move immediatly after shooting
-					drawBridgeCase++;
+					sallyCase++;
 					count = 0;
 				}
 				break;
 			case 9:
 				Robot.catapult.shootBoulder();
 				break;
+//			case 10: //starting here is currently untested it is meant to go back to the neutral zone
+//				if (Robot.catapult.shooterState != 0) {
+//					Robot.catapult.shootBoulder();
+//				}
+//				if (Robot.robotDrive.gyroTurn(0)) {
+//					sallyCase++;
+//				}
+//				break;
+//			case 11:
+//				if (Robot.catapult.shooterState != 0) {
+//					Robot.catapult.shootBoulder();
+//				}
+//				Robot.robotDrive.goToDistance(-1000, -1000, 0.8, 10, 10, 0.6, 0.7);
+//				if (Robot.robotDrive.getBackLightSensorValue() > 1200) {
+//					sallyCase++;
+//				}
+//				break;
+//			case 12:
+//				if (Robot.catapult.shooterState != 0) {
+//					Robot.catapult.shootBoulder();
+//				}
+//				Robot.robotDrive.goToDistance(-1000, -1000, 0.8, 10, 10, 0.6, 0.7);
+//				if (Robot.robotDrive.isFlat()) {
+//					sallyCase++;
+//				}
+//				break;
+//			case 13:
+//				if (Robot.catapult.shooterState != 0) {
+//					Robot.catapult.shootBoulder();
+//				}
+//				break;
 			}
 			break;
 		}
 		System.out.println("Case: " + drawBridgeCase + " AUTO MODE: " + Robot.autoMode());
+	}
+
+	private void drawBridgeAuto() {
+		switch(drawBridgeCase) {
+		case 0:
+			Robot.robotDrive.goToDistance(1000, 1000, 0.4, 30, 30, 0.4, 0.4);//188
+			if (Robot.robotDrive.getFrontLightSensorValue() > 1200) {
+				Robot.robotDrive.resetGoToDistanceState();
+				count = 0;
+				drawBridgeCase++;
+			}
+			break;
+		case 1:
+			Robot.robotDrive.goToDistance(1000, 1000, 0.3, 30, 30, 0.3, 0.3);//188
+			if (Math.abs(Robot.robotDrive.getLeftSpeed()) < 50 && count > 10) {
+				Robot.robotDrive.setLeftMotor(0);
+				Robot.robotDrive.setRightMotor(0);
+				Robot.manipulatorArm.setManipulatorElbowMode(5);
+		    	Robot.manipulatorArm.setManipulatorWristMode(5);
+		    	Robot.manipulatorArm.resetCount();
+		    	Robot.manipulatorArm.resetDrawBridgeState();
+		    	Robot.robotDrive.resetGoToDistanceState();
+				drawBridgeCase++;
+			}
+			count++;
+			break;
+		case 2:
+			if(Robot.manipulatorArm.drawBridge()) {
+				Robot.robotDrive.resetGoToDistanceState();
+				drawBridgeCase++;
+			}
+			break;
+		case 3:
+			Robot.robotDrive.goToDistance(1000, 1000, 0.8, 30, 30, 0.4, 0.4);
+			if(Robot.robotDrive.isFlat()) {
+				Robot.robotDrive.resetGoToDistanceState();
+				drawBridgeCase++;
+			}
+			if (Math.abs(Robot.manipulatorArm.getElbowError()) < 2500 && count > 10) {
+				Robot.manipulatorArm.setManipulatorWrist(Robot.manipulatorWristRestPosition());
+			}
+			else {
+				Robot.manipulatorArm.setManipulatorWrist(Robot.manipulatorWristRestPosition() - 3500);
+			}
+		
+				count++;
+			Robot.manipulatorArm.setManipulatorElbow(Robot.manipulatorElbowRestPosition());
+			break;
+		case 4:
+			if(Robot.autoPosition() == 2) {
+				if (Robot.robotDrive.goToDistance(75, 75, 0.8, 30, 30, 0.4, 0.4)) {
+					drawBridgeCase++;
+				}
+			}
+			else {
+				 drawBridgeCase++;
+			}
+			
+			break;	
+		case 5:
+			if(Robot.robotDrive.gyroTurn(amountToTurn)) {
+				drawBridgeCase++;
+			}
+			break;
+		case 6:
+			Robot.camera.cameraLightsOn();
+			Robot.robotDrive.autoAimInit();
+			//Robot.manipulatorArm.setManipulatorMode("ShootMode");
+			Robot.manipulatorArm.setManipulatorElbowMode(5);
+    		Robot.manipulatorArm.setManipulatorWristMode(5);
+    		Robot.manipulatorArm.readyToShoot();
+			Robot.pickupArm.setArmMode("ShootMode");
+			drawBridgeCase++;
+			break;
+		case 7:
+			if(Robot.robotDrive.autoAim()) {
+				drawBridgeCase++;
+				Robot.camera.cameraLightsOff();
+			}
+			else {
+				Robot.camera.cameraLightsOn();
+			}
+			break;
+		case 8:
+			Robot.catapult.shootBoulder();
+			count ++;
+			if (count > 20) { // just so it doens't move immediatly after shooting
+				drawBridgeCase++;
+				count = 0;
+			}
+			break;
+		case 9:
+			Robot.catapult.shootBoulder();
+			break;
+		}
 	}
 
 	private void low_Bar_Auto() {

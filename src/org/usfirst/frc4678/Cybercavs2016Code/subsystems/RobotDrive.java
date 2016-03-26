@@ -79,11 +79,11 @@ public class RobotDrive extends Subsystem {
 	
 	private final NetworkTable grip = NetworkTable.getTable("GRIP");
 	private double WIDTH = 320.0;
-	private double CENTERX = (WIDTH / 2) + 5; //decreaing makes robot go to the right
+	private double CENTERX = (WIDTH / 2) + 15; //decreaing makes robot go to the right
 	//private double PIXEL_ENCODER_RATIO = Robot.pixelsPerEncoderChange();
 	private double AUTOAIM_TURN_RATE = Robot.autoAimTurnRate();
 	private double AUTOAIM_MAX_POWER = Robot.autoAimMaxPower();
-	private double[] currentCenterXs;
+	private double[] currentCenterXs,currentCenterYs;
 	private double[] currentWidths;
 	
 	enum AutoAimState {
@@ -349,10 +349,8 @@ public class RobotDrive extends Subsystem {
 			setLeftMotor(0);
 			setRightMotor(0);
 			goToDistanceState = 0;
-			System.out.println("Drivetrain goToDistance at target");
-			System.out
-					.println("Drivetrain goToDistance final encoder values are "
-							+ getRightEncoder() + ", " + getLeftEncoder());
+			//System.out.println("Drivetrain goToDistance at target");
+			//System.out.println("Drivetrain goToDistance final encoder values are "+ getRightEncoder() + ", " + getLeftEncoder());
 			return true;
 		}
 		System.out.println(" return false here...");
@@ -449,6 +447,7 @@ public class RobotDrive extends Subsystem {
     			break;
     		case 2: // Init for Camera auto aim
     			currentCenterXs = grip.getNumberArray("myContoursReport/centerX", new double[]{});
+    			currentCenterYs = grip.getNumberArray("myContoursReport/centerY", new double[]{});
     			currentWidths = grip.getNumberArray("myContoursReport/width",new double[]{});
 	    		//System.out.println("Looking for contours" + currentCenterXs.length);    	    	
     			if (currentCenterXs.length == 0) {
@@ -459,17 +458,18 @@ public class RobotDrive extends Subsystem {
     	    	else {
     	    		//System.out.println("Found at least 1");
     	    		cnt++; // Increment counter.  If we get readings 5 times in a row, assume target is good
-    	    		if (cnt >= 25) {
+    	    		if (cnt >= 8) {
     	    			state++;
     	    			cnt = 0;
     	    			widest = 0;
+    	    			pixelsToTurn = 0;
     	    			while(cnt < currentCenterXs.length) {
-    	    				if (currentWidths[cnt] > widest) {
+    	    				if ((currentWidths[cnt] > widest)&&(currentCenterYs[cnt] < 175)&&(currentCenterYs[cnt] > 100)) {
     	    					widest = currentWidths[cnt];
     	    					wideidx = cnt;
+    	   	        	    	pixelsToTurn = currentCenterXs[wideidx] - CENTERX;
     	    				}
     	    				cnt++;
-   	        	    	pixelsToTurn = currentCenterXs[wideidx] - CENTERX;
     	    			}
 
     	    		}
@@ -497,6 +497,7 @@ public class RobotDrive extends Subsystem {
     			break;
     		case 4:
     			currentCenterXs = grip.getNumberArray("myContoursReport/centerX", new double[]{});
+    			currentCenterYs = grip.getNumberArray("myContoursReport/centerY", new double[]{});
     			if (currentCenterXs.length > 0)
     				cameraXPos = currentCenterXs[0];
     			else 
@@ -514,15 +515,16 @@ public class RobotDrive extends Subsystem {
     			// Then assess if the position is good or not.  If not, repeat at case 3 with the new adjustment.
     			if (isinAuto) { // Only do this extra part when in Autonomous
     				cnt++; // Wait the 25 counts
-    				if (cnt > 25) {
+    				if (cnt > 8) {
         				if (retrycount < 5) { // give up after 5 re-tries
         	    			currentCenterXs = grip.getNumberArray("myContoursReport/centerX", new double[]{});
-        					// Find the CenterX closest to CENTERX and see how close we are.
+        	    			currentCenterYs = grip.getNumberArray("myContoursReport/centerY", new double[]{});
+          					// Find the CenterX closest to CENTERX and see how close we are.
         	    			closecnt = 0;
         	    			closest = 10000.0;
         	    			while(closecnt < currentCenterXs.length) {
         	    				double tmp = Math.abs(currentCenterXs[closecnt] - CENTERX);
-        	    				if (tmp < closest) {
+        	    				if ((tmp < closest)&&(currentCenterYs[closecnt] < 175)&&(currentCenterYs[closecnt] > 100)) {
         	    					closest = tmp;
         	    					closeidx = closecnt;
         	    				}
@@ -540,7 +542,7 @@ public class RobotDrive extends Subsystem {
 	        	    				state++;
 	        	    			}
         	    			}
-        	    		System.out.println("Retry "+retrycount+": cnt = "+cnt+", pixelsToTurn = "+pixelsToTurn+" closest = "+closest+" CENTERX="+CENTERX);
+        	    		//System.out.println("Retry "+retrycount+": cnt = "+cnt+", pixelsToTurn = "+pixelsToTurn+" closest = "+closest+" CENTERX="+CENTERX);
         				}
     					
     				}
@@ -614,7 +616,7 @@ public class RobotDrive extends Subsystem {
    		if (rightpwr < -MAXPOWER)
    			rightpwr = -MAXPOWER;
     	
-    	System.out.println(cameraXPos + ", " + lefterr+","+righterr+","+leftpwr+","+rightpwr+","+leftEncoderdiff+","+rightEncoderdiff+","+left_PID_P+","+right_PID_P+","+left_PID_D+","+right_PID_D);
+    	//System.out.println(cameraXPos + ", " + lefterr+","+righterr+","+leftpwr+","+rightpwr+","+leftEncoderdiff+","+rightEncoderdiff+","+left_PID_P+","+right_PID_P+","+left_PID_D+","+right_PID_D);
     	setLeftMotor(-leftpwr);
     	setRightMotor(-rightpwr);
     	if (Math.abs(lefterr) < 2.0 && Math.abs(righterr) < 2.0) {
@@ -661,7 +663,7 @@ public class RobotDrive extends Subsystem {
    		if (rightpwr < -MAXPOWER)
    			rightpwr = -MAXPOWER;
    		
-   		System.out.printf("LP=%6.2f RP=%6.2f LS=%6.2f RS=%6.2f LPWR=%6.2f RPWR=%6.2f Lerr:%6.2f=%6.2f-%6.2f Rerr:%6.2f=%6.2f-%6.2f \n",leftPos,rightPos,leftSpeed,rightSpeed,leftpwr,rightpwr,lefterr,leftPos,lastleftEncoder,righterr,rightPos,lastrightEncoder);
+   		//System.out.printf("LP=%6.2f RP=%6.2f LS=%6.2f RS=%6.2f LPWR=%6.2f RPWR=%6.2f Lerr:%6.2f=%6.2f-%6.2f Rerr:%6.2f=%6.2f-%6.2f \n",leftPos,rightPos,leftSpeed,rightSpeed,leftpwr,rightpwr,lefterr,leftPos,lastleftEncoder,righterr,rightPos,lastrightEncoder);
     	setLeftMotor(-leftpwr);
     	setRightMotor(-rightpwr);
     	

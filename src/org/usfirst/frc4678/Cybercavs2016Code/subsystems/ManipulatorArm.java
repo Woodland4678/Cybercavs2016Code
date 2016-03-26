@@ -109,6 +109,7 @@ public class ManipulatorArm extends Subsystem {
     int elbowThirdPosition = Robot.manipulatorElbowRestPosition() + 59688;
     int elbowFourthPosition = Robot.manipulatorElbowRestPosition() + 72387;
     int elbowFifthPosition = Robot.manipulatorElbowRestPosition() + 74346;
+    int elbowSixthPosition = Robot.manipulatorElbowRestPosition() + 50000;
     
     int elbowPortcullisReady = Robot.manipulatorElbowRestPosition() + 70553;
     int elbowPortcullisSecond = Robot.manipulatorElbowRestPosition() + 66697;
@@ -317,7 +318,7 @@ public class ManipulatorArm extends Subsystem {
 			setManipulatorWrist(Robot.manipulatorWristRestPosition());
 		}
 		else {
-			setManipulatorWrist(Robot.manipulatorWristRestPosition() - 3500);
+			setManipulatorWrist(Robot.manipulatorWristRestPosition() - 5000);
 		}
 	
 			count++;
@@ -565,6 +566,8 @@ public class ManipulatorArm extends Subsystem {
 		System.out.println("ELBOW ERROR: " + manipulatorElbow.getError());
 	}
 	public boolean sallyPort() {
+		fpgaDiff = Timer.getFPGATimestamp() - lastFPGA;
+		lastFPGA = Timer.getFPGATimestamp();
 		switch(sallyState) {
 		case 0:
 			setManipulatorWrist(wristSallyReady);
@@ -584,12 +587,12 @@ public class ManipulatorArm extends Subsystem {
 			count ++;
 		break;
 		case 2:
+			timeCount += fpgaDiff;
 			encoderPosition = (encoderSallyMax - 0) * timeCount / totalTime + 0;
 			speed = ((encoderSallyMax - 0) / totalTime) / SPEED_FACTOR;
 //			Robot.robotDrive.DrivePath(encoderPosition, speed, encoderPosition, speed);
 			Robot.robotDrive.setRightMotor(-1);
 			Robot.robotDrive.setLeftMotor(-1);
-			timeCount += 0.02;
 			if (Robot.robotDrive.getRightEncoder() > encoderSallyMax) {
 				Robot.robotDrive.setRightMotor(0);
 				Robot.robotDrive.setLeftMotor(0);
@@ -605,20 +608,30 @@ public class ManipulatorArm extends Subsystem {
 			}
 			break;
 		case 4:
-			encoderPosition = (0 - encoderSallyMax) * timeCount / totalTime + encoderSallyMax;
-			speed = ((0 - encoderSallyMax) / totalTime) / SPEED_FACTOR;
-//			Robot.robotDrive.DrivePath(encoderPosition, speed, encoderPosition, speed);
-			Robot.robotDrive.setRightMotor(1);
-			Robot.robotDrive.setLeftMotor(1);
-			timeCount += 0.02;
-			if (Robot.robotDrive.getRightEncoder() < 0) {
+//			encoderPosition = (0 - encoderSallyMax) * timeCount / totalTime + encoderSallyMax;
+//			speed = ((0 - encoderSallyMax) / totalTime) / SPEED_FACTOR;
+////			Robot.robotDrive.DrivePath(encoderPosition, speed, encoderPosition, speed);
+//			Robot.robotDrive.setRightMotor(1);
+//			Robot.robotDrive.setLeftMotor(1);
+			Robot.robotDrive.goToDistance(1000, 1000, 1, 5, 5, 0.9, 0.9);
+			if (Robot.robotDrive.getFrontLightSensorValue() > 1200) {
 				sallyState++;
 				Robot.robotDrive.setRightMotor(0);
 				Robot.robotDrive.setLeftMotor(0);
 				timeCount = 0;
 				totalTime = 1.0;
+				Robot.robotDrive.resetGoToDistanceState();
 				return true;
 			}
+			timeCount += 0.02;
+//			if (Robot.robotDrive.getRightEncoder() < 0) {
+//				sallyState++;
+//				Robot.robotDrive.setRightMotor(0);
+//				Robot.robotDrive.setLeftMotor(0);
+//				timeCount = 0;
+//				totalTime = 1.0;
+//				return true;
+//			}
 			break;		
 		}
 		return false;	
@@ -653,12 +666,13 @@ public class ManipulatorArm extends Subsystem {
 			totalTime = 0.75;
 			break;
 		case 3:
+			timeCount += fpgaDiff;
 			newElbowPosition = (elbowSecondPosition - drawBridgeElbowReady) * timeCount / totalTime + drawBridgeElbowReady;
 			setManipulatorElbow(newElbowPosition);
 			encoderPosition = encoderSecondPosition * timeCount / totalTime;
 			speed = (encoderSecondPosition / totalTime) / SPEED_FACTOR;
 			Robot.robotDrive.DrivePath(encoderPosition, speed, encoderPosition, speed);
-			timeCount += fpgaDiff;
+			
 			if (timeCount > totalTime) {
 				manipulatorWrist.changeControlMode(TalonControlMode.Position);
 				setManipulatorWrist(wristSecondPosition);
@@ -672,6 +686,7 @@ public class ManipulatorArm extends Subsystem {
 			}
 			break;
 		case 4:
+			timeCount += fpgaDiff;
 			//Robot.robotDrive.DrivePath(encoderSecondPosition, 0, encoderSecondPosition, 0); //stop
 			newElbowPosition = (elbowThirdPosition - elbowSecondPosition) * timeCount / totalTime + elbowSecondPosition;
 			newWristPosition = (wristThirdPosition - wristSecondPosition) * timeCount / totalTime + wristSecondPosition;
@@ -680,7 +695,6 @@ public class ManipulatorArm extends Subsystem {
 			setManipulatorElbow(newElbowPosition);
 			setManipulatorWrist(newWristPosition);
 			Robot.robotDrive.DrivePath(encoderPosition, speed, encoderPosition, speed);
-			timeCount += fpgaDiff;
 			if (timeCount > totalTime) {
 				drawBridgeState++;
 				timeCount = 0;
@@ -688,6 +702,7 @@ public class ManipulatorArm extends Subsystem {
 			}
 			break;
 		case 5:
+			timeCount += fpgaDiff;
 			//Robot.robotDrive.DrivePath(encoderThirdPosition, 0, encoderThirdPosition, 0); //stop
 			newElbowPosition = (elbowFourthPosition - elbowThirdPosition) * timeCount / totalTime + elbowThirdPosition;
 			newWristPosition = (wristFourthPosition - wristThirdPosition) * timeCount / totalTime + wristThirdPosition;
@@ -696,32 +711,48 @@ public class ManipulatorArm extends Subsystem {
 			setManipulatorElbow(newElbowPosition);
 			setManipulatorWrist(newWristPosition);
 			Robot.robotDrive.DrivePath(encoderPosition, speed, encoderPosition, speed);
-			timeCount += fpgaDiff;
+			
 			if (timeCount > totalTime) {
 				drawBridgeState++;
 				timeCount = 0;
 				totalTime = 0.75;
+				manipulatorWrist.changeControlMode(TalonControlMode.PercentVbus);
+				manipulatorWrist.set(0);
 			}
 			break;
 		case 6:
+			timeCount += fpgaDiff;
 			newElbowPosition = (elbowFifthPosition - elbowFourthPosition) * timeCount / totalTime + elbowFourthPosition;
-			newWristPosition = (wristFifthPosition - wristFourthPosition) * timeCount / totalTime + wristFourthPosition;
+			//newWristPosition = (wristFifthPosition - wristFourthPosition) * timeCount / totalTime + wristFourthPosition;
 			encoderPosition = (encoderFifthPosition - encoderFourthPosition) * timeCount / totalTime + encoderFourthPosition;
 			speed = ((encoderFifthPosition - encoderFourthPosition) / totalTime) / SPEED_FACTOR;
 			setManipulatorElbow(newElbowPosition);
-			setManipulatorWrist(newWristPosition);
+			//setManipulatorWrist(newWristPosition);
 			Robot.robotDrive.DrivePath(encoderPosition, speed, encoderPosition, speed);
+			
+			if (timeCount > totalTime) {
+				drawBridgeState++;
+				timeCount = 0;
+				totalTime = 0.3;
+			}
+			break;
+		case 7:
 			timeCount += fpgaDiff;
+			newElbowPosition = (elbowSixthPosition - elbowFifthPosition) * timeCount / totalTime + elbowFifthPosition;
+			setManipulatorElbow(newElbowPosition);
+			Robot.robotDrive.DrivePath(encoderFifthPosition, 0, encoderFifthPosition, 0); //stop
 			if (timeCount > totalTime) {
 				drawBridgeState++;
 				timeCount = 0;
 				totalTime = 1.0;
 			}
 			break;
-		case 7:
+		case 8:
+			manipulatorWrist.changeControlMode(TalonControlMode.Position);
 			Robot.robotDrive.DrivePath(encoderFifthPosition, 0, encoderFifthPosition, 0); //stop
 			return true;
 		}
+		System.out.println("Case: " + drawBridgeState + ", " + "Angular wrist: " + Robot.manipulatorArm.getManipulatorWristAngular() + ", " + "Wrist encoder: " + Robot.manipulatorArm.getManipulatorWristPosition());
 		return false;
 	}
 	public boolean portcullis() {
