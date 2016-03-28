@@ -347,16 +347,6 @@ public class ManipulatorArm extends Subsystem {
 		manipulatorWrist.setEncPosition(wristStartPosition);
 		manipulatorElbow.setEncPosition(elbowStartPosition);
 	}
-	public void categoryC() {	//movement for the drawbridge and sally port
-		if (count > 100) {
-			manipulatorElbow.changeControlMode(TalonControlMode.Voltage); //disables elbow after 2 seconds so it may start looking for a major change in encoder value
-			manipulatorElbow.set(0);
-		} else {
-			setManipulatorElbow(Robot.manipulatorElbowShootPosition());
-		}
-		setManipulatorWrist(Robot.manipulatorWristDrawBridgePosition());
-		count++;
-	}
 	public void resetCount() {
 		count = 0;
 	}

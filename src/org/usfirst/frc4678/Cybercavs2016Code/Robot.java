@@ -38,72 +38,72 @@ public class Robot extends IterativeRobot {
 	////////// Parameters for Elbow//////////
 	////////////////////////////////////////
 
-	public static int pickupElbowPosition() {
-		Preferences prefs = Preferences.getInstance();
-		if (!prefs.containsKey("pickupElbowPosition")) {
-			prefs.putInt("pickupElbowPosition", 39500);
-		}
-		return prefs.getInt("pickupElbowPosition", 39500);
-	}
+//	public static int pickupElbowPosition() {
+//		Preferences prefs = Preferences.getInstance();
+//		if (!prefs.containsKey("pickupElbowPosition")) {
+//			prefs.putInt("pickupElbowPosition", 39500);
+//		}
+//		return prefs.getInt("pickupElbowPosition", 39500);
+//	}
 
 	public static int holdElbowPosition() {
 		Preferences prefs = Preferences.getInstance();
 		if (!prefs.containsKey("holdElbowPosition")) {
-			prefs.putInt("holdElbowPosition", 1417);
+			prefs.putInt("holdElbowPosition", 3589);
 		}
-		return prefs.getInt("holdElbowPosition", 1417);
+		return prefs.getInt("holdElbowPosition", 3589);
 	}
 
-	public static int spitOutElbowPosition() {
-		Preferences prefs = Preferences.getInstance();
-		if (!prefs.containsKey("spitOutElbowPosition")) {
-			prefs.putInt("spitOutElbowPosition", 10438);
-		}
-		return prefs.getInt("spitOutElbowPosition", 10438);
-	}
-	
-	public static int lowBarElbowPosition() {
-		Preferences prefs = Preferences.getInstance();
-		if (!prefs.containsKey("lowBarElbowPosition")) {
-			prefs.putInt("lowBarElbowPosition", 43000);
-		}
-		return prefs.getInt("lowBarElbowPosition", 43000);
-	}
+//	public static int spitOutElbowPosition() {
+//		Preferences prefs = Preferences.getInstance();
+//		if (!prefs.containsKey("spitOutElbowPosition")) {
+//			prefs.putInt("spitOutElbowPosition", 10438);
+//		}
+//		return prefs.getInt("spitOutElbowPosition", 10438);
+//	}
+//	
+//	public static int lowBarElbowPosition() {
+//		Preferences prefs = Preferences.getInstance();
+//		if (!prefs.containsKey("lowBarElbowPosition")) {
+//			prefs.putInt("lowBarElbowPosition", 43000);
+//		}
+//		return prefs.getInt("lowBarElbowPosition", 43000);
+//	}
 
 	////////////////////////////////////////
 	////////// Parameters for Wrist//////////
 	////////////////////////////////////////
 
-	public static int pickupWristPosition() {
-		Preferences prefs = Preferences.getInstance();
-		if (!prefs.containsKey("pickupWristPosition")) {
-			prefs.putInt("pickupWristPosition", -5957);
-		}
-		return prefs.getInt("pickupWristPosition", -5957);
-	}
+//	public static int pickupWristPosition() {
+//		Preferences prefs = Preferences.getInstance();
+//		if (!prefs.containsKey("pickupWristPosition")) {
+//			prefs.putInt("pickupWristPosition", -5957);
+//		}
+//		return prefs.getInt("pickupWristPosition", -5957);
+//	}
 
 	public static int holdWristPosition() {
 		Preferences prefs = Preferences.getInstance();
 		if (!prefs.containsKey("holdWristPosition")) {
-			prefs.putInt("holdWristPosition", 2717);
+			prefs.putInt("holdWristPosition", 2027);
 		}
-		return prefs.getInt("holdWristPosition", 2717);
+		return prefs.getInt("holdWristPosition", 2027);
 	}
 
-	public static int spitOutWristPosition() {
-		Preferences prefs = Preferences.getInstance();
-		if (!prefs.containsKey("spitOutWristPosition")) {
-			prefs.putInt("spitOutWristPosition", -38845);
-		}
-		return prefs.getInt("spitOutWristPosition", -38845);
-	}
-	public static int wristPullInPosition() {
-		Preferences prefs = Preferences.getInstance();
-		if (!prefs.containsKey("wristPullInPosition")) {
-			prefs.putInt("wristPullInPosition", 19257);
-		}
-		return prefs.getInt("wristPullInPosition", 19257);
-	}
+//	public static int spitOutWristPosition() {
+//		Preferences prefs = Preferences.getInstance();
+//		if (!prefs.containsKey("spitOutWristPosition")) {
+//			prefs.putInt("spitOutWristPosition", -38845);
+//		}
+//		return prefs.getInt("spitOutWristPosition", -38845);
+//	}
+//	public static int wristPullInPosition() {
+//		Preferences prefs = Preferences.getInstance();
+//		if (!prefs.containsKey("wristPullInPosition")) {
+//			prefs.putInt("wristPullInPosition", 19257);
+//		}
+//		return prefs.getInt("wristPullInPosition", 19257);
+//	}
 
 
 	///////////////////////////////////////////
@@ -113,49 +113,49 @@ public class Robot extends IterativeRobot {
 	public static double latchReadyPosition() {
 		Preferences prefs = Preferences.getInstance();
 		if (!prefs.containsKey("latchReadyPostion")) {
-			prefs.putDouble("latchReadyPostion", 0.205);
+			prefs.putDouble("latchReadyPostion", 0.32);
 		}
-		return prefs.getDouble("latchReadyPostion", 0.205);
+		return prefs.getDouble("latchReadyPostion", 0.32);
 	}
 
 	public static double latchShootPosition() {
 		Preferences prefs = Preferences.getInstance();
 		if (!prefs.containsKey("latchShootPosition")) {
-			prefs.putDouble("latchShootPosition", 0.4);
+			prefs.putDouble("latchShootPosition", 1.0);
 		}
-		return prefs.getDouble("latchShootPosition", 0.4);
+		return prefs.getDouble("latchShootPosition", 1.0);
 	}
 	
 	public static double latchLockPosition() { //position to lower server after latch to ensure it doesn't launch prematurely
 		Preferences prefs = Preferences.getInstance();
 		if (!prefs.containsKey("latchLockPosition")) {
-			prefs.putDouble("latchLockPosition", 0);
+			prefs.putDouble("latchLockPosition", 0.01);
 		}
-		return prefs.getDouble("latchLockPosition", 0);
+		return prefs.getDouble("latchLockPosition", 0.01);
 	}
 
 	public static double winchPower() {
 		Preferences prefs = Preferences.getInstance();
 		if (!prefs.containsKey("winchPower")) {
-			prefs.putDouble("winchPower", 0.2);
+			prefs.putDouble("winchPower", 1.0);
 		}
-		return prefs.getDouble("winchPower", 0.2);
+		return prefs.getDouble("winchPower", 1.0);
 	}
 
 	public static double winchWoundDistance() {
 		Preferences prefs = Preferences.getInstance();
 		if (!prefs.containsKey("winchWoundDistance")) {
-			prefs.putDouble("winchWoundDistance", 1.5);
+			prefs.putDouble("winchWoundDistance", 1);
 		}
-		return prefs.getDouble("winchWoundDistance", 1.5);
+		return prefs.getDouble("winchWoundDistance", 1);
 	}
 
 	public static double winchUnwoundDistance() {
 		Preferences prefs = Preferences.getInstance();
 		if (!prefs.containsKey("winchUnwoundDistance")) {
-			prefs.putDouble("winchUnwoundDistance", 4);
+			prefs.putDouble("winchUnwoundDistance", 4.6);
 		}
-		return prefs.getDouble("winchUnwoundDistance", 4);
+		return prefs.getDouble("winchUnwoundDistance", 4.6);
 	}
 
 	///////////////////////////////////
@@ -165,98 +165,98 @@ public class Robot extends IterativeRobot {
 	public static double pickupWheelsPower() {
 		Preferences prefs = Preferences.getInstance();
 		if (!prefs.containsKey("pickupWheelsPower")) {
-			prefs.putDouble("pickupWheelsPower", 3);
+			prefs.putDouble("pickupWheelsPower", -12);
 		}
-		return prefs.getDouble("pickupWheelsPower", 3);
+		return prefs.getDouble("pickupWheelsPower", -12);
 	}
 
-	public static double encoderClicksPerCentimeter() {
-		Preferences prefs = Preferences.getInstance();
-		if (!prefs.containsKey("encoderClicksPerCentimeter")) {
-			prefs.putDouble("encoderClicksPerCentimeter", 7.2);
-		}
-		return prefs.getDouble("encoderClicksPerCentimeter", 7.2);
-	}
+//	public static double encoderClicksPerCentimeter() {
+//		Preferences prefs = Preferences.getInstance();
+//		if (!prefs.containsKey("encoderClicksPerCentimeter")) {
+//			prefs.putDouble("encoderClicksPerCentimeter", 7.2);
+//		}
+//		return prefs.getDouble("encoderClicksPerCentimeter", 7.2);
+//	}
 
-	public static int encoderChangePerTurn() {
-		Preferences prefs = Preferences.getInstance();
-		if (!prefs.containsKey("encoderChangePerTurn")) {
-			prefs.putInt("encoderChangePerTurn", 3000);
-		}
-		return prefs.getInt("encoderChangePerTurn", 3000);
-	}
+//	public static int encoderChangePerTurn() {
+//		Preferences prefs = Preferences.getInstance();
+//		if (!prefs.containsKey("encoderChangePerTurn")) {
+//			prefs.putInt("encoderChangePerTurn", 3000);
+//		}
+//		return prefs.getInt("encoderChangePerTurn", 3000);
+//	}
     
-    public static int targetLightSensorValue() {
-        Preferences prefs = Preferences.getInstance();
-        if (!prefs.containsKey("targetLightSensorValue")) {
-            prefs.putInt("targetLightSensorValue", 400);
-        }
-        return prefs.getInt("targetLightSensorValue", 400);
-    }
+//    public static int targetLightSensorValue() {
+//        Preferences prefs = Preferences.getInstance();
+//        if (!prefs.containsKey("targetLightSensorValue")) {
+//            prefs.putInt("targetLightSensorValue", 400);
+//        }
+//        return prefs.getInt("targetLightSensorValue", 400);
+//    }
 	
-    public static int lightSensorMargin() {
-        Preferences prefs = Preferences.getInstance();
-        if (!prefs.containsKey("lightSensorMargin")) {
-            prefs.putInt("lightSensorMargin", 50);
-        }
-        return prefs.getInt("lightSensorMargin", 50);
-    }
+//    public static int lightSensorMargin() {
+//        Preferences prefs = Preferences.getInstance();
+//        if (!prefs.containsKey("lightSensorMargin")) {
+//            prefs.putInt("lightSensorMargin", 50);
+//        }
+//        return prefs.getInt("lightSensorMargin", 50);
+//    }
     
-    public static double goToBoxTurnSpeed() {
-        Preferences prefs = Preferences.getInstance();
-        if (!prefs.containsKey("goToBoxTurnSpeed")) {
-            prefs.putDouble("goToBoxTurnSpeed", .05);
-        }
-        return prefs.getDouble("goToBoxTurnSpeed", .05);
-    }
+//    public static double goToBoxTurnSpeed() {
+//        Preferences prefs = Preferences.getInstance();
+//        if (!prefs.containsKey("goToBoxTurnSpeed")) {
+//            prefs.putDouble("goToBoxTurnSpeed", .05);
+//        }
+//        return prefs.getDouble("goToBoxTurnSpeed", .05);
+//    }
 
-    public static int autoTurnReductionSpeed() {
-        Preferences prefs = Preferences.getInstance();
-        if (!prefs.containsKey("autoTurnReductionSpeed")) {
-            prefs.putInt("autoTurnReductionSpeed", 2);
-        }
-        return prefs.getInt("autoTurnReductionSpeed", 2);
-    }
-    public static int autoMode() {
-        Preferences prefs = Preferences.getInstance();
-        if (!prefs.containsKey("autoMode")) {
-            prefs.putInt("autoMode", 0);
-        }
-        return prefs.getInt("autoMode", 0);
-    }
+//    public static int autoTurnReductionSpeed() {
+//        Preferences prefs = Preferences.getInstance();
+//        if (!prefs.containsKey("autoTurnReductionSpeed")) {
+//            prefs.putInt("autoTurnReductionSpeed", 2);
+//        }
+//        return prefs.getInt("autoTurnReductionSpeed", 2);
+//    }
+//    public static int autoMode() {
+//        Preferences prefs = Preferences.getInstance();
+//        if (!prefs.containsKey("autoMode")) {
+//            prefs.putInt("autoMode", 0);
+//        }
+//        return prefs.getInt("autoMode", 0);
+//    }
     
     public static double pixelsPerEncoderChange() {
     	Preferences prefs = Preferences.getInstance();
         if (!prefs.containsKey("pixelsPerEncoderChange")) {
-            prefs.putDouble("pixelsPerEncoderChange", 1.4);
+            prefs.putDouble("pixelsPerEncoderChange", 0.735);
         }
-        return prefs.getDouble("pixelsPerEncoderChange", 1.4);
+        return prefs.getDouble("pixelsPerEncoderChange", 0.735);
 	}
     
-    public static double autoAimTurnRate() {
-    	Preferences prefs = Preferences.getInstance();
-        if (!prefs.containsKey("autoAimTurnRate")) {
-            prefs.putDouble("autoAimTurnRate", 1);
-        }
-        return prefs.getDouble("autoAimTurnRate", 1);
-	}
+//    public static double autoAimTurnRate() {
+//    	Preferences prefs = Preferences.getInstance();
+//        if (!prefs.containsKey("autoAimTurnRate")) {
+//            prefs.putDouble("autoAimTurnRate", 1);
+//        }
+//        return prefs.getDouble("autoAimTurnRate", 1);
+//	}
     
-    public static double autoAimMaxPower() {
-    	Preferences prefs = Preferences.getInstance();
-        if (!prefs.containsKey("autoAimMaxPower")) {
-            prefs.putDouble("autoAimMaxPower", 0.2);
-        }
-        return prefs.getDouble("autoAimMaxPower", 0.2);
-	}
+//    public static double autoAimMaxPower() {
+//    	Preferences prefs = Preferences.getInstance();
+//        if (!prefs.containsKey("autoAimMaxPower")) {
+//            prefs.putDouble("autoAimMaxPower", 0.2);
+//        }
+//        return prefs.getDouble("autoAimMaxPower", 0.2);
+//	}
     
-    public static double servoPosition() {
-        Preferences prefs = Preferences.getInstance();
-        if (!prefs.containsKey("servoPosition")) {
-            prefs.putDouble("servoPosition", 0);
-        }
-        return prefs.getDouble("servoPosition", 0);
-    }
-    
+//    public static double servoPosition() {
+//        Preferences prefs = Preferences.getInstance();
+//        if (!prefs.containsKey("servoPosition")) {
+//            prefs.putDouble("servoPosition", 0);
+//        }
+//        return prefs.getDouble("servoPosition", 0);
+//    }
+//    
 	///////////////////////////////////////////
 	////////// Manipulator Parameters//////////
 	///////////////////////////////////////////
@@ -264,45 +264,45 @@ public class Robot extends IterativeRobot {
     public static int manipulatorWristRestPosition() {
         Preferences prefs = Preferences.getInstance();
         if (!prefs.containsKey("manipulatorWristRestPosition")) {
-            prefs.putInt("manipulatorWristRestPosition", 1400);
+            prefs.putInt("manipulatorWristRestPosition", 2100);
         }
-        return prefs.getInt("manipulatorWristRestPosition", 1400);
+        return prefs.getInt("manipulatorWristRestPosition", 2100);
     }
     public static int manipulatorElbowRestPosition() {
         Preferences prefs = Preferences.getInstance();
         if (!prefs.containsKey("manipulatorElbowRestPosition")) {
-            prefs.putInt("manipulatorElbowRestPosition", 1300);
+            prefs.putInt("manipulatorElbowRestPosition", 1900);
         }
-        return prefs.getInt("manipulatorElbowRestPosition", 1300);
+        return prefs.getInt("manipulatorElbowRestPosition", 1900);
     }
-    public static int manipulatorElbowShootPosition() {
-        Preferences prefs = Preferences.getInstance();
-        if (!prefs.containsKey("manipulatorElbowShootPosition")) {
-            prefs.putInt("manipulatorElbowShootPosition", 42967);
-        }
-        return prefs.getInt("manipulatorElbowShootPosition", 42967);
-    }
-    public static int manipulatorWristTestPosition() {
-        Preferences prefs = Preferences.getInstance();
-        if (!prefs.containsKey("manipulatorWristTestPosition")) {
-            prefs.putInt("manipulatorWristTestPosition", -32000);
-        }
-        return prefs.getInt("manipulatorWristTestPosition", -32000);
-    }
-    public static int manipulatorWristDrawBridgePosition() {
-        Preferences prefs = Preferences.getInstance();
-        if (!prefs.containsKey("manipulatorWristDrawBridgePosition")) {
-            prefs.putInt("manipulatorWristDrawBridgePosition", -16634);
-        }
-        return prefs.getInt("manipulatorWristDrawBridgePosition", -16634);
-    }
-    public static int autoPosition() {
-        Preferences prefs = Preferences.getInstance();
-        if (!prefs.containsKey("autoPosition")) {
-            prefs.putInt("autoPosition", 1);
-        }
-        return prefs.getInt("autoPosition", 1);
-    }
+//    public static int manipulatorElbowShootPosition() {
+//        Preferences prefs = Preferences.getInstance();
+//        if (!prefs.containsKey("manipulatorElbowShootPosition")) {
+//            prefs.putInt("manipulatorElbowShootPosition", 42967);
+//        }
+//        return prefs.getInt("manipulatorElbowShootPosition", 42967);
+//    }
+//    public static int manipulatorWristTestPosition() {
+//        Preferences prefs = Preferences.getInstance();
+//        if (!prefs.containsKey("manipulatorWristTestPosition")) {
+//            prefs.putInt("manipulatorWristTestPosition", -32000);
+//        }
+//        return prefs.getInt("manipulatorWristTestPosition", -32000);
+//    }
+//    public static int manipulatorWristDrawBridgePosition() {
+//        Preferences prefs = Preferences.getInstance();
+//        if (!prefs.containsKey("manipulatorWristDrawBridgePosition")) {
+//            prefs.putInt("manipulatorWristDrawBridgePosition", -16634);
+//        }
+//        return prefs.getInt("manipulatorWristDrawBridgePosition", -16634);
+//    }
+//    public static int autoPosition() {
+//        Preferences prefs = Preferences.getInstance();
+//        if (!prefs.containsKey("autoPosition")) {
+//            prefs.putInt("autoPosition", 1);
+//        }
+//        return prefs.getInt("autoPosition", 1);
+//    }
 	Command autonomousCommand;
 
 	public static OI oi;

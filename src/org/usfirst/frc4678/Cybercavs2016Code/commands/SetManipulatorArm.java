@@ -87,11 +87,6 @@ public class SetManipulatorArm extends Command {
     		Robot.manipulatorArm.setManipulatorWristMode(5);
     		Robot.manipulatorArm.restMode();
     	}
-    	else if(Robot.manipulatorArm.getManipulatorMode() == "CategoryC") {
-    		Robot.manipulatorArm.setManipulatorElbowMode(5);
-    		Robot.manipulatorArm.setManipulatorWristMode(5);
-    		Robot.manipulatorArm.categoryC();
-    	}
     	else if(Robot.manipulatorArm.getManipulatorMode() == "Portcullis") {
     		Robot.manipulatorArm.setManipulatorElbowMode(5);
     		Robot.manipulatorArm.setManipulatorWristMode(5);

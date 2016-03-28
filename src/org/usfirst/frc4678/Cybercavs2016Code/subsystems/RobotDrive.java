@@ -30,12 +30,13 @@ public class RobotDrive extends Subsystem {
 	boolean robotDriving = false;
 	double GO_TO_DISTANCE_CORRECTION_SPEED = 50;
 	int AUTO_DRIVE_RAMP_DISTANCE = 30;
-	int ENCODER_DIFFERENCE_PER_TURN = Robot.encoderChangePerTurn();
-	int LIGHT_SENSOR_MARGIN = Robot.lightSensorMargin();
-	double GO_TO_BOX_TURN_SPEED = Robot.goToBoxTurnSpeed();
-	int TARGET_LIGHT_SENSOR_VALUE = Robot.targetLightSensorValue();
+	double encoderClicksPerCentimeter = 7.2;
+//	int ENCODER_DIFFERENCE_PER_TURN = Robot.encoderChangePerTurn();
+//	int LIGHT_SENSOR_MARGIN = Robot.lightSensorMargin();
+//	double GO_TO_BOX_TURN_SPEED = Robot.goToBoxTurnSpeed();
+//	int TARGET_LIGHT_SENSOR_VALUE = Robot.targetLightSensorValue();
 	double AUTO_TURN_MARGIN = .05;// This is a percentage
-	double AUTO_TURN_REDUCTION_SPEED = Robot.autoTurnReductionSpeed();
+//	double AUTO_TURN_REDUCTION_SPEED = Robot.autoTurnReductionSpeed();
 	double AUTO_TURN_REDUCTION_DISTANCE = 0.6;// Starts reducing the speed when
 												// it is x percent of the way to
 												// the target distance
@@ -81,8 +82,8 @@ public class RobotDrive extends Subsystem {
 	private double WIDTH = 320.0;
 	private double CENTERX = (WIDTH / 2) + 15; //decreaing makes robot go to the right
 	//private double PIXEL_ENCODER_RATIO = Robot.pixelsPerEncoderChange();
-	private double AUTOAIM_TURN_RATE = Robot.autoAimTurnRate();
-	private double AUTOAIM_MAX_POWER = Robot.autoAimMaxPower();
+//	private double AUTOAIM_TURN_RATE = Robot.autoAimTurnRate();
+//	private double AUTOAIM_MAX_POWER = Robot.autoAimMaxPower();
 	private double[] currentCenterXs,currentCenterYs;
 	private double[] currentWidths;
 	
@@ -227,16 +228,16 @@ public class RobotDrive extends Subsystem {
 		// --------------------------------------------------------------------------
 
 		// Get target distance in centimeters
-		targetLeft = leftCentimeters * Robot.encoderClicksPerCentimeter();
-		targetRight = rightCentimeters * Robot.encoderClicksPerCentimeter();
+		targetLeft = leftCentimeters * encoderClicksPerCentimeter; //used to be parameters
+		targetRight = rightCentimeters * encoderClicksPerCentimeter; //used to be parameters
 
 		// Get the current distance in centimeters
 		currentLeft = Math.abs(getLeftEncoder() - startingLeftDistance);
 		currentRight = Math.abs(getRightEncoder() - startingRightDistance);
 		currentLeftCentimeters = currentLeft
-				/ Robot.encoderClicksPerCentimeter();
+				/ encoderClicksPerCentimeter; //used to use the parameter
 		currentRightCentimeters = currentRight
-				/ Robot.encoderClicksPerCentimeter();
+				/ encoderClicksPerCentimeter; //used to use the parameter (same name)
 
 		// Find the percentage the left and right are to their target
 		leftPercentThere = Math.abs(currentLeft / targetLeft);

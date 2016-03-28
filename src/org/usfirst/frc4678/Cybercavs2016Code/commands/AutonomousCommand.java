@@ -103,7 +103,6 @@ public class AutonomousCommand extends Command {
 		Robot.robotDrive.setIsInAuto(true);
 		Robot.robotDrive.resetGyro();
 		Robot.robotDrive.resetEncoders();
-		autoMode = Robot.autoMode();
 		Robot.pickupArm.setArmMode("Hold");
 		if (autoPosition == 2) {
 			amountToTurn = 27;
