@@ -123,70 +123,6 @@ public class ManipulatorArm extends Subsystem {
     
     int encoderSallyMax = 900;
 
-    
-    static double[][] portcullis = new double[][]{
-    		{5.0,2689,2191,110,106},
-    		{2.0,-9483.0, 68573.0, 110.0, 106.0},
-    		{2.0,-9560.0, 62045.0, 110.0, 106.0},
-    		{2.0,-9562.0, 55137.0, 110.0, 106.0},
-    		{2.0,-11714.0, 50455.0, 110.0, 107.0},
-    		{2.0,-15158.0, 49245.0, 110.0, 107.0},
-    		{2.0,-10661.0, 40377.0, -103.0, -105.0},
-    		{2.0,-8285.0, 25347.0, -278.0, -273.0},
-    		{2.0,-6213.0, 8355.0, -454.0, -452.0},
-    		{2.0,-3067.0, 2473.0, -528.0, -525.0},
-    		{1.0,-3067.0, 2473.0, -528.0, -525.0},
-    		};
-    
-    		
-   static double[][] cheval = new double[][]{
-			{1.5,-4852.0, 62487.0, -24.0, -23.0},
-			{1.5,-1910.0, 48322.0, -24.0, -23.0},
-			{1.5,-5416.0, 32160.0, -24.0, -23.0},
-			{1.5,-5368.0, 45194.0, -106.0, -104.0},
-			{1.5,-5143.0, 59423.0, -104.0, -102.0},
-			{1.5,-5149.0, 67295.0, -104.0, -101.0},
-			{1.5,-5171.0, 68752.0, -284.0, -274.0},
-			{1.5,-2699.0, 37567.0, -280.0, -270.0},
-			{1.5,2419.0, 2452.0, -544.0, -524.0},
-			{1.5,2419.0, 2453.0, -785.0, -782.0},
-			{1.5,2419.0, 2454.0, -921.0, -925.0},
-			{0.75,2419.0, 2454.0, -921.0, -925.0},		
-  	};
-  	
-  	static double[][] sally = new double[][]{
-  			{2.5,-5572.0, 63552.0, -11.0, -11.0},
-  			{2.5,-3887.0, 51708.0, -11.0, -11.0},
-  			{2.5,-9412.0, 32606.0, -11.0, -11.0},
-  			{2.5,-16908.0, 42705.0, -11.0, -11.0},
-  			{2.5,-13727.0, 40044.0, -10.0, -10.0},
-  			{2.5,-12768.0, 38069.0, 273.0, 269.0},
-  			{2.5,-13107.0, 34085.0, 545.0, 556.0},
-  			{2.5,-12607.0, 32702.0, 604.0, 692.0},
-  			{2.5,-10412.0, 32451.0, 435.0, 792.0},
-  			{2.5,-10412.0, 32451.0, 524.0, 533.0},
-  			{2.5,-10412.0, 32451.0, -159.0, -137.0},
-  			{1.25,-10412.0, 32451.0, -159.0, -137.0},
-  	};
-  	
-  	static double[][] drawbridge = new double[][]{
-  			{1.75,-5240.0, 64136.0, -20.0, -21.0},
-  			{1.75,-2133.0, 39439.0, -19.0, -19.0},
-  			{1.75,-5425.0, 22567.0, -20.0, -19.0},
-  			{1.75,-18011.0, 33501.0, -20.0, -20.0},
-  			{1.75,-27922.0, 47721.0, -20.0, -19.0},
-  			{1.75,-24754.0, 47413.0, -20.0, -19.0},
-  			{1.75,-23377.0, 47665.0, 257.0, 250.0},
-  			{1.75,-17893.0, 46463.0, 567.0, 549.0},
-  			{1.75,-9020.0, 52448.0, 643.0, 626.0},
-  			{1.75,-10279.0, 76674.0, 641.0, 624.0},
-  			{1.75,-6888.0, 76388.0, 466.0, 453.0},
-  			{1.75,-6896.0, 77334.0, 299.0, 290.0},
-  			{1.75,-5850.0, 41067.0, 125.0, 121.0},
-  			{1.75,2626.0, 2418.0, -74.0, -78.0},
-  			{0.625,2626.0, 2418.0, -74.0, -78.0},
-  	};
-
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
 
@@ -205,13 +141,13 @@ public class ManipulatorArm extends Subsystem {
 	//////////Setter Functions//////////
 	/////////////////////////////////////
     
-    public void setManipulatorWrist(double position) {
+    public void setManipulatorWrist(double position) {//function to move wrist with PID movement
     	manipulatorWrist.configPeakOutputVoltage(+12f, -12f); //max and min power
     	manipulatorWrist.setPID(0.27, 0, 0); //PID values
     	manipulatorWrist.setAllowableClosedLoopErr(20);
     	manipulatorWrist.set(position); // allowable error in the PID position movement
     }
-    public void setManipulatorElbow(double position) {
+    public void setManipulatorElbow(double position) { //function to move elbow with PID movement
     	manipulatorElbow.configPeakOutputVoltage(+12f, -12f); //max and min power
     	manipulatorElbow.setPID(0.27, 0, 0); //PID values
     	manipulatorElbow.setAllowableClosedLoopErr(20);
@@ -314,7 +250,7 @@ public class ManipulatorArm extends Subsystem {
 	
 	
 	public void restMode() {
-		if (Math.abs(manipulatorElbow.getError()) < 2500 && count > 10) {
+		if (Math.abs(manipulatorElbow.getError()) < 2500 && count > 10) { //moves elbow first
 			setManipulatorWrist(Robot.manipulatorWristRestPosition());
 		}
 		else {
@@ -324,17 +260,17 @@ public class ManipulatorArm extends Subsystem {
 			count++;
 		setManipulatorElbow(Robot.manipulatorElbowRestPosition());
 	}
-	public void readyToShoot() {
+	public void readyToShoot() { //simply moves both parts at same time, no need to move one first
 		setManipulatorWrist(wristShootPosition);
 		setManipulatorElbow(elbowShootPosition);
 	}
-	public void straightUp() {
+	public void straightUp() { //simply moves both parts at same time, no need to move one first
 		setManipulatorWrist(wristStraightUpPosition);
 		setManipulatorElbow(elbowStraightUpPosition);
 	}
 	
-	public void CalibrateManipulator() {
-		wristStartPosition = (manipulatorWrist.getPulseWidthPosition() % 4096);
+	public void CalibrateManipulator() { //calibrates manipulator at the beginning of every match
+		wristStartPosition = (manipulatorWrist.getPulseWidthPosition() % 4096);//4096 encoder clicks every rotation
 		elbowStartPosition = (manipulatorElbow.getPulseWidthPosition() % 4096);
 		if (wristStartPosition < 0) {
 			wristStartPosition = wristStartPosition + 4096;
@@ -342,7 +278,7 @@ public class ManipulatorArm extends Subsystem {
 		if (elbowStartPosition < 0) {
 			elbowStartPosition = elbowStartPosition + 4096;
 		}
-		manipulatorWrist.setPulseWidthPosition(wristStartPosition);
+		manipulatorWrist.setPulseWidthPosition(wristStartPosition); //sets the angular and the encoder position to be the same
 		manipulatorElbow.setPulseWidthPosition(elbowStartPosition);
 		manipulatorWrist.setEncPosition(wristStartPosition);
 		manipulatorElbow.setEncPosition(elbowStartPosition);
@@ -350,225 +286,71 @@ public class ManipulatorArm extends Subsystem {
 	public void resetCount() {
 		count = 0;
 	}
-	public void portcullis1() {
-		switch(portcullisState) {
-		
-		case 0:
-			setManipulatorElbow(elbowPortcullisPosition);
-			setManipulatorWrist(wristPortcullisPosition);
-			if(Math.abs(manipulatorElbow.getError()) < 100 && count > 10) {
-				portcullisState++;
-				manipulatorWrist.changeControlMode(TalonControlMode.Voltage);
-				manipulatorElbow.changeControlMode(TalonControlMode.Voltage);
-				manipulatorWrist.set(0);
-				manipulatorElbow.set(0);
-				count = 0;
-			}
-			count++;
-		break;
-		case 1:
-			if(count > 10) {
-				if (Math.abs(wristPortcullisPosition - currentWristPosition) > 300) {
-					Robot.robotDrive.resetEncoders();
-					count = 0;
-					portcullisState++;
-				}
-				previousWristPosition = currentWristPosition;
-			}
-			count++;
-			currentWristPosition = manipulatorWrist.getPosition();
-		break;
-		case 2:
-			wristPosition = manipulatorWrist.getPosition();
-			elbowPosition = manipulatorElbow.getPosition();
-			leftEncoder = Robot.robotDrive.getLeftEncoder();
-			rightEncoder = Robot.robotDrive.getRightEncoder();
-			System.out.println(wristPosition + ", " + elbowPosition + ", " + leftEncoder + ", " + rightEncoder);
-		}
-	}
+//	public void portcullis1() {
+//		switch(portcullisState) {
+//		
+//		case 0:
+//			setManipulatorElbow(elbowPortcullisPosition);
+//			setManipulatorWrist(wristPortcullisPosition);
+//			if(Math.abs(manipulatorElbow.getError()) < 100 && count > 10) {
+//				portcullisState++;
+//				manipulatorWrist.changeControlMode(TalonControlMode.Voltage);
+//				manipulatorElbow.changeControlMode(TalonControlMode.Voltage);
+//				manipulatorWrist.set(0);
+//				manipulatorElbow.set(0);
+//				count = 0;
+//			}
+//			count++;
+//		break;
+//		case 1:
+//			if(count > 10) {
+//				if (Math.abs(wristPortcullisPosition - currentWristPosition) > 300) {
+//					Robot.robotDrive.resetEncoders();
+//					count = 0;
+//					portcullisState++;
+//				}
+//				previousWristPosition = currentWristPosition;
+//			}
+//			count++;
+//			currentWristPosition = manipulatorWrist.getPosition();
+//		break;
+//		case 2:
+//			wristPosition = manipulatorWrist.getPosition();
+//			elbowPosition = manipulatorElbow.getPosition();
+//			leftEncoder = Robot.robotDrive.getLeftEncoder();
+//			rightEncoder = Robot.robotDrive.getRightEncoder();
+//			System.out.println(wristPosition + ", " + elbowPosition + ", " + leftEncoder + ", " + rightEncoder);
+//		}
+//	}
 
 	public static double interp(double time, double start, double end, double from, double to) { // Do the interpolation calculation
 		return((to - from)*((time - start) / (end - start)) + from);
     }
 	
-	public static boolean lookup(double time){ // do a lookup of the position information and also calculate speed data
-		// First, find the correct time offset into the data
-		int x, arysize;
-		double time_accumulator = 0, find_time = 0;
-		double start_time = 0, end_time = 0;
-		boolean found,done;
-		double start_pos1 = 0, end_pos1 = 0, pos1 = 0, speed1 = 0;
-		double start_pos2 = 0, end_pos2 = 0, pos2 = 0, speed2 = 0;
-		double start_pos3 = 0, end_pos3 = 0, pos3 = 0, speed3 = 0;
-		double start_pos4 = 0, end_pos4 = 0, pos4 = 0, speed4 = 0;
-		
-		double speed_multiplier = speed_mult;
-		
-		double timeoffset = time * speed_multiplier;
-		
-		int dataset = comboindex;
-		// Now, try to look this up in the correct dataset
-		if (dataset == 0)
-		    arysize = portcullis.length;
-		else if (dataset == 1)
-		    arysize = cheval.length; 
-		else if (dataset == 2)
-		    arysize = sally.length; 
-		else if (dataset == 3)
-		    arysize = drawbridge.length; 
-		else
-		    return false; // dataset is out of range.  Return false.  Lookup fails
-		
-		found = false; // Indicate we have not yet found the dataset elements in the desired time range
-		done = false;
-		x = 0;
-		time_accumulator = 0.0;
-		find_time = time * speed_multiplier;
-		while((!found)&&(!done)) {
-		    switch(dataset) {
-		        case 0: // portcullis
-		            start_time = time_accumulator;
-		            end_time = time_accumulator + portcullis[x][joints.TIME.ordinal()];
-		            if ((find_time >= start_time)&&(find_time < end_time))
-		                { // If we are in the right time space, set up data for each axis
-		                start_pos1 = portcullis[x][joints.WRIST.ordinal()];
-		                end_pos1 = portcullis[x+1][joints.WRIST.ordinal()];
-		                start_pos2 = portcullis[x][joints.ELBOW.ordinal()];
-		                end_pos2 = portcullis[x+1][joints.ELBOW.ordinal()];
-		                start_pos3 = portcullis[x][joints.LEFT.ordinal()];
-		                end_pos3 = portcullis[x+1][joints.LEFT.ordinal()];
-		                start_pos4 = portcullis[x][joints.RIGHT.ordinal()];
-		                end_pos4 = portcullis[x+1][joints.RIGHT.ordinal()];
-		                found = true;
-		                }
-		            else if (x >= arysize - 2)
-		                done = true; // We have reached the end of the dataset.  Motion is done.
-		            break;
-		        case 1: // cheval
-		            start_time = time_accumulator;
-		            end_time = time_accumulator + cheval[x][joints.TIME.ordinal()];
-		            if ((find_time >= start_time)&&(find_time < end_time))
-		                { // If we are in the right time space, set up data for each axis
-		                start_pos1 = cheval[x][joints.WRIST.ordinal()];
-		                end_pos1 = cheval[x+1][joints.WRIST.ordinal()];
-		                start_pos2 = cheval[x][joints.ELBOW.ordinal()];
-		                end_pos2 = cheval[x+1][joints.ELBOW.ordinal()];
-		                start_pos3 = cheval[x][joints.LEFT.ordinal()];
-		                end_pos3 = cheval[x+1][joints.LEFT.ordinal()];
-		                start_pos4 = cheval[x][joints.RIGHT.ordinal()];
-		                end_pos4 = cheval[x+1][joints.RIGHT.ordinal()];
-		                found = true;
-		                }
-		            else if (x >= arysize - 2)
-		                done = true; // We have reached the end of the dataset.  Motion is done.
-		            break;
-		        case 2: // sally
-		            start_time = time_accumulator;
-		            end_time = time_accumulator + sally[x][joints.TIME.ordinal()];
-		            if ((find_time >= start_time)&&(find_time < end_time))
-		                { // If we are in the right time space, set up data for each axis
-		                start_pos1 = sally[x][joints.WRIST.ordinal()];
-		                end_pos1 = sally[x+1][joints.WRIST.ordinal()];
-		                start_pos2 = sally[x][joints.ELBOW.ordinal()];
-		                end_pos2 = sally[x+1][joints.ELBOW.ordinal()];
-		                start_pos3 = sally[x][joints.LEFT.ordinal()];
-		                end_pos3 = sally[x+1][joints.LEFT.ordinal()];
-		                start_pos4 = sally[x][joints.RIGHT.ordinal()];
-		                end_pos4 = sally[x+1][joints.RIGHT.ordinal()];
-		                found = true;
-		                }
-		            else if (x >= arysize - 2)
-		                done = true; // We have reached the end of the dataset.  Motion is done.
-		            break;
-		        case 3: // drawbridge
-		            start_time = time_accumulator;
-		            end_time = time_accumulator + drawbridge[x][joints.TIME.ordinal()];
-		            if ((find_time >= start_time)&&(find_time < end_time))
-		                { // If we are in the right time space, set up data for each axis
-		                start_pos1 = drawbridge[x][joints.WRIST.ordinal()];
-		                end_pos1 = drawbridge[x+1][joints.WRIST.ordinal()];
-		                start_pos2 = drawbridge[x][joints.ELBOW.ordinal()];
-		                end_pos2 = drawbridge[x+1][joints.ELBOW.ordinal()];
-		                start_pos3 = drawbridge[x][joints.LEFT.ordinal()];
-		                end_pos3 = drawbridge[x+1][joints.LEFT.ordinal()];
-		                start_pos4 = drawbridge[x][joints.RIGHT.ordinal()];
-		                end_pos4 = drawbridge[x+1][joints.RIGHT.ordinal()];
-		                found = true;
-		                }
-		            else if (x >= arysize - 2)
-		                done = true; // We have reached the end of the dataset.  Motion is done.
-		            break;
-		        }
-		    if ((!found)&&(!done)) // keep looking till we're done or till we find what we're looking for.
-		        {
-		        x++;
-		        time_accumulator = end_time;
-		        }
-		    }
-		if ((found)&&(!done)) // If we are not done and we found a record, generate data.
-		    { // We have valid data points.  Calculate target positions and speeds.
-		    pos1 = interp(find_time, start_time, end_time, start_pos1, end_pos1); // interpolate for pos1
-		    // Calculate speed assuming we will maintain the same average speed for this section
-		    speed1 = (end_pos1 - start_pos1) / (end_time - start_time) * speed_multiplier / 5.0;
-		
-		    pos2 = interp(find_time, start_time, end_time, start_pos2, end_pos2); // interpolate for pos2
-		    speed2 = (end_pos2 - start_pos2) / (end_time - start_time) * speed_multiplier / 5.0;
-		
-		    pos3 = interp(find_time, start_time, end_time, start_pos3, end_pos3); // interpolate for pos2
-		    speed3 = (end_pos3 - start_pos3) / (end_time - start_time) * speed_multiplier / 5.0;
-		
-		    pos4 = interp(find_time, start_time, end_time, start_pos4, end_pos4); // interpolate for pos2
-		    speed4 = (end_pos4 - start_pos4) / (end_time - start_time) * speed_multiplier / 5.0;
-		
-		    wristPos = pos1;
-		    elbowPos = pos2;
-		    leftPos = pos3;
-		    rightPos = pos4;
-		    wristSpeed = speed1;
-		    elbowSpeed = speed2;
-		    leftSpeed = speed3;
-		    rightSpeed = speed4;
-		    return true; // Data has been set.  Return True.
-		    }
-		else // if we can't find something or we are done, return false.  Motion is to stop now.
-		    return false;
-		}
-	
-	public static void posPrint(double timeStep) {
-		double localTime=0;
-		while (lookup(localTime))
-        {
-        System.out.printf("time = %3.2f" + ", wrist pos = %5.2f "+" speed = %3.2f " +
-                        ", elbow pos = %6.2f "+" speed = %3.2f " +
-                        ", left pos = %3.2f "+" speed = %3.2f " +
-                        ", right pos = %3.2f "+" speed = %3.2f "+"\n", localTime, wristPos, wristSpeed, elbowPos, elbowSpeed, leftPos, leftSpeed, rightPos, rightSpeed);
-        localTime = localTime +timeStep;
 
-        }
-	}
-	public void afterShoot() {
+	public void afterShoot() { //moves manipulator in a little bit after shooting so its not sticking out
 		setManipulatorElbow(elbowAfterShootPosition);
 		if (Math.abs(manipulatorElbow.getError()) < 100 && count > 10) {
 			setManipulatorWrist(wristRestPosition);
 			count = 0;
 		}
 		count++;
-		System.out.println("ELBOW ERROR: " + manipulatorElbow.getError());
+		//System.out.println("ELBOW ERROR: " + manipulatorElbow.getError());
 	}
 	public boolean sallyPort() {
-		fpgaDiff = Timer.getFPGATimestamp() - lastFPGA;
+		fpgaDiff = Timer.getFPGATimestamp() - lastFPGA; //acurate time tracker
 		lastFPGA = Timer.getFPGATimestamp();
 		switch(sallyState) {
-		case 0:
+		case 0: //sets wrist ready for sally, wrist moves first so it doesn't scrap against the door
 			setManipulatorWrist(wristSallyReady);
-			if (manipulatorWrist.getError() < 250 && count > 10) {
+			if (manipulatorWrist.getError() < 250 && count > 10) {//ensures wrist moves first
 				setManipulatorElbow(elbowSallyReady);
 				sallyState++;
 				count = 0;
 			}
 			count++;
 		break;
-		case 1:
+		case 1: //waits until the elbow is in the right position, then moves to next state
 			if (manipulatorElbow.getError() < 250 && count > 10) {
 				sallyState++;
 				totalTime = 1.0;
@@ -577,7 +359,7 @@ public class ManipulatorArm extends Subsystem {
 			}
 			count ++;
 		break;
-		case 2:
+		case 2: //robot goes backwards at high speed to swing the door open
 			timeCount += fpgaDiff;
 //			encoderPosition = (encoderSallyMax - 0) * timeCount / totalTime + 0;
 //			speed = ((encoderSallyMax - 0) / totalTime) / SPEED_FACTOR;
@@ -599,20 +381,20 @@ public class ManipulatorArm extends Subsystem {
 				totalTime = 1.0;
 			}
 		break;
-		case 3:
+		case 3: //gives a slight delay before switching directions, without this the robot would quit
 			timeCount++;
 			if (timeCount > 15) {
 				sallyState++;
 			}
 			break;
-		case 4:
+		case 4://moves robot at a high speed forward to get past the sally port door, the front light sensor will indicate when we are done
 //			encoderPosition = (0 - encoderSallyMax) * timeCount / totalTime + encoderSallyMax;
 //			speed = ((0 - encoderSallyMax) / totalTime) / SPEED_FACTOR;
 ////			Robot.robotDrive.DrivePath(encoderPosition, speed, encoderPosition, speed);
 //			Robot.robotDrive.setRightMotor(1);
 //			Robot.robotDrive.setLeftMotor(1);
 			Robot.robotDrive.goToDistance(1000, 1000, 0.95, 5, 5, 0.9, 0.9);
-			if (Robot.robotDrive.getFrontLightSensorValue() > 1200) {
+			if (Robot.robotDrive.getFrontLightSensorValue() > 1200) {//indicates front is on the outer work, this means the routine is done
 				sallyState++;
 				Robot.robotDrive.setRightMotor(0);
 				Robot.robotDrive.setLeftMotor(0);
@@ -621,7 +403,7 @@ public class ManipulatorArm extends Subsystem {
 				Robot.robotDrive.resetGoToDistanceState();
 				return true;
 			}
-			timeCount += 0.02;
+			timeCount += 0.02; //don't use this anymore
 //			if (Robot.robotDrive.getRightEncoder() < 0) {
 //				sallyState++;
 //				Robot.robotDrive.setRightMotor(0);
@@ -639,51 +421,51 @@ public class ManipulatorArm extends Subsystem {
 		lastFPGA = Timer.getFPGATimestamp();
 		System.out.println("ACTUAL TIME: " + Timer.getFPGATimestamp());
 		switch(drawBridgeState) {
-		case 0:
+		case 0: // again moves the wrist first so that the arm doesn't scrap against the drawbridge
 			Robot.robotDrive.resetEncoders();
 			setManipulatorWrist(drawBridgeWristReady);
-			if (manipulatorWrist.getError() < 1000 && count > 10) {
+			if (manipulatorWrist.getError() < 1000 && count > 10) { // this determines if the wrist is in position, if so it moves the elbow
 				drawBridgeState++;
 				count = 0;
 			}
 			count++;
 			break;
-		case 1:
-			setManipulatorElbow(drawBridgeElbowReady);
+		case 1: //moves the elbow until its in position, then moves on to next state
+			setManipulatorElbow(drawBridgeElbowReady); 
 			if (manipulatorElbow.getError() < 200 && count > 10) {
 				drawBridgeState++;
 				count = 0;
 			}
 			count++;
 			break;
-		case 2:
-			manipulatorWrist.changeControlMode(TalonControlMode.PercentVbus);
+		case 2: //sets the wrist to power mode and gives is 10% power downwards to start opening the drawbridge.
+			manipulatorWrist.changeControlMode(TalonControlMode.PercentVbus); //power mode (values between -1 and 1)
 			manipulatorWrist.set(0.1);
 			drawBridgeState++;
 			timeCount = 0;
-			totalTime = 0.75;
+			totalTime = 0.75; //this indicates how long the next step has to finish (lowering this will make it go faster)
 			break;
-		case 3:
-			timeCount += fpgaDiff;
-			newElbowPosition = (elbowSecondPosition - drawBridgeElbowReady) * timeCount / totalTime + drawBridgeElbowReady;
-			setManipulatorElbow(newElbowPosition);
+		case 3: //calculates the next elbow and drivetrain position based on time, updates speed every 50th of a second, this step pulls bridge half way down, and drives back a little
+			timeCount += fpgaDiff; //keeps track of time
+			newElbowPosition = (elbowSecondPosition - drawBridgeElbowReady) * timeCount / totalTime + drawBridgeElbowReady; //new elbow position
+			setManipulatorElbow(newElbowPosition); //set manipulator to new position
 			encoderPosition = encoderSecondPosition * timeCount / totalTime;
-			speed = (encoderSecondPosition / totalTime) / SPEED_FACTOR;
-			Robot.robotDrive.DrivePath(encoderPosition, speed, encoderPosition, speed);
+			speed = (encoderSecondPosition / totalTime) / SPEED_FACTOR; //speed of drivetrain
+			Robot.robotDrive.DrivePath(encoderPosition, speed, encoderPosition, speed); //makes robot drive on specified path.
 			
-			if (timeCount > totalTime) {
-				manipulatorWrist.changeControlMode(TalonControlMode.Position);
-				setManipulatorWrist(wristSecondPosition);
+			if (timeCount > totalTime) { //if time exceeds that specified in previous state it moves on to the next and sets a time limit for the next step
+				manipulatorWrist.changeControlMode(TalonControlMode.Position); //changes wrist to position mode
+				setManipulatorWrist(wristSecondPosition); //makes wrist maintain current position
 				timeCount = 0;
 				totalTime = 0.75;
 				drawBridgeState++;
 			}
-			if (manipulatorWrist.get() > wristSecondPosition - 500) {
+			if (manipulatorWrist.get() > wristSecondPosition - 500) { //checks if manipulator reaches next target before this step finishes it maintains that position
 				manipulatorWrist.changeControlMode(TalonControlMode.Position);
 				setManipulatorWrist(wristSecondPosition);
 			}
 			break;
-		case 4:
+		case 4: //pushes arm forward and downwards to push drawbridge fully down, drivetrain doesn't move in this step
 			timeCount += fpgaDiff;
 			//Robot.robotDrive.DrivePath(encoderSecondPosition, 0, encoderSecondPosition, 0); //stop
 			newElbowPosition = (elbowThirdPosition - elbowSecondPosition) * timeCount / totalTime + elbowSecondPosition;
@@ -696,10 +478,10 @@ public class ManipulatorArm extends Subsystem {
 			if (timeCount > totalTime) {
 				drawBridgeState++;
 				timeCount = 0;
-				totalTime = 0.5;
+				totalTime = 0.5; //next step only get 1/2 second to finish
 			}
 			break;
-		case 5:
+		case 5: //pushes arm out a bit more to keep drawbridge down, and begins to drive forward
 			timeCount += fpgaDiff;
 			//Robot.robotDrive.DrivePath(encoderThirdPosition, 0, encoderThirdPosition, 0); //stop
 			newElbowPosition = (elbowFourthPosition - elbowThirdPosition) * timeCount / totalTime + elbowThirdPosition;
@@ -718,7 +500,7 @@ public class ManipulatorArm extends Subsystem {
 				manipulatorWrist.set(0);
 			}
 			break;
-		case 6:
+		case 6: //drive forward the rest of the way
 			timeCount += fpgaDiff;
 			newElbowPosition = (elbowFifthPosition - elbowFourthPosition) * timeCount / totalTime + elbowFourthPosition;
 			//newWristPosition = (wristFifthPosition - wristFourthPosition) * timeCount / totalTime + wristFourthPosition;
@@ -734,7 +516,7 @@ public class ManipulatorArm extends Subsystem {
 				totalTime = 0.3;
 			}
 			break;
-		case 7:
+		case 7: //moves elbow up a little bit so it doesn't get stuck under the robot
 			timeCount += fpgaDiff;
 			newElbowPosition = (elbowSixthPosition - elbowFifthPosition) * timeCount / totalTime + elbowFifthPosition;
 			setManipulatorElbow(newElbowPosition);
@@ -745,7 +527,7 @@ public class ManipulatorArm extends Subsystem {
 				totalTime = 1.0;
 			}
 			break;
-		case 8:
+		case 8: //stops the drivetrain so it doesn't continue at previous speed
 			manipulatorWrist.changeControlMode(TalonControlMode.Position);
 			Robot.robotDrive.DrivePath(encoderFifthPosition, 0, encoderFifthPosition, 0); //stop
 			return true;
@@ -848,18 +630,18 @@ public class ManipulatorArm extends Subsystem {
 		}
 		return false;
 	}
-	public void exitSallyPort() {
+	public void exitSallyPort() { //give specified movement when exiting the sally port early so it doesn't just push down on the door really hard
 		switch(exitSallyState) {
-		case 0:
+		case 0: //moves the manipulator to be straight up
 			setManipulatorWrist(wristStraightUpPosition);
 			setManipulatorElbow(elbowStraightUpPosition);
-			if (manipulatorWrist.getError() < 100 && count > 10) {
+			if (manipulatorWrist.getError() < 100 && count > 10) { //once wrist is in the right position it moves to next step
 				exitSallyState++;
 				count = 0;
 			}
 			count ++;
 			break;
-		case 1:
+		case 1: //moves elbow to rest position, then sets the wrist
 			setManipulatorElbow(Robot.manipulatorElbowRestPosition());
 			if (manipulatorElbow.getError() < 20000 && count > 10) {
 				exitSallyState = 0;
@@ -870,6 +652,165 @@ public class ManipulatorArm extends Subsystem {
 		}
 		
 	}
+	
+	
+	
+	
+//	public static boolean lookup(double time){ // do a lookup of the position information and also calculate speed data
+//	// First, find the correct time offset into the data
+//	int x, arysize;
+//	double time_accumulator = 0, find_time = 0;
+//	double start_time = 0, end_time = 0;
+//	boolean found,done;
+//	double start_pos1 = 0, end_pos1 = 0, pos1 = 0, speed1 = 0;
+//	double start_pos2 = 0, end_pos2 = 0, pos2 = 0, speed2 = 0;
+//	double start_pos3 = 0, end_pos3 = 0, pos3 = 0, speed3 = 0;
+//	double start_pos4 = 0, end_pos4 = 0, pos4 = 0, speed4 = 0;
+//	
+//	double speed_multiplier = speed_mult;
+//	
+//	double timeoffset = time * speed_multiplier;
+//	
+//	int dataset = comboindex;
+//	// Now, try to look this up in the correct dataset
+//	if (dataset == 0)
+//	    arysize = portcullis.length;
+//	else if (dataset == 1)
+//	    arysize = cheval.length; 
+//	else if (dataset == 2)
+//	    arysize = sally.length; 
+//	else if (dataset == 3)
+//	    arysize = drawbridge.length; 
+//	else
+//	    return false; // dataset is out of range.  Return false.  Lookup fails
+//	
+//	found = false; // Indicate we have not yet found the dataset elements in the desired time range
+//	done = false;
+//	x = 0;
+//	time_accumulator = 0.0;
+//	find_time = time * speed_multiplier;
+//	while((!found)&&(!done)) {
+//	    switch(dataset) {
+//	        case 0: // portcullis
+//	            start_time = time_accumulator;
+//	            end_time = time_accumulator + portcullis[x][joints.TIME.ordinal()];
+//	            if ((find_time >= start_time)&&(find_time < end_time))
+//	                { // If we are in the right time space, set up data for each axis
+//	                start_pos1 = portcullis[x][joints.WRIST.ordinal()];
+//	                end_pos1 = portcullis[x+1][joints.WRIST.ordinal()];
+//	                start_pos2 = portcullis[x][joints.ELBOW.ordinal()];
+//	                end_pos2 = portcullis[x+1][joints.ELBOW.ordinal()];
+//	                start_pos3 = portcullis[x][joints.LEFT.ordinal()];
+//	                end_pos3 = portcullis[x+1][joints.LEFT.ordinal()];
+//	                start_pos4 = portcullis[x][joints.RIGHT.ordinal()];
+//	                end_pos4 = portcullis[x+1][joints.RIGHT.ordinal()];
+//	                found = true;
+//	                }
+//	            else if (x >= arysize - 2)
+//	                done = true; // We have reached the end of the dataset.  Motion is done.
+//	            break;
+//	        case 1: // cheval
+//	            start_time = time_accumulator;
+//	            end_time = time_accumulator + cheval[x][joints.TIME.ordinal()];
+//	            if ((find_time >= start_time)&&(find_time < end_time))
+//	                { // If we are in the right time space, set up data for each axis
+//	                start_pos1 = cheval[x][joints.WRIST.ordinal()];
+//	                end_pos1 = cheval[x+1][joints.WRIST.ordinal()];
+//	                start_pos2 = cheval[x][joints.ELBOW.ordinal()];
+//	                end_pos2 = cheval[x+1][joints.ELBOW.ordinal()];
+//	                start_pos3 = cheval[x][joints.LEFT.ordinal()];
+//	                end_pos3 = cheval[x+1][joints.LEFT.ordinal()];
+//	                start_pos4 = cheval[x][joints.RIGHT.ordinal()];
+//	                end_pos4 = cheval[x+1][joints.RIGHT.ordinal()];
+//	                found = true;
+//	                }
+//	            else if (x >= arysize - 2)
+//	                done = true; // We have reached the end of the dataset.  Motion is done.
+//	            break;
+//	        case 2: // sally
+//	            start_time = time_accumulator;
+//	            end_time = time_accumulator + sally[x][joints.TIME.ordinal()];
+//	            if ((find_time >= start_time)&&(find_time < end_time))
+//	                { // If we are in the right time space, set up data for each axis
+//	                start_pos1 = sally[x][joints.WRIST.ordinal()];
+//	                end_pos1 = sally[x+1][joints.WRIST.ordinal()];
+//	                start_pos2 = sally[x][joints.ELBOW.ordinal()];
+//	                end_pos2 = sally[x+1][joints.ELBOW.ordinal()];
+//	                start_pos3 = sally[x][joints.LEFT.ordinal()];
+//	                end_pos3 = sally[x+1][joints.LEFT.ordinal()];
+//	                start_pos4 = sally[x][joints.RIGHT.ordinal()];
+//	                end_pos4 = sally[x+1][joints.RIGHT.ordinal()];
+//	                found = true;
+//	                }
+//	            else if (x >= arysize - 2)
+//	                done = true; // We have reached the end of the dataset.  Motion is done.
+//	            break;
+//	        case 3: // drawbridge
+//	            start_time = time_accumulator;
+//	            end_time = time_accumulator + drawbridge[x][joints.TIME.ordinal()];
+//	            if ((find_time >= start_time)&&(find_time < end_time))
+//	                { // If we are in the right time space, set up data for each axis
+//	                start_pos1 = drawbridge[x][joints.WRIST.ordinal()];
+//	                end_pos1 = drawbridge[x+1][joints.WRIST.ordinal()];
+//	                start_pos2 = drawbridge[x][joints.ELBOW.ordinal()];
+//	                end_pos2 = drawbridge[x+1][joints.ELBOW.ordinal()];
+//	                start_pos3 = drawbridge[x][joints.LEFT.ordinal()];
+//	                end_pos3 = drawbridge[x+1][joints.LEFT.ordinal()];
+//	                start_pos4 = drawbridge[x][joints.RIGHT.ordinal()];
+//	                end_pos4 = drawbridge[x+1][joints.RIGHT.ordinal()];
+//	                found = true;
+//	                }
+//	            else if (x >= arysize - 2)
+//	                done = true; // We have reached the end of the dataset.  Motion is done.
+//	            break;
+//	        }
+//	    if ((!found)&&(!done)) // keep looking till we're done or till we find what we're looking for.
+//	        {
+//	        x++;
+//	        time_accumulator = end_time;
+//	        }
+//	    }
+//	if ((found)&&(!done)) // If we are not done and we found a record, generate data.
+//	    { // We have valid data points.  Calculate target positions and speeds.
+//	    pos1 = interp(find_time, start_time, end_time, start_pos1, end_pos1); // interpolate for pos1
+//	    // Calculate speed assuming we will maintain the same average speed for this section
+//	    speed1 = (end_pos1 - start_pos1) / (end_time - start_time) * speed_multiplier / 5.0;
+//	
+//	    pos2 = interp(find_time, start_time, end_time, start_pos2, end_pos2); // interpolate for pos2
+//	    speed2 = (end_pos2 - start_pos2) / (end_time - start_time) * speed_multiplier / 5.0;
+//	
+//	    pos3 = interp(find_time, start_time, end_time, start_pos3, end_pos3); // interpolate for pos2
+//	    speed3 = (end_pos3 - start_pos3) / (end_time - start_time) * speed_multiplier / 5.0;
+//	
+//	    pos4 = interp(find_time, start_time, end_time, start_pos4, end_pos4); // interpolate for pos2
+//	    speed4 = (end_pos4 - start_pos4) / (end_time - start_time) * speed_multiplier / 5.0;
+//	
+//	    wristPos = pos1;
+//	    elbowPos = pos2;
+//	    leftPos = pos3;
+//	    rightPos = pos4;
+//	    wristSpeed = speed1;
+//	    elbowSpeed = speed2;
+//	    leftSpeed = speed3;
+//	    rightSpeed = speed4;
+//	    return true; // Data has been set.  Return True.
+//	    }
+//	else // if we can't find something or we are done, return false.  Motion is to stop now.
+//	    return false;
+//	}
+
+//public static void posPrint(double timeStep) {
+//	double localTime=0;
+//	while (lookup(localTime))
+//    {
+//    System.out.printf("time = %3.2f" + ", wrist pos = %5.2f "+" speed = %3.2f " +
+//                    ", elbow pos = %6.2f "+" speed = %3.2f " +
+//                    ", left pos = %3.2f "+" speed = %3.2f " +
+//                    ", right pos = %3.2f "+" speed = %3.2f "+"\n", localTime, wristPos, wristSpeed, elbowPos, elbowSpeed, leftPos, leftSpeed, rightPos, rightSpeed);
+//    localTime = localTime +timeStep;
+//
+//    }
+//}
 
 }
 

@@ -13,25 +13,18 @@ package org.usfirst.frc4678.Cybercavs2016Code;
 
 import org.usfirst.frc4678.Cybercavs2016Code.commands.AutoAim;
 import org.usfirst.frc4678.Cybercavs2016Code.commands.AutonomousCommand;
-import org.usfirst.frc4678.Cybercavs2016Code.commands.CalibratePickup;
 import org.usfirst.frc4678.Cybercavs2016Code.commands.DrawBridge;
 import org.usfirst.frc4678.Cybercavs2016Code.commands.DriveTrain;
 import org.usfirst.frc4678.Cybercavs2016Code.commands.HoldBallMode;
-import org.usfirst.frc4678.Cybercavs2016Code.commands.ManipulatorCategoryCMode;
 import org.usfirst.frc4678.Cybercavs2016Code.commands.ManipulatorRestMode;
 import org.usfirst.frc4678.Cybercavs2016Code.commands.ManipulatorShootMode;
 import org.usfirst.frc4678.Cybercavs2016Code.commands.Pickup;
 import org.usfirst.frc4678.Cybercavs2016Code.commands.PickupArmLowBarPosition;
-import org.usfirst.frc4678.Cybercavs2016Code.commands.PickupArmTesting;
 import org.usfirst.frc4678.Cybercavs2016Code.commands.Portcullis;
 import org.usfirst.frc4678.Cybercavs2016Code.commands.Position1;
 import org.usfirst.frc4678.Cybercavs2016Code.commands.Position2;
-import org.usfirst.frc4678.Cybercavs2016Code.commands.ReadyToShoot;
-import org.usfirst.frc4678.Cybercavs2016Code.commands.ReleaseClimber;
-import org.usfirst.frc4678.Cybercavs2016Code.commands.RetractClimber;
 import org.usfirst.frc4678.Cybercavs2016Code.commands.SetManipulatorArm;
 import org.usfirst.frc4678.Cybercavs2016Code.commands.SetPickupArm;
-import org.usfirst.frc4678.Cybercavs2016Code.commands.SetServoMotor;
 import org.usfirst.frc4678.Cybercavs2016Code.commands.Shoot;
 import org.usfirst.frc4678.Cybercavs2016Code.commands.SpitOut;
 import org.usfirst.frc4678.Cybercavs2016Code.commands.TurnOnLightRing;
@@ -88,8 +81,6 @@ public class OI {
     public JoystickButton operatorBtn2;
     public JoystickButton operatorBtn3;
     public JoystickButton operatorBtn4;
-    public JoystickButton operatorBtn5;
-    public JoystickButton operatorBtn6;
     public Joystick operatorGamepad;
     public Joystick autoSwitch;
 
@@ -102,10 +93,6 @@ public class OI {
         
         operatorGamepad = new Joystick(1);
         
-        operatorBtn6 = new JoystickButton(operatorGamepad, 6);
-        operatorBtn6.whileHeld(new RetractClimber());
-        operatorBtn5 = new JoystickButton(operatorGamepad, 5);
-        operatorBtn5.whileHeld(new ReleaseClimber());
         operatorBtn4 = new JoystickButton(operatorGamepad, 4);
         operatorBtn4.whileHeld(new Portcullis());
         operatorBtn3 = new JoystickButton(operatorGamepad, 3);
@@ -136,15 +123,12 @@ public class OI {
         SmartDashboard.putData("SetManipulatorArm", new SetManipulatorArm());
         SmartDashboard.putData("ManipulatorShootMode", new ManipulatorShootMode());
         SmartDashboard.putData("ManipulatorRestMode", new ManipulatorRestMode());
-        SmartDashboard.putData("ManipulatorCategoryCMode", new ManipulatorCategoryCMode());
         SmartDashboard.putData("PickupArmLowBarPosition", new PickupArmLowBarPosition());
         SmartDashboard.putData("Portcullis", new Portcullis());
         SmartDashboard.putData("sallyPort", new sallyPort());
         SmartDashboard.putData("AutoAim", new AutoAim());
         SmartDashboard.putData("TurnOnLightRing", new TurnOnLightRing());
         SmartDashboard.putData("DrawBridge", new DrawBridge());
-        SmartDashboard.putData("ReleaseClimber", new ReleaseClimber());
-        SmartDashboard.putData("RetractClimber", new RetractClimber());
         SmartDashboard.putData("Position1", new Position1());
         SmartDashboard.putData("Position2", new Position2());
 

@@ -79,17 +79,17 @@ public class AutonomousCommand extends Command {
 	protected void initialize() {
 		autoDefense = 0;
 		autoPosition = 0;
-		if (Robot.oi.getAutoSwitch().getRawButton(16)) {
+		if (Robot.oi.getAutoSwitch().getRawButton(16)) { //determines which position the switch is in for auto mode
 			autoDefense += 1;
 		}
-		if (Robot.oi.getAutoSwitch().getRawButton(15)) {
+		if (Robot.oi.getAutoSwitch().getRawButton(15)) { 
 			autoDefense += 2;
 		}
-		if (Robot.oi.getAutoSwitch().getRawButton(14)) {
+		if (Robot.oi.getAutoSwitch().getRawButton(14)) { 
 			autoDefense += 4;
 		}
 		
-		if (Robot.oi.getAutoSwitch().getRawButton(13)) {
+		if (Robot.oi.getAutoSwitch().getRawButton(13)) { //determines which position switch is in for auto positioning
 			autoPosition += 1;
 		}
 		if (Robot.oi.getAutoSwitch().getRawButton(12)) {
@@ -103,18 +103,18 @@ public class AutonomousCommand extends Command {
 		Robot.robotDrive.setIsInAuto(true);
 		Robot.robotDrive.resetGyro();
 		Robot.robotDrive.resetEncoders();
-		Robot.pickupArm.setArmMode("Hold");
-		if (autoPosition == 2) {
+		Robot.pickupArm.setArmMode("Hold"); 
+		if (autoPosition == 2) { // if the auto position is two we will need to turn about 27 degrees right toward the target
 			amountToTurn = 27;
 		}
-		else if (autoPosition == 5) {
+		else if (autoPosition == 5) {//in position 5 we need to turn 20 degress left to look at the target
 			amountToTurn = -20;
 		}
 		
-		else if (autoPosition == 3) {
+		else if (autoPosition == 3) { // in position 3 need just a small 10 degree right
 			amountToTurn = 10;
 		}
-		else {
+		else { //any other position doesn't require any turning, position 1 is its own thing
 			amountToTurn = 0;
 		}
 	}
@@ -140,147 +140,153 @@ public class AutonomousCommand extends Command {
 //			}
 //			count++;
 //			break;
-		case 0:
+		case 0: // if defense selector is 0 it will run low bar
 			low_Bar_Auto();
 			break;
 			
-		case 1:
+		case 1: // if defense selector is 1 it will run drawbridge
 			drawBridgeAuto();
 			break;
-		case 2:
-			switch(sallyCase) { // comments in drawbridge are almost the same as applies here, look at that
-			case 0:
-				Robot.robotDrive.goToDistance(1000, 1000, 0.6, 10, 10, 0.4, 0.4);//188
-				if (Robot.robotDrive.getFrontLightSensorValue() > 1200) {
-					Robot.robotDrive.resetGoToDistanceState();
-					count = 0;
-					sallyCase++;
-				}
-				break;
-			case 1:
-				Robot.robotDrive.goToDistance(1000, 1000, 0.4, 0, 0, 0.4, 0.4);//188
-				if (Math.abs(Robot.robotDrive.getLeftSpeed()) < 50 && count > 10) {
-					Robot.robotDrive.setLeftMotor(0);
-					Robot.robotDrive.setRightMotor(0);
-					Robot.manipulatorArm.setManipulatorElbowMode(5);
-			    	Robot.manipulatorArm.setManipulatorWristMode(5);
-			    	Robot.manipulatorArm.resetCount();
-			    	Robot.manipulatorArm.resetSallyState();
-			    	Robot.robotDrive.resetGoToDistanceState();
-					sallyCase++;
-				}
-				count++;
-				break;
-			case 2:
-				if (Robot.manipulatorArm.sallyPort()) {
-					sallyCase++;
-				}
-				break;
-			case 3:
-				Robot.robotDrive.goToDistance(1000, 1000, 0.8, 30, 30, 0.4, 0.4);
-				if(Robot.robotDrive.isFlat()) {
-					Robot.robotDrive.resetGoToDistanceState();
-					sallyCase++;
-				}
-				break;
-			case 4:
-				if (autoPosition == 2) {
-					if (Robot.robotDrive.goToDistance(75, 75, 0.8, 30, 30, 0.4, 0.4)) {
-						Robot.robotDrive.resetGoToDistanceState();
-						sallyCase++;
-					}
-				}
-				else {
-					sallyCase++;
-				}
-				
-				break;	
-			case 5:
-				if(Robot.robotDrive.gyroTurn(amountToTurn)) {
-					sallyCase++;
-					Robot.robotDrive.resetGoToDistanceState();
-				}
-				break;
-			case 6:
-				Robot.camera.cameraLightsOn();
-				Robot.robotDrive.autoAimInit();
-				Robot.manipulatorArm.setManipulatorMode("ShootMode");
-				Robot.pickupArm.setArmMode("ShootMode");
-				sallyCase++;
-				break;
-			case 7:
-				if(Robot.robotDrive.autoAim()) {
-					sallyCase++;
-					Robot.camera.cameraLightsOff();
-				}
-				else {
-					Robot.camera.cameraLightsOn();
-				}
-				break;
-			case 8:
-				Robot.catapult.shootBoulder();
-				count ++;
-				if (count > 40) { // just so it doens't move immediatly after shooting
-					sallyCase++;
-					count = 0;
-				}
-				break;
-			case 9:
-				Robot.catapult.shootBoulder();
-				Robot.robotDrive.resetEncoders();
-				timeCount = 0;
-				sallyCase++;
-				break;
-			case 10:
-				
-				if (Robot.catapult.getShooterState() != 0) {
-					Robot.catapult.shootBoulder();
-				}
-				timeCount += fpgaDiff;
-				Robot.robotDrive.DrivePath((timeCount * 75) / 0.5, 5, (timeCount * 75)/0.5, 5);
-				if (timeCount > 0.5) {
-					Robot.robotDrive.setLeftMotor(0);
-					Robot.robotDrive.setRightMotor(0);
-					sallyCase++;
-				}
-				break;
-			case 11: //starting here is currently untested it is meant to go back to the neutral zone
-				if (Robot.catapult.getShooterState() != 0) {
-					Robot.catapult.shootBoulder();
-				}
-				if (Robot.robotDrive.gyroTurn(0)) {
-					sallyCase++;
-				}
-				break;
-			case 12:
-				if (Robot.catapult.getShooterState() != 0) {
-					Robot.catapult.shootBoulder();
-				}
-				Robot.robotDrive.goToDistance(-1000, -1000, 0.8, 10, 10, 0.6, 0.7);
-				if (Robot.robotDrive.getBackLightSensorValue() > 1200) {
-					sallyCase++;
-				}
-				break;
-			case 13:
-				if (Robot.catapult.getShooterState() != 0) {
-					Robot.catapult.shootBoulder();
-				}
-				Robot.robotDrive.goToDistance(-1000, -1000, 0.8, 10, 10, 0.6, 0.7);
-				if (Robot.robotDrive.isFlat()) {
-					Robot.robotDrive.setLeftMotor(0);
-					Robot.robotDrive.setRightMotor(0);
-					sallyCase++;
-				}
-				break;
-			case 14:
-				if (Robot.catapult.getShooterState() != 0) {
-					Robot.catapult.shootBoulder();
-				}
-				break;
-			}
+		case 2: // if defense selector is 2 it will run sallyport
+			sallyPort_Auto();
 			break;
 		}
 		//System.out.println("Case: " + drawBridgeCase + " AUTO MODE: " + Robot.autoMode());
+	}
+
+	private void sallyPort_Auto() {
+		switch(sallyCase) { // comments in drawbridge are almost the same as applies here, look at that
+		case 0: // drives forward until front of robot is on autoworks
+			Robot.robotDrive.goToDistance(1000, 1000, 0.6, 10, 10, 0.4, 0.4);//188
+			if (Robot.robotDrive.getFrontLightSensorValue() > 1200) {
+				Robot.robotDrive.resetGoToDistanceState();
+				count = 0;
+				sallyCase++;
+			}
+			break;
+		case 1: //drive forward until robot gets stopped by the sally port
+			Robot.robotDrive.goToDistance(1000, 1000, 0.4, 0, 0, 0.4, 0.4);//188
+			if (Math.abs(Robot.robotDrive.getLeftSpeed()) < 50 && count > 10) {
+				Robot.robotDrive.setLeftMotor(0); //stops left motor
+				Robot.robotDrive.setRightMotor(0); //stops right motor
+				Robot.manipulatorArm.setManipulatorElbowMode(5); //set manipulator elbow to position mode
+		    	Robot.manipulatorArm.setManipulatorWristMode(5); // sets manipulator wrist to position mode
+		    	Robot.manipulatorArm.resetCount();
+		    	Robot.manipulatorArm.resetSallyState(); //resets the sally port method state
+		    	Robot.robotDrive.resetGoToDistanceState();
+				sallyCase++;
+			}
+			count++;
+			break;
+		case 2://runs the sally port routine
+			if (Robot.manipulatorArm.sallyPort()) { 
+				sallyCase++;
+			}
+			break;
+		case 3: // drives forward until the robot is completely on carpet again
+			Robot.robotDrive.goToDistance(1000, 1000, 0.8, 30, 30, 0.4, 0.4);
+			if(Robot.robotDrive.isFlat()) {
+				Robot.robotDrive.resetGoToDistanceState();
+				sallyCase++;
+			}
+			break;
+		case 4: // checks if the position is two it will move forward more, otherwise it will just move on
+			if (autoPosition == 2) {
+				if (Robot.robotDrive.goToDistance(75, 75, 0.8, 30, 30, 0.4, 0.4)) {
+					Robot.robotDrive.resetGoToDistanceState();
+					sallyCase++;
+				}
+			}
+			else {
+				sallyCase++;
+			}
+			
+			break;	
+		case 5: // turns the robot a specified amount based on position
+			if(Robot.robotDrive.gyroTurn(amountToTurn)) {
+				sallyCase++;
+				Robot.robotDrive.resetGoToDistanceState();
+			}
+			break;
+		case 6: // prepares the camera lights and moves the two arms out of the way
+			Robot.camera.cameraLightsOn();
+			Robot.robotDrive.autoAimInit();
+			Robot.manipulatorArm.setManipulatorMode("ShootMode");
+			Robot.pickupArm.setArmMode("ShootMode");
+			sallyCase++;
+			break;
+		case 7://auto aims
+			if(Robot.robotDrive.autoAim()) {
+				sallyCase++;
+				Robot.camera.cameraLightsOff();
+			}
+			else {
+				Robot.camera.cameraLightsOn();
+			}
+			break;
+		case 8: // shoots
+			Robot.catapult.shootBoulder();
+			count ++;
+			if (count > 40) { // just so it doens't move immediatly after shooting
+				sallyCase++;
+				count = 0;
+			}
+			break;
+		case 9: //prepares to move back to neutral zone
+			Robot.catapult.shootBoulder();
+			Robot.robotDrive.resetEncoders();
+			timeCount = 0;
+			sallyCase++;
+			break;
+		case 10: // moves back slightly
+			
+			if (Robot.catapult.getShooterState() != 0) { // if catapult isn't done shooting this continues it
+				Robot.catapult.shootBoulder();
+			}
+			timeCount += fpgaDiff; //keeps acurate track of time
+			Robot.robotDrive.DrivePath((timeCount * 75) / 0.5, 5, (timeCount * 75)/0.5, 5);
+			if (timeCount > 0.5) {
+				Robot.robotDrive.setLeftMotor(0);
+				Robot.robotDrive.setRightMotor(0);
+				sallyCase++;
+			}
+			break;
+		case 11: //starting here is currently untested it is meant to go back to the neutral zone, turns straight to be ready to move back to neutral zone
+			if (Robot.catapult.getShooterState() != 0) {
+				Robot.catapult.shootBoulder();
+			}
+			if (Robot.robotDrive.gyroTurn(0)) { // straightens out 
+				sallyCase++;
+			}
+			break;
+		case 12: // moves back until back of robot sees the outer works
+			if (Robot.catapult.getShooterState() != 0) {
+				Robot.catapult.shootBoulder();
+			}
+			Robot.robotDrive.goToDistance(-1000, -1000, 0.8, 10, 10, 0.6, 0.7);
+			if (Robot.robotDrive.getBackLightSensorValue() > 1200) {
+				Robot.robotDrive.resetGoToDistanceState();
+				sallyCase++;
+			}
+			break;
+		case 13://moves back until robot is on carpet again (completely in neutral zone again)
+			if (Robot.catapult.getShooterState() != 0) {
+				Robot.catapult.shootBoulder();
+			}
+			Robot.robotDrive.goToDistance(-1000, -1000, 0.8, 10, 10, 0.6, 0.7);
+			if (Robot.robotDrive.isFlat()) {
+				Robot.robotDrive.resetGoToDistanceState();
+				Robot.robotDrive.setLeftMotor(0);
+				Robot.robotDrive.setRightMotor(0);
+				sallyCase++;
+			}
+			break;
+		case 14: // continues calling shoot if it hasn't finished yet
+			if (Robot.catapult.getShooterState() != 0) {
+				Robot.catapult.shootBoulder();
+			}
+			break;
+		}
 	}
 
 	private void drawBridgeAuto() {
@@ -430,7 +436,7 @@ public class AutonomousCommand extends Command {
 
 	private void low_Bar_Auto() {
 		switch(lowBarCase) {
-		case 0:
+		case 0: //moves forward until front sees the outer work
 			//Robot.robotDrive.resetGyro();
 			Robot.robotDrive.goToDistance(1000, 1000, 0.8, 30, 30, 0.4, 0.4);//188
 			if (Robot.robotDrive.getFrontLightSensorValue() > 1200) {
@@ -438,47 +444,48 @@ public class AutonomousCommand extends Command {
 				lowBarCase++;
 			}
 			break;
-		case 1:
+		case 1: //puts arm down to lowbar position, and moves forward until the robot clears the outerworks
 			Robot.pickupArm.setArmMode("lowBar");
 			Robot.robotDrive.goToDistance(1000, 1000, 0.6, 30, 30, 0.4, 0.4);//188
 			if (Robot.robotDrive.isFlat()) {
-				Robot.manipulatorArm.setManipulatorElbowMode(5);
-				Robot.manipulatorArm.setManipulatorWristMode(5);
-				Robot.manipulatorArm.readyToShoot();
+				Robot.manipulatorArm.setManipulatorElbowMode(5); //sets manipulator elbow mode to position
+				Robot.manipulatorArm.setManipulatorWristMode(5); //sets manipulator wrist mode to position
+				Robot.manipulatorArm.readyToShoot(); //moves manipulator to ready to shoot position
 				Robot.robotDrive.resetGoToDistanceState();
 				lowBarCase++;
 			}
 			break;
-		case 2:
+		case 2: //moves forward specified distance
 			if (Robot.robotDrive.goToDistance(190, 190, 0.8, 30, 30, 0.4, 0.4)) {
 				lowBarCase++;
 				Robot.robotDrive.resetEncoders();
 				timeIdx = 0;
 			}
 			break;
-		case 3:
-			double speed = 10;
-			double leftPos = timeIdx * speed;
-			double rightPos = timeIdx * -speed;
-			if (timeIdx < 150 / speed) {
-				Robot.robotDrive.DrivePath(leftPos, speed * 5, rightPos, -(speed * 5));
-			} else {
-				Robot.robotDrive.DrivePath(150, 0, -150, 0);
-			}
-			if (timeIdx > 200 / speed) {
-				Robot.robotDrive.setLeftMotor(0);
-				Robot.robotDrive.setRightMotor(0);
-				lowBarCase++;
-			}
-			timeIdx++;
+		case 3: //turns towards the target
+//			double speed = 10;
+//			double leftPos = timeIdx * speed;
+//			double rightPos = timeIdx * -speed;
+//			if (timeIdx < 150 / speed) {
+//				Robot.robotDrive.DrivePath(leftPos, speed * 5, rightPos, -(speed * 5));
+//			} else {
+//				Robot.robotDrive.DrivePath(150, 0, -150, 0);
+//			}
+//			if (timeIdx > 200 / speed) {
+//				Robot.robotDrive.setLeftMotor(0);
+//				Robot.robotDrive.setRightMotor(0);
+//				lowBarCase++;
+//			}
+//			timeIdx++;
+			Robot.robotDrive.gyroTurn(45);
 			break;
-		case 4:
+		case 4://prepares camera lights for auto aiming
 			Robot.camera.cameraLightsOn();
 			Robot.robotDrive.autoAimInit();
 			Robot.manipulatorArm.setManipulatorMode("ShootMode");
 			lowBarCase++;
 			break;
-		case 5:
+		case 5: // auto aims
 			if(Robot.robotDrive.autoAim()) {
 				lowBarCase++;
 				Robot.camera.cameraLightsOff();
@@ -487,7 +494,7 @@ public class AutonomousCommand extends Command {
 				Robot.camera.cameraLightsOn();
 			}
 			break;
-		case 6:
+		case 6: //shoots
 			Robot.catapult.shootBoulder();
 			count ++;
 			if (count > 40) { // just so it doens't move immediatly after shooting
@@ -495,7 +502,7 @@ public class AutonomousCommand extends Command {
 				count = 0;
 			}
 			break;
-		case 7:
+		case 7: //simply straightens out again, can't move back through the low bar
 			Robot.catapult.shootBoulder();
 			Robot.robotDrive.gyroTurn(0);
 		break;
@@ -503,7 +510,7 @@ public class AutonomousCommand extends Command {
 	}
 	
 
-	private void rampartsAuto() {
+	private void rampartsAuto() { //don't really use these
 		switch(rampartCase) {
 		case MOVE_TO_OUTER_WORKS:
 			if (Robot.robotDrive.goToDistance(140, 140, 0.5, 30, 30, 0.2, 0.2)) {
@@ -578,7 +585,7 @@ public class AutonomousCommand extends Command {
 		}
 	}
 
-	private void moatAuto() {
+	private void moatAuto() { //we don't use this one either
 		switch(moatCase)  {
 		case MOVE_TO_OUTER_WORKS:
 			//Robot.robotDrive.resetGyro();
@@ -692,7 +699,7 @@ public class AutonomousCommand extends Command {
 	protected void end() {
 		//System.out.println("previous auto state : " + Robot.catapult.getShooterState());
 		//Robot.catapult.setPreviousShooterState(Robot.catapult.getShooterState());
-		Robot.catapult.setWinchMotor(0);
+		Robot.catapult.setWinchMotor(0); // stops the winch so it doesn't keep going after auto
 		Robot.robotDrive.setIsInAuto(false);
 	}
 

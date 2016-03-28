@@ -5,6 +5,6 @@ public class ManipulatorArmTest {
 		ManipulatorArm.comboindex=2;
 		ManipulatorArm.speed_mult=1;
 //		ManipulatorArmV2.time=0.02;
-		ManipulatorArm.posPrint(0.02);
+//		ManipulatorArm.posPrint(0.02);
 	}
 }

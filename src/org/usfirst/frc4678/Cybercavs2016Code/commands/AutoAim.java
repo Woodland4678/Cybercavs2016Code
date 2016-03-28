@@ -41,14 +41,14 @@ public class AutoAim extends Command {
     protected void initialize() {
     	Robot.camera.cameraLightsOn();
     	Robot.robotDrive.autoAimInit();
-    	Robot.manipulatorArm.setManipulatorMode("ShootMode");
-    	Robot.pickupArm.setArmMode("ShootMode");
+    	Robot.manipulatorArm.setManipulatorMode("ShootMode"); //moves manipulator out of the way
+    	Robot.pickupArm.setArmMode("ShootMode"); // moves pickup arm out of the way
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	if(Robot.robotDrive.autoAim()) {
-    		Robot.camera.cameraLightsOff();
+    		Robot.camera.cameraLightsOff(); //if auto aim on target turns light off
     	}
     	Robot.camera.cameraLightsOn();
     }

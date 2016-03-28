@@ -302,7 +302,7 @@ public class PickupArm extends Subsystem {
 	////////// Functions to set Arms positions//////////
 	////////////////////////////////////////////////////
 	
-	public void setElbowPosition(int position) {
+	public void setElbowPosition(int position) { //function to move the elbow with pid movement
 		if ((pickupElbowMotor.getPosition() < 11000) && (armMode == "Hold")) {
 			pickupElbowMotor.configPeakOutputVoltage(+3f, -3f); // lowers power when arm is close to hold position
 		}
@@ -348,7 +348,11 @@ public class PickupArm extends Subsystem {
 			if (pickupElbowMotor.getEncPosition() > (elbowHoldPosition + 28000)) {
 				pickupWristMotor.changeControlMode(TalonControlMode.Position);
 				setWristPosition(wristPickupPosition);
-				setPickupWheels(Robot.pickupWheelsPower());
+				if (Robot.oi.getOperatorGamepad().getRawButton(9)) {
+					setPickupWheels(-Robot.pickupWheelsPower());
+				} else {
+					setPickupWheels(Robot.pickupWheelsPower());
+				}
 			}
 			else {
 				pickupWristMotor.changeControlMode(TalonControlMode.Voltage);
@@ -368,6 +372,11 @@ public class PickupArm extends Subsystem {
 		break;
 		case 1://moves the wrist out and the elbow down to lift the ball over the bumper
 			//System.out.println("IN CASE 1!!!!");
+			if (Robot.oi.getOperatorGamepad().getRawButton(9)) {
+				setPickupWheels(-Robot.pickupWheelsPower());
+			} else {
+				setPickupWheels(Robot.pickupWheelsPower());
+			}
 			setWristPosition(wristPickupPosition + 1000); 
 			setElbowPosition(elbowPickupPosition + 2000);
 			if (!ballSensor.get()) {
@@ -390,11 +399,11 @@ public class PickupArm extends Subsystem {
 	}
 	public void holdPosition() {
 		setElbowPosition(elbowHoldPosition);
-		if (Math.abs(pickupElbowMotor.getError()) < 1000) {
+		if (Math.abs(pickupElbowMotor.getError()) < 1000) { //moves the elbow first once within an error then moves wrist
 			pickupWristMotor.changeControlMode(TalonControlMode.Position);
 			setWristPosition(wristHoldPosition);
 		}
-		else {
+		else { //stops the wrist if elbow not inposition yet
 			pickupWristMotor.changeControlMode(TalonControlMode.Voltage);
 			pickupWristMotor.set(0);
 		}
@@ -419,16 +428,16 @@ public class PickupArm extends Subsystem {
 //		case 2: //move elbow up to give the ball more push out the robot
 //			setElbowPosition(elbowSpitOutPosition + 8500); 
 		
-		case 0:
+		case 0: //reversed the pickup wheels and sets the wrist position
 			setPickupWheels(-Robot.pickupWheelsPower());
 			setWristPosition(Robot.holdWristPosition());
-			if (count > 2) {
+			if (count > 2) { //give very small time for the ball to get moving out of the robot
 				count = 0;
 				spitState++;
 			}
 			count++;
 			break;
-		case 1:
+		case 1: //moves the elbow and the wrist out to give the ball a push
 			setElbowPosition(Robot.holdElbowPosition() + 11000);
 			setWristPosition(Robot.holdWristPosition() + 8000);
 			break;
@@ -450,7 +459,7 @@ public class PickupArm extends Subsystem {
 //			break;
 //		}
 		setElbowPosition(elbowLowBarPosition);
-		if (pickupElbowMotor.getError() < 200 && count > 10 || elbowInLowPos) {
+		if (pickupElbowMotor.getError() < 200 && count > 10 || elbowInLowPos) { // moves the elbow first, once its in position wrist can be moved
 			count = 0;
 			pickupWristMotor.changeControlMode(TalonControlMode.Position);
 			pickupWristMotor.set(wristLowBarPosition);
@@ -484,9 +493,9 @@ public class PickupArm extends Subsystem {
 	public void stopIntakeWheels() {
 		pickupWheels.disable();
 	}
-	public void CalibratePickup() {
-		wristStartPosition = (pickupWristMotor.getPulseWidthPosition() % 4096);
-		elbowStartPosition = (pickupElbowMotor.getPulseWidthPosition() % 4096);
+	public void CalibratePickup() { //this runs in robotinit
+		wristStartPosition = (pickupWristMotor.getPulseWidthPosition() % 4096); //there are 4096 encoder clicks per revolution
+		elbowStartPosition = (pickupElbowMotor.getPulseWidthPosition() % 4096);// doing this gets them to start in the expected position
 		if (wristStartPosition < 0) {
 			wristStartPosition = wristStartPosition + 4096;
 		}
@@ -501,7 +510,7 @@ public class PickupArm extends Subsystem {
 		pickupWristMotor.setEncPosition(wristStartPosition);
 		pickupElbowMotor.setEncPosition(elbowStartPosition);
 	}
-	public void pickupOsc() {
+	public void pickupOsc() { //test code to make the pickup arm follow a path
 		kElbow = 0.6;
 		kWrist = 0.6;
 		wristPosition = (positionSpeed[cnt][0]);
