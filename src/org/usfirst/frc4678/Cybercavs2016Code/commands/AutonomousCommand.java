@@ -79,13 +79,13 @@ public class AutonomousCommand extends Command {
 	protected void initialize() {
 		autoDefense = 0;
 		autoPosition = 0;
-		if (Robot.oi.getAutoSwitch().getRawButton(16)) { //determines which position the switch is in for auto mode
+		if (Robot.oi.getAutoSwitch().getRawButton(14)) { //determines which position the switch is in for auto mode
 			autoDefense += 1;
 		}
 		if (Robot.oi.getAutoSwitch().getRawButton(15)) { 
 			autoDefense += 2;
 		}
-		if (Robot.oi.getAutoSwitch().getRawButton(14)) { 
+		if (Robot.oi.getAutoSwitch().getRawButton(16)) { 
 			autoDefense += 4;
 		}
 		
