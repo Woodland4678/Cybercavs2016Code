@@ -303,6 +303,14 @@ public class Robot extends IterativeRobot {
 //        }
 //        return prefs.getInt("autoPosition", 1);
 //    }
+    
+    public static double pixToTurnMax() {
+        Preferences prefs = Preferences.getInstance();
+        if (!prefs.containsKey("pixToTurnMax")) {
+            prefs.putDouble("pixToTurnMax", 1.0);
+        }
+        return prefs.getDouble("pixToTurnMax", 1.0);
+    }
 	Command autonomousCommand;
 
 	public static OI oi;

@@ -85,12 +85,13 @@ public class ManipulatorArm extends Subsystem {
     int wristPortcullisPosition = Robot.manipulatorWristRestPosition() - 8887;
     int wristRestPosition = Robot.manipulatorWristRestPosition();
     int wristStraightUpPosition = Robot.manipulatorWristRestPosition() - 35799;
-    int wristSallyReady = Robot.manipulatorWristRestPosition() - 15086;
+    int wristSallyReady = Robot.manipulatorWristRestPosition() - 15586;
+    int wristSallyPull = Robot.manipulatorWristRestPosition() - 13586;
     int drawBridgeWristReady = Robot.manipulatorWristRestPosition() - 29834;
     int wristSecondPosition = Robot.manipulatorWristRestPosition() - 10068;
     int wristThirdPosition = Robot.manipulatorWristRestPosition() - 13098;
     int wristFourthPosition = Robot.manipulatorWristRestPosition() - 11753;
-    int wristFifthPosition = Robot.manipulatorWristRestPosition() -17393
+    int wristFifthPosition = Robot.manipulatorWristRestPosition() -19393
 ;
 
     int wristPortcullisReady = Robot.manipulatorWristRestPosition() -9658;
@@ -104,11 +105,11 @@ public class ManipulatorArm extends Subsystem {
     int elbowAfterShootPosition = Robot.manipulatorElbowRestPosition() + 23337;
     int elbowStraightUpPosition = Robot.manipulatorElbowRestPosition() + 47493;
     int elbowSallyReady = Robot.manipulatorElbowRestPosition() + 42196;
-    int drawBridgeElbowReady = Robot.manipulatorElbowRestPosition() + 39548;
+    int drawBridgeElbowReady = Robot.manipulatorElbowRestPosition() + 47500;
     int elbowSecondPosition = Robot.manipulatorElbowRestPosition() + 20000; // was 15880
-    int elbowThirdPosition = Robot.manipulatorElbowRestPosition() + 59688;
-    int elbowFourthPosition = Robot.manipulatorElbowRestPosition() + 72387;
-    int elbowFifthPosition = Robot.manipulatorElbowRestPosition() + 74346;
+    int elbowThirdPosition = Robot.manipulatorElbowRestPosition() + 59688; // Push down
+    int elbowFourthPosition = Robot.manipulatorElbowRestPosition() + 72887; // Push down most of the way
+    int elbowFifthPosition = Robot.manipulatorElbowRestPosition() + 74846; // Push down drive forward a bit.
     int elbowSixthPosition = Robot.manipulatorElbowRestPosition() + 50000;
     
     int elbowPortcullisReady = Robot.manipulatorElbowRestPosition() + 70553;
@@ -117,8 +118,8 @@ public class ManipulatorArm extends Subsystem {
     int elbowPortcullisFourth = Robot.manipulatorElbowRestPosition() + 5786;
     
     int encoderSecondPosition = 338;
-    int encoderThirdPosition = 750;
-    int encoderFourthPosition = 750;
+    int encoderThirdPosition = 785;
+    int encoderFourthPosition = 785;
     int encoderFifthPosition = 273;
     
     int encoderSallyMax = 900;
@@ -250,7 +251,7 @@ public class ManipulatorArm extends Subsystem {
 	
 	
 	public void restMode() {
-		if (Math.abs(manipulatorElbow.getError()) < 2500 && count > 10) { //moves elbow first
+		if (Math.abs(manipulatorElbow.getError()) < 1000 && count > 10) { //moves elbow first
 			setManipulatorWrist(Robot.manipulatorWristRestPosition());
 		}
 		else {
@@ -331,7 +332,7 @@ public class ManipulatorArm extends Subsystem {
 	public void afterShoot() { //moves manipulator in a little bit after shooting so its not sticking out
 		setManipulatorElbow(elbowAfterShootPosition);
 		if (Math.abs(manipulatorElbow.getError()) < 100 && count > 10) {
-			setManipulatorWrist(wristRestPosition);
+			setManipulatorWrist(wristRestPosition - 3000);
 			count = 0;
 		}
 		count++;
@@ -356,6 +357,7 @@ public class ManipulatorArm extends Subsystem {
 				totalTime = 1.0;
 				timeCount = 0;
 				Robot.robotDrive.resetGoToDistanceState();
+				setManipulatorWrist(wristSallyPull); //used to push down harder on sally
 			}
 			count ++;
 		break;
@@ -373,7 +375,7 @@ public class ManipulatorArm extends Subsystem {
 //				timeCount = 0;
 //				totalTime = 1.0;
 //			}
-			if (Robot.robotDrive.goToDistance(-120, -120, 0.95, 5, 5, 0.9, 0.9)) {
+			if (Robot.robotDrive.goToDistance(-127, -127, 0.85, 40, 5, 0.5, 0.7)) { //was 0.75 for max and 5 for ramp up 
 				Robot.robotDrive.setRightMotor(0);
 				Robot.robotDrive.setLeftMotor(0);
 				sallyState++;
@@ -384,8 +386,10 @@ public class ManipulatorArm extends Subsystem {
 		case 3: //gives a slight delay before switching directions, without this the robot would quit
 			timeCount++;
 			if (timeCount > 15) {
+				Robot.robotDrive.resetGoToDistanceState();
 				sallyState++;
 			}
+			
 			break;
 		case 4://moves robot at a high speed forward to get past the sally port door, the front light sensor will indicate when we are done
 //			encoderPosition = (0 - encoderSallyMax) * timeCount / totalTime + encoderSallyMax;
@@ -394,7 +398,7 @@ public class ManipulatorArm extends Subsystem {
 //			Robot.robotDrive.setRightMotor(1);
 //			Robot.robotDrive.setLeftMotor(1);
 			Robot.robotDrive.goToDistance(1000, 1000, 0.95, 5, 5, 0.9, 0.9);
-			if (Robot.robotDrive.getFrontLightSensorValue() > 1200) {//indicates front is on the outer work, this means the routine is done
+			if (Robot.robotDrive.getFrontLightSensorValue() > 1250) {//indicates front is on the outer work, this means the routine is done
 				sallyState++;
 				Robot.robotDrive.setRightMotor(0);
 				Robot.robotDrive.setLeftMotor(0);

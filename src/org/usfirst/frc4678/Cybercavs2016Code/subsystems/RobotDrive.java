@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.interfaces.Accelerometer;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
@@ -70,6 +71,7 @@ public class RobotDrive extends Subsystem {
 	double previousRightEnc = 0;
 	double previousLeftEnc = 0;
 	double cameraXPos = 0;
+	int chevalState = 0;
 	
 	boolean isinAuto = true;
 	int retrycount = 0;
@@ -80,7 +82,7 @@ public class RobotDrive extends Subsystem {
 	
 	private final NetworkTable grip = NetworkTable.getTable("GRIP");
 	private double WIDTH = 320.0;
-	private double CENTERX = (WIDTH / 2) + 15; //decreaing makes robot go to the right
+	private double CENTERX = (WIDTH / 2) + 5; //decreaing makes robot go to the right
 	//private double PIXEL_ENCODER_RATIO = Robot.pixelsPerEncoderChange();
 //	private double AUTOAIM_TURN_RATE = Robot.autoAimTurnRate();
 //	private double AUTOAIM_MAX_POWER = Robot.autoAimMaxPower();
@@ -164,12 +166,12 @@ public class RobotDrive extends Subsystem {
 	/////////////////////////////////////
 	
 	public void setRightMotor(double power) {
-		rightMotor.set(-power);
+		rightMotor.set(power);
 		rightPower = power;
 	}
 
 	public void setLeftMotor(double power) {
-		leftMotor.set(power);
+		leftMotor.set(-power);
 		leftPower = power;
 	}
 	
@@ -188,6 +190,12 @@ public class RobotDrive extends Subsystem {
 	}
 	public void setIsInAuto(boolean val) {
 		isinAuto = val;
+	}
+	public void resetChevalState() {
+		chevalState = 0;
+	}
+	public void resetCount() {
+		count = 0;
 	}
 	
 	/////////////////////////////////////////
@@ -383,8 +391,8 @@ public class RobotDrive extends Subsystem {
 			gyroPower = MAXGYROPOWER;
 		if (gyroPower < -MAXGYROPOWER)
 			gyroPower = -MAXGYROPOWER;
-		setLeftMotor(-gyroPower);
-		setRightMotor(gyroPower);
+		setLeftMotor(gyroPower);
+		setRightMotor(-gyroPower);
 		if (Math.abs(gyroError) < 5) {
 			Robot.robotDrive.setLeftMotor(0);
 			Robot.robotDrive.setRightMotor(0);
@@ -396,7 +404,7 @@ public class RobotDrive extends Subsystem {
 	}
 
 	public boolean checkFrontLightSensorIsOnCarpet() {
-		if (frontLightSensor.getValue() < 800) {
+		if (frontLightSensor.getValue() < 1000) {
 			return true;
 		} else {
 			return false;
@@ -404,9 +412,10 @@ public class RobotDrive extends Subsystem {
 	}
 
 	public boolean checkBackLightSensorIsOnCarpet() {
-		if (backLightSensor.getValue() < 800) {
+		if (backLightSensor.getValue() < 1000) {
 			return true;
 		} else {
+			
 			return false;
 		}
 	}
@@ -478,7 +487,7 @@ public class RobotDrive extends Subsystem {
     	    			widest = 0;
     	    			pixelsToTurn = 0;
     	    			while(cnt < currentCenterXs.length) {
-    	    				if ((currentWidths[cnt] > widest)&&(currentCenterYs[cnt] < 175)&&(currentCenterYs[cnt] > 100)) {
+    	    				if ((currentWidths[cnt] > widest)&&(currentCenterYs[cnt] < 240)) {
     	    					widest = currentWidths[cnt];
     	    					wideidx = cnt;
     	   	        	    	pixelsToTurn = currentCenterXs[wideidx] - CENTERX;
@@ -501,21 +510,33 @@ public class RobotDrive extends Subsystem {
 
     	    	// try mult = 0.735 for pixelsToTurn at 10 Going with 0.74
     	    	// try mult = 0.7 for pixelsToTurn at 40 seemed to work ok.
-    	    	double pixelmult = (Robot.pixelsPerEncoderChange() - 0.76)*(Math.abs(pixelsToTurn) - 10)/30.0 + 0.76 ;
+    			// changing pixels to turn formula to work for 100 pixels at max and 10 picels at min.
+    			// Min at 0.74 encoder to pixel calc.  Max at 
+    	    	double pixelmult = (Robot.pixelsPerEncoderChange() - Robot.pixToTurnMax())*(Math.abs(pixelsToTurn) - 10)/90.0 + Robot.pixToTurnMax() ;
     	    	resetEncoders();
-    	    	targleft = pixelsToTurn * pixelmult;
+    	    	targleft = -pixelsToTurn * pixelmult;
     	    	System.out.println("pixelmult = "+pixelmult);
     	    	targright = -targleft;
-    	    	System.out.println("pixelsToTurn:" + pixelsToTurn+" CENTERX = "+CENTERX+" Targets("+targleft+","+targright+")");
+    	    	System.out.println("pixelsToTurn:" + pixelsToTurn+" pixelmult= "+ pixelmult +" CENTERX = "+CENTERX+" Targets("+targleft+","+targright+")");
     			state++;
     			break;
     		case 4:
+				cameraXPos = 0;
     			currentCenterXs = grip.getNumberArray("myContoursReport/centerX", new double[]{});
     			currentCenterYs = grip.getNumberArray("myContoursReport/centerY", new double[]{});
-    			if (currentCenterXs.length > 0)
-    				cameraXPos = currentCenterXs[0];
-    			else 
-    				cameraXPos = 0;
+					// Find the CenterX closest to CENTERX and see how close we are.
+    			closecnt = 0;
+    			closest = 10000.0;
+    			while(closecnt < currentCenterXs.length) {
+    				double tmp = Math.abs(currentCenterXs[closecnt] - CENTERX);
+    				if ((tmp < closest)&&(currentCenterYs[closecnt] < 240)) {
+    					closest = tmp;
+    					closeidx = closecnt;
+    					cameraXPos = currentCenterXs[closecnt]; // This is the closest contour as the robot is turning.
+    				}
+    				closecnt++;
+    			}
+				System.out.println("Encoders during findTarget"+ Robot.robotDrive.getRightEncoder() + ", " + Robot.robotDrive.getLeftEncoder() + " cameraXPos = "+cameraXPos);
     			if (findTarget()) {
     				setLeftMotor(0);
     				setRightMotor(0);
@@ -538,7 +559,7 @@ public class RobotDrive extends Subsystem {
         	    			closest = 10000.0;
         	    			while(closecnt < currentCenterXs.length) {
         	    				double tmp = Math.abs(currentCenterXs[closecnt] - CENTERX);
-        	    				if ((tmp < closest)&&(currentCenterYs[closecnt] < 175)&&(currentCenterYs[closecnt] > 100)) {
+        	    				if ((tmp < closest)&&(currentCenterYs[closecnt] < 240)) {
         	    					closest = tmp;
         	    					closeidx = closecnt;
         	    				}
@@ -546,7 +567,7 @@ public class RobotDrive extends Subsystem {
         	    			}
         	    			if (currentCenterXs.length > 0) {
 	        	    			double tmp = Math.abs(currentCenterXs[closeidx] - CENTERX);
-	        	    			if (tmp > 2) { // Not Close enough.  Let's try again.
+	        	    			if (tmp > 3) { // Not Close enough.  Let's try again.
 	           	        	    	pixelsToTurn = currentCenterXs[closeidx] - CENTERX; // Here's how far we need to turn
 	           	        	    	state = 3; // State 3 takes care of things once we've set pixelsToTurn
 	           	        	    	retrycount++; // Keep track of how many times we re-try.
@@ -682,6 +703,83 @@ public class RobotDrive extends Subsystem {
     	setRightMotor(-rightpwr);
     	
     }
+    
+    double timecnt,totaltime;
+    double fpgaDiff, lastFPGA;
+    public boolean Cheval() {
+		fpgaDiff = Timer.getFPGATimestamp() - lastFPGA; //acurate time tracker
+		lastFPGA = Timer.getFPGATimestamp();
 
+    	switch(chevalState) {
+    	case 0:
+    		goToDistance(-100, -100, 0.35, 5, 5, 0.3, 0.2);
+    		if (getLeftSpeed() < 30 && count > 5) {
+    			chevalState++;
+    			count = 0;
+    		}
+    		count++;
+    		break;
+    	case 1:
+    		Robot.pickupArm.setArmMode("lowBar");
+    		if (Robot.pickupArm.getElbowError() < 200) {
+    			chevalState++;
+    			timecnt = 0;
+    			totaltime = 0.5;
+    			resetEncoders();
+    		}
+    		break;
+    	case 2: // Use DrivePath.  use +ve values for backwards, -ve values to go forward
+    		timecnt += fpgaDiff;
+    		DrivePath(-200*timecnt/totaltime,-10,-200*timecnt/totaltime,-10);
+    		if (timecnt >= totaltime) {
+    			chevalState++;
+    			count = 0;	
+    			resetEncoders();
+    		}    		
+    		break;
+    	case 3://slight delay before switching directions
+    		DrivePath(0,0,0,0); // Tell drive train to stop completely
+    		if (count > 10) {
+    			chevalState++;
+    			count = 0;
+    			timecnt = 0;
+    			totaltime = 0.55;
+    		}
+    		count ++;
+    		break;
+    	case 4:
+    		timecnt += fpgaDiff;
+    		DrivePath(500*timecnt/totaltime,10,500*timecnt/totaltime,10);
+    		if (timecnt >= totaltime) {
+    			chevalState++;
+    			count = 0;	
+    			resetEncoders();
+    		}    		
+    		break;
+    	case 5:
+    		Robot.pickupArm.setArmMode("Hold");
+			chevalState++;
+			count = 0;
+			timecnt = 0;
+			totaltime = 0.9; // Prepare to drive the rest of the way over the Cheval
+    		break;
+    	case 6:
+    		timecnt += fpgaDiff;
+    		DrivePath(700*timecnt/totaltime,10,700*timecnt/totaltime,10);
+    		if (timecnt >= totaltime) {
+    			chevalState++;
+    			count = 0;	
+    			resetEncoders();
+    		}
+    		break;
+    	case 7:
+    		Robot.robotDrive.setRightMotor(0);
+			Robot.robotDrive.setLeftMotor(0);
+    		return true;
+    		
+    	}
+    	return false;
+    	
+    }
 
 }

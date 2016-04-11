@@ -60,6 +60,10 @@ public class SetManipulatorArm extends Command {
     	if (Robot.oi.operatorGamepad.getPOV() == 0) {
     		Robot.manipulatorArm.setManipulatorMode("StraightUp");
     	}
+    	if (Robot.oi.operatorGamepad.getPOV() == 180) {
+    		Robot.manipulatorArm.resetCount();
+    		Robot.manipulatorArm.setManipulatorMode("Rest");
+    	}
 //    	operatorJoystickX = Robot.oi.getOperatorGamepad().getX();
 //    	operatorJoystickY = Robot.oi.getOperatorGamepad().getY();
 //    	if (Math.abs(operatorJoystickX) > 0.01) {
@@ -113,6 +117,12 @@ public class SetManipulatorArm extends Command {
     		Robot.manipulatorArm.setManipulatorElbowMode(5);
     		Robot.manipulatorArm.setManipulatorWristMode(5);
     		Robot.manipulatorArm.exitSallyPort();
+    	}
+    	else if (Robot.manipulatorArm.getManipulatorMode() == "Stop") {
+    		Robot.manipulatorArm.setManipulatorElbowMode(7);
+    		Robot.manipulatorArm.setManipulatorWristMode(7);
+    		Robot.manipulatorArm.setManipulatorElbow(0);
+    		Robot.manipulatorArm.setManipulatorWrist(0);
     	}
 //    	if (Robot.manipulatorArm.getManipulatorMode() == "Manual") {
 //    		if(operatorJoystickY > 0.4) {

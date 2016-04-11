@@ -38,6 +38,7 @@ public class PickupArmLowBarPosition extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
+    	Robot.pickupArm.resetElbowInLow();
     	Robot.pickupArm.setArmMode("lowBar");
     }
 

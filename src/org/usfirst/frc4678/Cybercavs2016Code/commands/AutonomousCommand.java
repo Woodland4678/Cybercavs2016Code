@@ -103,6 +103,7 @@ public class AutonomousCommand extends Command {
 		Robot.robotDrive.setIsInAuto(true);
 		Robot.robotDrive.resetGyro();
 		Robot.robotDrive.resetEncoders();
+		//Robot.robotDrive.resetGoToDistanceState();
 		Robot.pickupArm.setArmMode("Hold"); 
 		if (autoPosition == 2) { // if the auto position is two we will need to turn about 27 degrees right toward the target
 			amountToTurn = 27;
@@ -167,6 +168,7 @@ public class AutonomousCommand extends Command {
 		case 1: //drive forward until robot gets stopped by the sally port
 			Robot.robotDrive.goToDistance(1000, 1000, 0.4, 0, 0, 0.4, 0.4);//188
 			if (Math.abs(Robot.robotDrive.getLeftSpeed()) < 50 && count > 10) {
+				
 				Robot.robotDrive.setLeftMotor(0); //stops left motor
 				Robot.robotDrive.setRightMotor(0); //stops right motor
 				Robot.manipulatorArm.setManipulatorElbowMode(5); //set manipulator elbow to position mode
@@ -211,11 +213,18 @@ public class AutonomousCommand extends Command {
 		case 6: // prepares the camera lights and moves the two arms out of the way
 			Robot.camera.cameraLightsOn();
 			Robot.robotDrive.autoAimInit();
-			Robot.manipulatorArm.setManipulatorMode("ShootMode");
+			Robot.manipulatorArm.readyToShoot();
 			Robot.pickupArm.setArmMode("ShootMode");
+			count = 0;
 			sallyCase++;
 			break;
-		case 7://auto aims
+		case 7:
+			if (count > 10) {
+				sallyCase++;
+			}
+			count++;
+			break;
+		case 8://auto aims
 			if(Robot.robotDrive.autoAim()) {
 				sallyCase++;
 				Robot.camera.cameraLightsOff();
@@ -224,7 +233,7 @@ public class AutonomousCommand extends Command {
 				Robot.camera.cameraLightsOn();
 			}
 			break;
-		case 8: // shoots
+		case 9: // shoots
 			Robot.catapult.shootBoulder();
 			count ++;
 			if (count > 40) { // just so it doens't move immediatly after shooting
@@ -232,13 +241,13 @@ public class AutonomousCommand extends Command {
 				count = 0;
 			}
 			break;
-		case 9: //prepares to move back to neutral zone
+		case 10: //prepares to move back to neutral zone
 			Robot.catapult.shootBoulder();
 			Robot.robotDrive.resetEncoders();
 			timeCount = 0;
 			sallyCase++;
 			break;
-		case 10: // moves back slightly
+		case 11: // moves back slightly
 			
 			if (Robot.catapult.getShooterState() != 0) { // if catapult isn't done shooting this continues it
 				Robot.catapult.shootBoulder();
@@ -251,7 +260,7 @@ public class AutonomousCommand extends Command {
 				sallyCase++;
 			}
 			break;
-		case 11: //starting here is currently untested it is meant to go back to the neutral zone, turns straight to be ready to move back to neutral zone
+		case 12: //starting here is currently untested it is meant to go back to the neutral zone, turns straight to be ready to move back to neutral zone
 			if (Robot.catapult.getShooterState() != 0) {
 				Robot.catapult.shootBoulder();
 			}
@@ -259,7 +268,7 @@ public class AutonomousCommand extends Command {
 				sallyCase++;
 			}
 			break;
-		case 12: // moves back until back of robot sees the outer works
+		case 13: // moves back until back of robot sees the outer works
 			if (Robot.catapult.getShooterState() != 0) {
 				Robot.catapult.shootBoulder();
 			}
@@ -269,11 +278,11 @@ public class AutonomousCommand extends Command {
 				sallyCase++;
 			}
 			break;
-		case 13://moves back until robot is on carpet again (completely in neutral zone again)
+		case 14://moves back until robot is on carpet again (completely in neutral zone again)
 			if (Robot.catapult.getShooterState() != 0) {
 				Robot.catapult.shootBoulder();
 			}
-			Robot.robotDrive.goToDistance(-1000, -1000, 0.8, 10, 10, 0.6, 0.7);
+			Robot.robotDrive.goToDistance(-250, -250, 0.8, 10, 10, 0.6, 0.7);
 			if (Robot.robotDrive.isFlat()) {
 				Robot.robotDrive.resetGoToDistanceState();
 				Robot.robotDrive.setLeftMotor(0);
@@ -281,7 +290,7 @@ public class AutonomousCommand extends Command {
 				sallyCase++;
 			}
 			break;
-		case 14: // continues calling shoot if it hasn't finished yet
+		case 15: // continues calling shoot if it hasn't finished yet
 			if (Robot.catapult.getShooterState() != 0) {
 				Robot.catapult.shootBoulder();
 			}
@@ -293,14 +302,14 @@ public class AutonomousCommand extends Command {
 		switch(drawBridgeCase) {
 		case 0:
 			Robot.robotDrive.goToDistance(1000, 1000, 0.4, 30, 30, 0.4, 0.4);//moves forward until front reaches outer works
-			if (Robot.robotDrive.getFrontLightSensorValue() > 1200) {
+			if (Robot.robotDrive.getFrontLightSensorValue() > 1250) {
 				Robot.robotDrive.resetGoToDistanceState();
 				count = 0;
 				drawBridgeCase++;
 			}
 			break;
 		case 1:
-			Robot.robotDrive.goToDistance(1000, 1000, 0.3, 30, 30, 0.3, 0.3);//moves forward until wheel speed stops (means bumpers are against drawbridge)
+			Robot.robotDrive.goToDistance(1000, 1000, 0.45, 20, 20, 0.4, 0.4);//moves forward until wheel speed stops (means bumpers are against drawbridge)
 			if (Math.abs(Robot.robotDrive.getLeftSpeed()) < 50 && count > 10) {
 				Robot.robotDrive.setLeftMotor(0); // stop motors
 				Robot.robotDrive.setRightMotor(0);
@@ -411,7 +420,7 @@ public class AutonomousCommand extends Command {
 				Robot.catapult.shootBoulder();
 			}
 			Robot.robotDrive.goToDistance(-1000, -1000, 0.8, 10, 10, 0.6, 0.7);
-			if (Robot.robotDrive.getBackLightSensorValue() > 1200) {
+			if (Robot.robotDrive.getBackLightSensorValue() > 1250) {
 				drawBridgeCase++;
 			}
 			break;
@@ -420,7 +429,7 @@ public class AutonomousCommand extends Command {
 				Robot.catapult.shootBoulder();
 			}
 			Robot.robotDrive.goToDistance(-1000, -1000, 0.8, 10, 10, 0.6, 0.7);
-			if (Robot.robotDrive.isFlat()) {
+			if (Robot.robotDrive.checkBackLightSensorIsOnCarpet()) {
 				Robot.robotDrive.setLeftMotor(0);
 				Robot.robotDrive.setRightMotor(0);
 				drawBridgeCase++;
@@ -477,7 +486,9 @@ public class AutonomousCommand extends Command {
 //				lowBarCase++;
 //			}
 //			timeIdx++;
-			Robot.robotDrive.gyroTurn(45);
+			if(Robot.robotDrive.gyroTurn(45)) {
+				lowBarCase++;
+			}
 			break;
 		case 4://prepares camera lights for auto aiming
 			Robot.camera.cameraLightsOn();

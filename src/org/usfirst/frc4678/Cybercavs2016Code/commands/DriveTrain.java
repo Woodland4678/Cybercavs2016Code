@@ -97,7 +97,7 @@ public class DriveTrain extends Command {
 		SmartDashboard.putNumber("pickup wheels speed ", Robot.pickupArm.getPickupWheelsSpeed());
 		SmartDashboard.putNumber("Gyro: ", Robot.robotDrive.getGyroAngle());
 		
-		joyStickX = Robot.oi.driverGamepad.getX();
+		joyStickX = -Robot.oi.driverGamepad.getX();
 		joyStickY = Robot.oi.driverGamepad.getY();
 		SmartDashboard.putNumber("joystick X: ", joyStickX);
 		SmartDashboard.putNumber("joystick Y: ", joyStickY);
@@ -258,22 +258,22 @@ public class DriveTrain extends Command {
 			case 0:
 			break;
 			case 90:
-				leftPower *= -1;
+				rightPower *= -1;
 			break;
 			case 180:
 				rightPower *= -1;
 				leftPower *= -1;
 			break;
 			case 270:
-				rightPower *= -1;
+				leftPower *= -1;
 			break;
 			}
 		}
-		if (Robot.oi.getDriverGamepad().getRawButton(5)) { //mirrors drivetrain
-			temp = leftPower;
-			leftPower = -rightPower;
-			rightPower = -temp;
-		}
+//		if (Robot.oi.getDriverGamepad().getRawButton(5)) { //mirrors drivetrain
+//			temp = leftPower;
+//			leftPower = -rightPower;
+//			rightPower = -temp;
+//		}
 		Robot.robotDrive.setLeftMotor(-leftPower);
 		Robot.robotDrive.setRightMotor(-rightPower);
 	

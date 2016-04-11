@@ -38,29 +38,31 @@ public class Position2 extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	Robot.robotDrive.setTarget(-100, 100);
-    	Robot.robotDrive.resetEncoders();
+    	//Robot.robotDrive.setTarget(100, 100);
+    	//Robot.robotDrive.resetEncoders();
     }
 
-    boolean result = false;
+   // boolean result = false;
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	result = Robot.robotDrive.findTarget();
+    	Robot.manipulatorArm.setManipulatorMode("Stop");
+    	//result = Robot.robotDrive.findTarget();
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return result;
+        return true;
     }
 
     // Called once after isFinished returns true
     protected void end() {
-    	Robot.robotDrive.setRightMotor(0);
-    	Robot.robotDrive.setLeftMotor(0);
+    	//Robot.robotDrive.setRightMotor(0);
+    	//Robot.robotDrive.setLeftMotor(0);
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
+    	end();
     }
 }

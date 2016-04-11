@@ -60,13 +60,18 @@ public class SetPickupArm extends Command {
     	else if ((Robot.pickupArm.getArmMode()) == ("ShootMode")) {
     		Robot.pickupArm.readyToShoot();
     	}
+    	else if (Robot.pickupArm.getArmMode() == ("AlternateSpit")) {
+    		Robot.pickupArm.setPickupWheels(-Robot.pickupWheelsPower());
+    		Robot.pickupArm.setWristPosition(Robot.holdWristPosition() + 2900);
+    	}
+    	
     	else {//dicks
 //    		Robot.pickupArm.setArmMode("Hold");
     	}
-    	if (Robot.oi.getDriverGamepad().getRawButton(9)) {
-    		Robot.pickupArm.setPickupWheels(-Robot.pickupWheelsPower());
+    	if (Robot.oi.getOperatorGamepad().getRawButton(9)) {
+    		Robot.pickupArm.setArmMode("AlternateSpit");
     	}
-    	//System.out.println("Current Arm Mode: " + Robot.pickupArm.getArmMode());
+    	System.out.println("Current Arm Mode: " + Robot.pickupArm.getArmMode());
     }
 
     // Make this return true when this Command no longer needs to run execute()
