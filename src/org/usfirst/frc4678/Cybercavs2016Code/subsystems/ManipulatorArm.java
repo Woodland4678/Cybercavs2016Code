@@ -656,7 +656,9 @@ public class ManipulatorArm extends Subsystem {
 		}
 		
 	}
-	
+	public void calibrateManipulator() {
+		
+	}
 	
 	
 	

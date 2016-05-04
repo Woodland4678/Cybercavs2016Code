@@ -76,13 +76,10 @@ public class RobotDrive extends Subsystem {
 	boolean isinAuto = true;
 	int retrycount = 0;
 	
-    double targleft, targright;
-    double lastleftEncoder, lastrightEncoder, leftEncoderdiff, rightEncoderdiff;
-    int foundCount = 0;
 	
 	private final NetworkTable grip = NetworkTable.getTable("GRIP");
 	private double WIDTH = 320.0;
-	private double CENTERX = (WIDTH / 2) + 5; //decreaing makes robot go to the right
+	private double CENTERX = (WIDTH / 2) - 5; //decreaing makes robot go to the right
 	//private double PIXEL_ENCODER_RATIO = Robot.pixelsPerEncoderChange();
 //	private double AUTOAIM_TURN_RATE = Robot.autoAimTurnRate();
 //	private double AUTOAIM_MAX_POWER = Robot.autoAimMaxPower();
@@ -404,7 +401,7 @@ public class RobotDrive extends Subsystem {
 	}
 
 	public boolean checkFrontLightSensorIsOnCarpet() {
-		if (frontLightSensor.getValue() < 1000) {
+		if (frontLightSensor.getValue() < 900) {
 			return true;
 		} else {
 			return false;
@@ -412,7 +409,7 @@ public class RobotDrive extends Subsystem {
 	}
 
 	public boolean checkBackLightSensorIsOnCarpet() {
-		if (backLightSensor.getValue() < 1000) {
+		if (backLightSensor.getValue() < 900) {
 			return true;
 		} else {
 			
@@ -437,7 +434,7 @@ public class RobotDrive extends Subsystem {
     	setRightMotor(-power);
     }
     
-    public void autoAimInit() {
+	public void autoAimInit() {
     	state = 0;//AutoAimState.INITIAL;
     	cnt = 0;
     }
@@ -446,11 +443,19 @@ public class RobotDrive extends Subsystem {
     	targleft = left;
     	targright = right;
     }
+    
+    int prevRightEnc[] = new int[16];
+    int prevLeftEnc[] = new int[16];
+    int enccnt = 0;
+    double prevCenterX;
+    double pixelsToTarget = 0;
 
     // 1.4 pixels / encoder click (both wheels)
     public boolean autoAim() {
     	double leftDiff = previousLeftEnc - leftEncoder.get();
     	double rightDiff = previousRightEnc - rightEncoder.get();
+        int x;
+        double pctdiff = 0.0;
     	previousLeftEnc = leftEncoder.get();
     	previousRightEnc = rightEncoder.get();
     	switch(state) {
@@ -491,6 +496,7 @@ public class RobotDrive extends Subsystem {
     	    					widest = currentWidths[cnt];
     	    					wideidx = cnt;
     	   	        	    	pixelsToTurn = currentCenterXs[wideidx] - CENTERX;
+                                prevCenterX = currentCenterXs[wideidx]; // use to detect when currentCenterX changes.
     	    				}
     	    				cnt++;
     	    			}
@@ -518,35 +524,115 @@ public class RobotDrive extends Subsystem {
     	    	System.out.println("pixelmult = "+pixelmult);
     	    	targright = -targleft;
     	    	System.out.println("pixelsToTurn:" + pixelsToTurn+" pixelmult= "+ pixelmult +" CENTERX = "+CENTERX+" Targets("+targleft+","+targright+")");
+                enccnt = 0; // Count number of encoder readings.  Make sure we have at least 5 before we evaluate camera CenterX change.
     			state++;
     			break;
     		case 4:
 				cameraXPos = 0;
     			currentCenterXs = grip.getNumberArray("myContoursReport/centerX", new double[]{});
     			currentCenterYs = grip.getNumberArray("myContoursReport/centerY", new double[]{});
+    			currentWidths = grip.getNumberArray("myContoursReport/width",new double[]{});
 					// Find the CenterX closest to CENTERX and see how close we are.
-    			closecnt = 0;
-    			closest = 10000.0;
-    			while(closecnt < currentCenterXs.length) {
-    				double tmp = Math.abs(currentCenterXs[closecnt] - CENTERX);
-    				if ((tmp < closest)&&(currentCenterYs[closecnt] < 240)) {
-    					closest = tmp;
-    					closeidx = closecnt;
-    					cameraXPos = currentCenterXs[closecnt]; // This is the closest contour as the robot is turning.
+//    			closecnt = 0;
+//    			closest = 10000.0;
+//    			while(closecnt < currentCenterXs.length) {
+//    				double tmp = Math.abs(currentCenterXs[closecnt] - CENTERX);
+//    				if ((tmp < closest)&&(currentCenterYs[closecnt] < 240)) {
+//    					closest = tmp;
+//    					closeidx = closecnt;
+//    					cameraXPos = currentCenterXs[closecnt]; // This is the closest contour as the robot is turning.
+//    				}
+//    				closecnt++;
+//    			}
+    			
+    			// Find closest seems to cause problems.  Find the widest.  This should work better.
+    			cnt = 0;
+    			widest = 0;
+    			pixelsToTurn = 0;
+    			while(cnt < currentCenterXs.length) {
+    				if ((currentWidths[cnt] > widest)&&(currentCenterYs[cnt] < 240)) {
+    					widest = currentWidths[cnt];
+    					wideidx = cnt;
+   	        	    	// pixelsToTurn = currentCenterXs[wideidx] - CENTERX;
+                        cameraXPos = currentCenterXs[cnt]; // use to detect when currentCenterX changes.
     				}
-    				closecnt++;
+    				cnt++;
     			}
+    			
 				System.out.println("Encoders during findTarget"+ Robot.robotDrive.getRightEncoder() + ", " + Robot.robotDrive.getLeftEncoder() + " cameraXPos = "+cameraXPos);
     			if (findTarget()) {
     				setLeftMotor(0);
     				setRightMotor(0);
     				state++;
     				cnt = 0;
-    			}
+    				}
+                for(x = 15;x > 0;x--) {
+                    prevLeftEnc[x] = prevLeftEnc[x-1]; // keep last 16 encoder left and right
+                    prevRightEnc[x] = prevRightEnc[x-1]; // values so we can see where we were at when camera gets a new Center X.
+                    }
+                prevLeftEnc[0] = leftEncoder.get(); // Store current left and right encoder readings in element 0
+                prevRightEnc[0] = rightEncoder.get(); // of the arrays.
+                enccnt++; // Keep track of how many encoder readings we have
+                //System.out.println("enccnt = "+enccnt);
+                if (enccnt > 16) { // Make sure we have a history of encoder positions before considering camera image position updates.
+                    if (prevCenterX != cameraXPos) {// Camera reports a change in the target position.  Have a look
+                        // this image is where the encoders were about 5 or 6 readings ago.  Use those to see how well on-track we are.
+                        // These would be prevLeftEnc[6] and prevRightEnc[6]
+                        // adjust and correct the targright and targleft values on the fly to correct aim as we get closer to the target
+                        // Let's start with the equivalent of pixelsToTurn
+                        pixelsToTarget = cameraXPos - CENTERX; // Use new cameraXPos to determine how far we are from the target.
+                        // and get that into an encoder target value using the same formula as above but use a different variable.
+                        double pixelmult2 = (Robot.pixelsPerEncoderChange() - Robot.pixToTurnMax())*(Math.abs(pixelsToTarget) - 10)/90.0 + Robot.pixToTurnMax();
+                        double newtargleft = -pixelmult2 * pixelsToTarget; // Calculate the new target positions as they were 5/50 seconds ago.
+                        //double newtargright = -newtargleft; // ago when this camera image was taken.  This assumes a 0 encoder position when the 
+                        // turn started 6/50 seconds ago so we need to see what the encoders were really reading back then.
+                        // use [6] array element to have a look.  This should be pretty close so long as we're processing a 50Hz.
+                        int leftEnc6 = prevLeftEnc[6];
+                        int rightEnc6 = prevRightEnc[6];
+                        // basically, if we are right on track, newtargleft + leftEnc6 == targleft
+                        // and newtargright + rightEnc6 == targright.  Since leftEnc6 and rightEnc6 may not be perfectly in sync, we can
+                        // assume the actual encoder turn was more like encoder_turned = (leftEnc6 - rightEnc6) / 2.  This is for the left encoder.
+                        // we may want to leave targright and targleft alone in situations where leftEnc6 and rightEnc6 are not in sync
+                        // and hopefully, the next camera reading takes place when they pretty much equal (leftEnc6 == rightEnc6)
+                        // Let's calculate a correction for targleft and targright for now and print this information to see how things look.
+                        
+                        double encComplete = (leftEnc6 - rightEnc6) / 2; // This is how much of the turn we have completed (in encoder ticks)
+                        // The sign will be correct for targleft. Since rightEnc6 should be about equal to -leftEnc6. 
+                        // newtargleft + encComplete would be what we now think targleft should be.
+                        // Since targright = -targleft, we don't really need
+                        // to be calculating it.  We can just work with targleft and set targright = -targleft like we do in the original calculation.
+                        double adjustedtargleft = newtargleft + encComplete;
+                        
+                        // Calculate a % diff for leftEnc6 and rightEnc6
+                        // maybe just abs(leftEnc6 + rightEnc6) would be just as helpful.
+                        int encSum = Math.abs(leftEnc6 + rightEnc6);
+                        if (encComplete != 0) { // avoid div by 0 errors.
+                            pctdiff = Math.abs(encSum) / Math.abs(encComplete); // Get an idea as to how far off left and right encoders are.
+                            }
+                        else
+                            {
+                            pctdiff = 100.0; // Assume pctdiff is large if targleft is = 0
+                            }
+
+                            // Display the data we have indicating what our new target should be.
+                        System.out.println("Camera Adjustment image at "+cameraXPos+" leftEnc6="+leftEnc6+" rightEnc6="+rightEnc6+" encSum = "+encSum+" targleft="+targleft+" should be="+adjustedtargleft+" pctdiff="+pctdiff);
+                        
+                        // If encoders are off by less than 10%, assume we will allow a correction to the target
+                        // we might just want to check if encSum < 10 instead.
+                        if (pctdiff < 0.10) { // uncomment the following lines to allow for live camera target corrections to take place.
+                             targleft = adjustedtargleft;
+                             targright = -targleft;
+                            }
+                        prevCenterX = cameraXPos; // Update prevCenterX so we can detect the next camera position update.
+                        }
+                    }
+                else {
+                    prevCenterX = cameraXPos; // Make sure we only catch fresh camera update images, not the one as soon as enccnt > 16
+    				}
     	    	break;
     		case 5:
-    			// Robot encoders say we're at the right position.  Camera lag can be 25 to 30 cycles at 50Hz so
-    			// Assume the findTarget stuff has used up 12 of those, we need to acquire the image for another 25 cycles
+    			// Robot encoders say we're at the right position.  Camera lag is about 5 of 6 cycles at 50Hz so
+    			// Assume the findTarget stuff has used up 12 of those, we need to acquire the image for another 25 cycles (not really).
     			// Then assess if the position is good or not.  If not, repeat at case 3 with the new adjustment.
     			if (isinAuto) { // Only do this extra part when in Autonomous
     				cnt++; // Wait the 25 counts
@@ -582,10 +668,13 @@ public class RobotDrive extends Subsystem {
     					
     				}
     			}
-    			else
+    			else {
+    				state = 0;
     				return true;
+    			}
     			break;
     		case 6: // Done.  Do nothing for now.
+    			state = 0;
     			return true;
     			
     	}
@@ -594,13 +683,16 @@ public class RobotDrive extends Subsystem {
     }
     
     double left_PID_I = 0, right_PID_I = 0;
+    double targleft, targright;
+    double lastleftEncoder, lastrightEncoder, leftEncoderdiff, rightEncoderdiff;
+    int foundCount = 0;
     
     public boolean findTarget() {
     	// This routine will attempt to position encoders to match targleft and targright
     	// Using a fast and accurate PID-type control method.
     	double PFACTOR = 0.015;
     	double DFACTOR = 0.027; // was 0.065
-    	double IFACTOR = 0.005; // was 0.0055
+    	double IFACTOR = 0.004; // was 0.0055
     	double IRANGE = 13; // Only apply I when we get pretty close to the target.
     	double MAXPOWER = 0.6;
     	double left_PID_P, right_PID_P, left_PID_D, right_PID_D;

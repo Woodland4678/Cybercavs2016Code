@@ -77,6 +77,7 @@ public class AutonomousCommand extends Command {
 
 	// Called just before this Command runs the first time
 	protected void initialize() {
+		Robot.catapult.setLatchServo(Robot.latchLockPosition()); // Try to prevent bad launches in auto.
 		autoDefense = 0;
 		autoPosition = 0;
 		if (Robot.oi.getAutoSwitch().getRawButton(14)) { //determines which position the switch is in for auto mode
@@ -236,7 +237,7 @@ public class AutonomousCommand extends Command {
 		case 9: // shoots
 			Robot.catapult.shootBoulder();
 			count ++;
-			if (count > 40) { // just so it doens't move immediatly after shooting
+			if (count > 40) { // just so it doens't move immediately after shooting
 				sallyCase++;
 				count = 0;
 			}
@@ -272,8 +273,8 @@ public class AutonomousCommand extends Command {
 			if (Robot.catapult.getShooterState() != 0) {
 				Robot.catapult.shootBoulder();
 			}
-			Robot.robotDrive.goToDistance(-1000, -1000, 0.8, 10, 10, 0.6, 0.7);
-			if (Robot.robotDrive.getBackLightSensorValue() > 1200) {
+			Robot.robotDrive.goToDistance(-350, -350, 0.8, 10, 10, 0.6, 0.7);
+			if (Robot.robotDrive.getBackLightSensorValue() > 900) {
 				Robot.robotDrive.resetGoToDistanceState();
 				sallyCase++;
 			}

@@ -12,6 +12,7 @@ package org.usfirst.frc4678.Cybercavs2016Code.subsystems;
 
 import org.usfirst.frc4678.Cybercavs2016Code.Robot;
 import org.usfirst.frc4678.Cybercavs2016Code.RobotMap;
+import org.usfirst.frc4678.Cybercavs2016Code.commands.SetManipulatorArm;
 import org.usfirst.frc4678.Cybercavs2016Code.commands.SetPickupArm;
 
 import edu.wpi.first.wpilibj.CANTalon;
@@ -540,5 +541,35 @@ public class PickupArm extends Subsystem {
 	
 		
 		//System.out.println(wristPositionError + ", " + wristPosition + ", " + wristSpeed + ", " + elbowPositionError + ", " + elbowPosition +", " + elbowSpeed);
+	}
+	
+	int calPstate = 0;
+	public boolean calibratePickup() { // Before this routine is executed, need to make sure the catapult has been winched in.
+		boolean retval = false;
+		switch(calPstate) {
+			case 0: // Start with Elbow moving in and keep wrist power off
+				setElbowMode(4);
+				pickupElbowMotor.set(0.3);
+				setWristMode(4);
+				pickupWristMotor.set(0);
+				if (count > 10 && pickupElbowMotor.getSpeed() < 10) {
+					calPstate++;
+					count = 0;
+				}
+				count++;
+				break;
+			case 1: // When Elbow speed gets really slow (or 0), assume we are fully retracted
+				// Can set incremental encoders to equal the angle encoder reading. And initialize retract of wrist
+				// Set elbow to maintain position so motion of wrist does not just move the elbow.
+				break;
+			case 2: // When Wrist speed gets really slow (or 0), assume we are fully retracted.  There probably won't be
+				// a ball in the robot.  See if we can detect the difference based on the angular reading
+				break;
+			case 3: // We are done.  Return true
+				retval = true;
+				calPstate = 0; // Set state back to 0 in case we need to do this again.
+				break;
+		}
+	return retval; // Will return true when we get to the last case			
 	}
 }
