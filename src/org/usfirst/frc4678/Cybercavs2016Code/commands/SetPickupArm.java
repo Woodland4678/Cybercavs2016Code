@@ -62,14 +62,14 @@ public class SetPickupArm extends Command {
     	}
     	else if (Robot.pickupArm.getArmMode() == ("AlternateSpit")) {
     		Robot.pickupArm.setPickupWheels(-Robot.pickupWheelsPower());
-    		Robot.pickupArm.setWristPosition(Robot.holdWristPosition() + 2900);
     	}
     	
     	else {//dicks
 //    		Robot.pickupArm.setArmMode("Hold");
     	}
     	if (Robot.oi.getOperatorGamepad().getRawButton(9)) {
-    		Robot.pickupArm.setArmMode("AlternateSpit");
+    		//Robot.pickupArm.setArmMode("AlternateSpit");
+    		Robot.pickupArm.setPickupWheels(-Robot.pickupWheelsPower());
     	}
     	//System.out.println("Current Arm Mode: " + Robot.pickupArm.getArmMode());
     }

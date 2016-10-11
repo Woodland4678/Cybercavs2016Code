@@ -491,7 +491,7 @@ public class RobotDrive extends Subsystem {
     	    			cnt = 0;
     	    			widest = 0;
     	    			pixelsToTurn = 0;
-    	    			while(cnt < currentCenterXs.length) {
+    	    			while((cnt < currentCenterXs.length && cnt < currentCenterYs.length && cnt < currentWidths.length)) {
     	    				if ((currentWidths[cnt] > widest)&&(currentCenterYs[cnt] < 240)) {
     	    					widest = currentWidths[cnt];
     	    					wideidx = cnt;
@@ -549,7 +549,7 @@ public class RobotDrive extends Subsystem {
     			cnt = 0;
     			widest = 0;
     			pixelsToTurn = 0;
-    			while(cnt < currentCenterXs.length) {
+    			while(cnt < currentCenterXs.length && cnt < currentCenterYs.length && cnt < currentWidths.length) {
     				if ((currentWidths[cnt] > widest)&&(currentCenterYs[cnt] < 240)) {
     					widest = currentWidths[cnt];
     					wideidx = cnt;
