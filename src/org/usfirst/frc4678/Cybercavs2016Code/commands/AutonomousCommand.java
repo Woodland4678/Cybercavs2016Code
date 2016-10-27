@@ -49,6 +49,8 @@ public class AutonomousCommand extends Command {
 	int lowBarCase = 0;
 	int drawBridgeCase = 0;
 	int sallyCase = 0;
+	int roughCase = 0;
+	int chevalCase = 0;
 	int autoDefense = 0;
 	int autoPosition = 0;
 	double timeIdx = 0;
@@ -152,8 +154,232 @@ public class AutonomousCommand extends Command {
 		case 2: // if defense selector is 2 it will run sallyport
 			sallyPort_Auto();
 			break;
+		case 3:
+			roughTerrain_Auto();
+			break;
+		case 4:
+			switch(chevalCase){
+			case 0:
+				if (Robot.robotDrive.Cheval()) {
+					chevalCase++;
+					count = 0;
+				}
+				break;
+			case 1:
+				Robot.robotDrive.setLeftMotor(0);
+				Robot.robotDrive.setRightMotor(0);
+				if (count > 15) {
+					chevalCase++;
+					Robot.robotDrive.resetGoToDistanceState();
+				}
+				count++;
+				break;		
+			case 2:
+				Robot.robotDrive.goToDistance(-100, -100, 0.5, 10, 10, 0.4, 0.5);
+				if (Robot.robotDrive.getFrontLightSensorValue() > 1200) {
+					chevalCase++;
+					Robot.robotDrive.resetGoToDistanceState();
+					Robot.robotDrive.setLeftMotor(0);
+					Robot.robotDrive.setRightMotor(0);
+					count = 0;
+				}
+				break;
+			case 3:
+				if(Robot.robotDrive.gyroTurn(0)) {
+					if (count > 15) {
+						chevalCase++;
+						count = 0;
+					}
+					count++;
+				}
+				break;
+			case 4:
+				int backup = -75;
+				if (autoPosition == 2) {
+					backup -= 150;
+				}
+				if (Robot.robotDrive.goToDistance(backup, backup, 0.5, 10, 10, 0.4, 0.5)) {
+					chevalCase++;
+					Robot.robotDrive.resetGoToDistanceState();
+					Robot.robotDrive.setLeftMotor(0);
+					Robot.robotDrive.setRightMotor(0);
+				}
+				break;
+			case 5:
+				int addToTurn = 180;
+				if (autoPosition == 2) {
+					addToTurn = -160;
+				}
+				if(Robot.robotDrive.gyroTurn(amountToTurn + addToTurn)) {
+					chevalCase++;
+					Robot.robotDrive.resetGoToDistanceState();
+					Robot.robotDrive.setLeftMotor(0);
+					Robot.robotDrive.setRightMotor(0);
+				}
+				break;
+			case 6:
+				Robot.camera.cameraLightsOn();
+				Robot.robotDrive.autoAimInit();
+				Robot.manipulatorArm.readyToShoot();
+				Robot.pickupArm.setArmMode("ShootMode");
+				count = 0;
+				chevalCase++;
+				break;
+			case 7:
+				if (count > 10) {
+					chevalCase++;
+				}
+				count++;
+				break;
+			case 8://auto aims
+				if(Robot.robotDrive.autoAim()) {
+					chevalCase++;
+					Robot.camera.cameraLightsOff();
+				}
+				else {
+					Robot.camera.cameraLightsOn();
+				}
+				break;
+			case 9: // shoots
+				Robot.catapult.shootBoulder();
+				count ++;
+				if (count > 40) { // just so it doens't move immediately after shooting
+					chevalCase++;
+					count = 0;
+				}
+				break;
+			case 10:
+				if (Robot.catapult.getShooterState() != 0) {
+					Robot.catapult.shootBoulder();
+				}
+				if (Robot.robotDrive.gyroTurn(180)) { // straightens out 
+					count = 0;
+					roughCase++;
+				}
+				break;
+			}
+			break;
 		}
+		
 		//System.out.println("Case: " + drawBridgeCase + " AUTO MODE: " + Robot.autoMode());
+	}
+
+	private void roughTerrain_Auto() {
+		switch(roughCase) {
+		case 0:
+			Robot.robotDrive.goToDistance(1000, 1000, 0.90, 10, 10, 0.6, 0.6);
+			if(Robot.robotDrive.getFrontLightSensorValue() > 1200){
+				Robot.robotDrive.resetGoToDistanceState();
+				roughCase++;
+				count = 0;
+			}
+			break;
+		case 1:	
+			if (Robot.robotDrive.isFlat()) {
+				Robot.robotDrive.resetGoToDistanceState();
+				Robot.robotDrive.setLeftMotor(0);
+				Robot.robotDrive.setRightMotor(0);
+				if (count > 15) {
+					roughCase++;
+				}
+				count++;
+			}
+			else {
+				Robot.robotDrive.goToDistance(300, 300, 0.90, 10, 10, 0.6, 0.6);
+			}
+			break;
+		case 2:
+			if (autoPosition == 2) {
+				if (Robot.robotDrive.goToDistance(75, 75, 0.8, 30, 30, 0.4, 0.4)) {
+					Robot.robotDrive.resetGoToDistanceState();
+					roughCase++;
+				}
+			}
+			else {
+				roughCase++;
+			}
+			
+			break;	
+		case 3:
+			Robot.robotDrive.setLeftMotor(0);
+			Robot.robotDrive.setRightMotor(0);
+			roughCase++;
+			break;
+		case 4:
+			if(Robot.robotDrive.gyroTurn(amountToTurn)) {
+				roughCase++;
+				Robot.robotDrive.resetGoToDistanceState();
+			}
+			break;
+		case 5:
+			Robot.camera.cameraLightsOn();
+			Robot.robotDrive.autoAimInit();
+			Robot.manipulatorArm.readyToShoot();
+			Robot.pickupArm.setArmMode("ShootMode");
+			count = 0;
+			roughCase++;
+			break;
+		case 6:
+			if (count > 10) {
+				roughCase++;
+			}
+			count++;
+			break;
+		case 7://auto aims
+			if(Robot.robotDrive.autoAim()) {
+				roughCase++;
+				Robot.camera.cameraLightsOff();
+			}
+			else {
+				Robot.camera.cameraLightsOn();
+			}
+			break;
+		case 8: // shoots
+			Robot.catapult.shootBoulder();
+			count ++;
+			if (count > 40) { // just so it doens't move immediately after shooting
+				roughCase++;
+				count = 0;
+			}
+			break;
+		case 9: //prepares to move back to neutral zone
+			Robot.catapult.shootBoulder();
+			Robot.robotDrive.resetEncoders();
+			Robot.robotDrive.resetGoToDistanceState();
+			timeCount = 0;
+			roughCase++;
+			break;
+		case 10:
+			if (Robot.catapult.getShooterState() != 0) {
+				Robot.catapult.shootBoulder();
+			}
+			if (Robot.robotDrive.gyroTurn(0)) { // straightens out 
+				count = 0;
+				roughCase++;
+			}
+			break;
+		case 11:
+			if (count > 25) {
+				roughCase++;
+			}
+			count++;
+			break;
+		case 12:
+			if (Robot.catapult.getShooterState() != 0) {
+				Robot.catapult.shootBoulder();
+			}
+			if (Robot.robotDrive.goToDistance(-350, -350, 0.75, 20, 20, 0.5, 0.5)){
+				roughCase++;
+			}
+			break;
+		case 13:
+			if (Robot.catapult.getShooterState() != 0) {
+				Robot.catapult.shootBoulder();
+			}
+			Robot.robotDrive.setLeftMotor(0);
+			Robot.robotDrive.setRightMotor(0);
+			break;
+		}
 	}
 
 	private void sallyPort_Auto() {

@@ -79,7 +79,7 @@ public class RobotDrive extends Subsystem {
 	
 	private final NetworkTable grip = NetworkTable.getTable("GRIP");
 	private double WIDTH = 320.0;
-	private double CENTERX = (WIDTH / 2) - 5; //decreaing makes robot go to the right
+	private double CENTERX = (WIDTH / 2) - 0; //decreaing makes robot go to the right
 	//private double PIXEL_ENCODER_RATIO = Robot.pixelsPerEncoderChange();
 //	private double AUTOAIM_TURN_RATE = Robot.autoAimTurnRate();
 //	private double AUTOAIM_MAX_POWER = Robot.autoAimMaxPower();
@@ -492,7 +492,7 @@ public class RobotDrive extends Subsystem {
     	    			widest = 0;
     	    			pixelsToTurn = 0;
     	    			while((cnt < currentCenterXs.length && cnt < currentCenterYs.length && cnt < currentWidths.length)) {
-    	    				if ((currentWidths[cnt] > widest)&&(currentCenterYs[cnt] < 240)) {
+    	    				if ((currentWidths[cnt] > widest)&&(currentCenterYs[cnt] > 100)) {
     	    					widest = currentWidths[cnt];
     	    					wideidx = cnt;
     	   	        	    	pixelsToTurn = currentCenterXs[wideidx] - CENTERX;
@@ -550,7 +550,7 @@ public class RobotDrive extends Subsystem {
     			widest = 0;
     			pixelsToTurn = 0;
     			while(cnt < currentCenterXs.length && cnt < currentCenterYs.length && cnt < currentWidths.length) {
-    				if ((currentWidths[cnt] > widest)&&(currentCenterYs[cnt] < 240)) {
+    				if ((currentWidths[cnt] > widest)&&(currentCenterYs[cnt] > 100)) {
     					widest = currentWidths[cnt];
     					wideidx = cnt;
    	        	    	// pixelsToTurn = currentCenterXs[wideidx] - CENTERX;
@@ -643,9 +643,9 @@ public class RobotDrive extends Subsystem {
           					// Find the CenterX closest to CENTERX and see how close we are.
         	    			closecnt = 0;
         	    			closest = 10000.0;
-        	    			while(closecnt < currentCenterXs.length) {
+        	    			while((closecnt < currentCenterXs.length) && (closecnt < currentCenterYs.length)) {
         	    				double tmp = Math.abs(currentCenterXs[closecnt] - CENTERX);
-        	    				if ((tmp < closest)&&(currentCenterYs[closecnt] < 240)) {
+        	    				if ((tmp < closest)&&(currentCenterYs[closecnt] < 200)) {
         	    					closest = tmp;
         	    					closeidx = closecnt;
         	    				}
@@ -804,10 +804,11 @@ public class RobotDrive extends Subsystem {
 
     	switch(chevalState) {
     	case 0:
-    		goToDistance(-100, -100, 0.35, 5, 5, 0.3, 0.2);
+    		goToDistance(-150, -150, 0.35, 5, 5, 0.3, 0.2);
     		if (getLeftSpeed() < 30 && count > 5) {
     			chevalState++;
     			count = 0;
+    			resetGyro();
     		}
     		count++;
     		break;
@@ -853,11 +854,11 @@ public class RobotDrive extends Subsystem {
 			chevalState++;
 			count = 0;
 			timecnt = 0;
-			totaltime = 0.9; // Prepare to drive the rest of the way over the Cheval
+			totaltime = 1.1; // Prepare to drive the rest of the way over the Cheval
     		break;
     	case 6:
     		timecnt += fpgaDiff;
-    		DrivePath(700*timecnt/totaltime,10,700*timecnt/totaltime,10);
+    		DrivePath(900*timecnt/totaltime,10,900*timecnt/totaltime,10);
     		if (timecnt >= totaltime) {
     			chevalState++;
     			count = 0;	

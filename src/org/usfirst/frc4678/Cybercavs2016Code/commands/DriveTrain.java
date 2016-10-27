@@ -87,6 +87,7 @@ public class DriveTrain extends Command {
 		SmartDashboard.putBoolean("Back ball distance ", Robot.pickupArm.getBackSensor());
 		SmartDashboard.putNumber("Wrist Error: ", Robot.pickupArm.getWristError());
 		SmartDashboard.putBoolean("check switch: ", Robot.catapult.getLatchSwitch());
+		SmartDashboard.putBoolean("Winch Pot Failed: ", Robot.catapult.getWinchPotFailed());
 		SmartDashboard.putNumber("winch position ", Robot.catapult.getWinchPosition());
 		SmartDashboard.putNumber("left drive train speed: ", Robot.robotDrive.getLeftSpeed());
 		SmartDashboard.putNumber("Right drive train speed: ", Robot.robotDrive.getRightSpeed());
@@ -96,6 +97,8 @@ public class DriveTrain extends Command {
 		SmartDashboard.putNumber("Manipulator Wrist Encoder Position: ", Robot.manipulatorArm.getManipulatorWristPosition());
 		SmartDashboard.putNumber("pickup wheels speed ", Robot.pickupArm.getPickupWheelsSpeed());
 		SmartDashboard.putNumber("Gyro: ", Robot.robotDrive.getGyroAngle());
+		SmartDashboard.putNumber("Winch Current ", Robot.catapult.getWinchCurrent());
+		SmartDashboard.putNumber("Winch Pot Failed Count: ", Robot.catapult.getWinchPotFailedCount());
 		
 		joyStickX = -Robot.oi.driverGamepad.getX();
 		joyStickY = Robot.oi.driverGamepad.getY();

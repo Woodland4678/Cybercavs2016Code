@@ -152,9 +152,9 @@ public class PickupArm extends Subsystem {
 	int wristHoldPosition = Robot.holdWristPosition(); //spitout for wrist and elbow are now relative, if this issue later change back
 	int wristPickupPosition = Robot.holdWristPosition() + 16413;
 	int wristSpitOutPosition = Robot.holdWristPosition() + 7864;
-	int wristLowBarPosition = Robot.holdWristPosition() + 16000;
+	int wristLowBarPosition = Robot.holdWristPosition() + 19000;
 	int elbowHoldPosition = Robot.holdElbowPosition();
-	int elbowPickupPosition = Robot.holdElbowPosition() + 34712; //was 35712
+	int elbowPickupPosition = Robot.holdElbowPosition() + 36712; //was 34712
 	int elbowSpitOutPosition = Robot.holdElbowPosition() + 10270;
 	int elbowLowBarPosition = Robot.holdElbowPosition() + 43646;
 	int elbowShootPosition = Robot.holdElbowPosition() + 25938;
@@ -310,10 +310,10 @@ public class PickupArm extends Subsystem {
 	
 	public void setElbowPosition(int position) { //function to move the elbow with pid movement
 		if ((pickupElbowMotor.getPosition() < 11000) && (armMode == "Hold")) {
-			pickupElbowMotor.configPeakOutputVoltage(+3f, -3f); // lowers power when arm is close to hold position
+			pickupElbowMotor.configPeakOutputVoltage(+3f, -3f); // lowers power when arm is close to hold position //was 3
 		}
 		else {
-			pickupElbowMotor.configPeakOutputVoltage(+9f, -9f); //max and min power //was 8
+			pickupElbowMotor.configPeakOutputVoltage(+9f, -9f); //max and min power //was 9
 		}
 		pickupElbowMotor.setPID(0.3, 0.0, 0.0); //PID values
 		pickupElbowMotor.setAllowableClosedLoopErr(20);
@@ -322,7 +322,7 @@ public class PickupArm extends Subsystem {
 
 	public void setWristPosition(int position) {
 		if ((pickupElbowMotor.getPosition() < 11000) && (armMode == "Hold")) {
-			pickupWristMotor.configPeakOutputVoltage(+4f, -4f); // lowers power when arm close to hold
+			pickupWristMotor.configPeakOutputVoltage(+4f, -4f); // lowers power when arm close to hold //was 4
 		} else {
 			pickupWristMotor.configPeakOutputVoltage(6f, -6f);  //max and min power //was 6
 		}
@@ -359,21 +359,25 @@ public class PickupArm extends Subsystem {
 				} else {
 					setPickupWheels(Robot.pickupWheelsPower());
 				}
+				if (!backBallSensor.get()) { //starts incrementing count once the back sensor sees the ball
+					count++;			
+				}
+				else {
+					count = 0;
+				}
+				if (count > 15 || Robot.oi.driverGamepad.getRawButton(12)) { // after 15 counts (~1/4 of a second) it assumes the ball is centered and proceeds to pick up the ball
+					pickupState++;
+					count = 0;
+				}
+				if (!ballSensor.get()) {
+					pickupState=2;
+				}
 			}
 			else {
 				pickupWristMotor.changeControlMode(TalonControlMode.Voltage);
 				pickupWristMotor.set(0);
 			}
-			if (!backBallSensor.get()) { //starts incrementing count once the back sensor sees the ball
-				count++;			
-			}
-			else {
-				count = 0;
-			}
-			if (count > 15 || Robot.oi.driverGamepad.getRawButton(12)) { // after 15 counts (~1/4 of a second) it assumes the ball is centered and proceeds to pick up the ball
-				pickupState++;
-				count = 0;
-			}
+			
 
 		break;
 		case 1://moves the wrist out and the elbow down to lift the ball over the bumper
