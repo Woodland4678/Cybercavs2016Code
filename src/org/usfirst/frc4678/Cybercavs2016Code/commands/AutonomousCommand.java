@@ -176,7 +176,7 @@ public class AutonomousCommand extends Command {
 				break;		
 			case 2:
 				Robot.robotDrive.goToDistance(-100, -100, 0.5, 10, 10, 0.4, 0.5);
-				if (Robot.robotDrive.getFrontLightSensorValue() > 1200) {
+				if (Robot.robotDrive.getFrontLightSensorValue() < 1200) {
 					chevalCase++;
 					Robot.robotDrive.resetGoToDistanceState();
 					Robot.robotDrive.setLeftMotor(0);

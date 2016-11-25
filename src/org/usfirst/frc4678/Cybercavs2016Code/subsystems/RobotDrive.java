@@ -84,7 +84,17 @@ public class RobotDrive extends Subsystem {
 //	private double AUTOAIM_TURN_RATE = Robot.autoAimTurnRate();
 //	private double AUTOAIM_MAX_POWER = Robot.autoAimMaxPower();
 	private double[] currentCenterXs,currentCenterYs;
-	private double[] currentWidths;
+	private double MAXCENTERY = 90; // Ignore objects where Y co-ord is less than this value.  Won't see targets higher
+									// in the field of vision (ignore lights on the ceiling)
+									// 100 was good at Fall Fiesta.  0 would include everything.  240 would eliminate everything.
+	private double[] currentWidths,currentHeights;
+	//private double ratioWH; // ratio of width / height.  We want relatively square objects (ratio between 0.75 and 1.25)
+	private double MINWH = 1.0;
+	private double MAXWH = 1.60;
+	private double MINWID = 25;
+	private double MAXWID = 55;
+	private double MINHT = 15;
+	private double MAXHT = 45;
 	
 	enum AutoAimState {
 		INITIAL,
@@ -401,7 +411,7 @@ public class RobotDrive extends Subsystem {
 	}
 
 	public boolean checkFrontLightSensorIsOnCarpet() {
-		if (frontLightSensor.getValue() < 900) {
+		if (frontLightSensor.getValue() < 1000) {
 			return true;
 		} else {
 			return false;
@@ -409,7 +419,7 @@ public class RobotDrive extends Subsystem {
 	}
 
 	public boolean checkBackLightSensorIsOnCarpet() {
-		if (backLightSensor.getValue() < 900) {
+		if (backLightSensor.getValue() < 1000) {
 			return true;
 		} else {
 			
@@ -477,6 +487,7 @@ public class RobotDrive extends Subsystem {
     			currentCenterXs = grip.getNumberArray("myContoursReport/centerX", new double[]{});
     			currentCenterYs = grip.getNumberArray("myContoursReport/centerY", new double[]{});
     			currentWidths = grip.getNumberArray("myContoursReport/width",new double[]{});
+    			currentHeights = grip.getNumberArray("myContoursReport/height",new double[]{});
 	    		//System.out.println("Looking for contours" + currentCenterXs.length);    	    	
     			if (currentCenterXs.length == 0) {
     	    		setTurnPower(0);
@@ -491,8 +502,10 @@ public class RobotDrive extends Subsystem {
     	    			cnt = 0;
     	    			widest = 0;
     	    			pixelsToTurn = 0;
-    	    			while((cnt < currentCenterXs.length && cnt < currentCenterYs.length && cnt < currentWidths.length)) {
-    	    				if ((currentWidths[cnt] > widest)&&(currentCenterYs[cnt] > 100)) {
+    	    			while((cnt < currentCenterXs.length && cnt < currentCenterYs.length && cnt < currentWidths.length && cnt < currentHeights.length)) {
+    	    				System.out.println("01: WIDTHS: " + currentWidths[cnt] + "HEIGHTS: " + currentHeights[cnt]);
+    	    				if ((currentWidths[cnt] > widest)&&(currentCenterYs[cnt] > MAXCENTERY)&&(currentWidths[cnt] > MINWID)&&(currentWidths[cnt]<MAXWID)&&(currentHeights[cnt] > MINHT)&&(currentHeights[cnt] < MAXHT)) {
+        	    				System.out.println("1: WIDTHS: " + currentWidths[cnt] + "HEIGHTS: " + currentHeights[cnt]);
     	    					widest = currentWidths[cnt];
     	    					wideidx = cnt;
     	   	        	    	pixelsToTurn = currentCenterXs[wideidx] - CENTERX;
@@ -532,6 +545,7 @@ public class RobotDrive extends Subsystem {
     			currentCenterXs = grip.getNumberArray("myContoursReport/centerX", new double[]{});
     			currentCenterYs = grip.getNumberArray("myContoursReport/centerY", new double[]{});
     			currentWidths = grip.getNumberArray("myContoursReport/width",new double[]{});
+    			currentHeights = grip.getNumberArray("myContoursReport/height",new double[]{});
 					// Find the CenterX closest to CENTERX and see how close we are.
 //    			closecnt = 0;
 //    			closest = 10000.0;
@@ -549,8 +563,10 @@ public class RobotDrive extends Subsystem {
     			cnt = 0;
     			widest = 0;
     			pixelsToTurn = 0;
-    			while(cnt < currentCenterXs.length && cnt < currentCenterYs.length && cnt < currentWidths.length) {
-    				if ((currentWidths[cnt] > widest)&&(currentCenterYs[cnt] > 100)) {
+    			while(cnt < currentCenterXs.length && cnt < currentCenterYs.length && cnt < currentWidths.length && cnt < currentHeights.length) {
+    				System.out.println("02: WIDTHS: " + currentWidths[cnt] + "HEIGHTS: " + currentHeights[cnt]);
+    				if ((currentWidths[cnt] > widest)&&(currentCenterYs[cnt] > MAXCENTERY)&&(currentWidths[cnt] > MINWID)&&(currentWidths[cnt]<MAXWID)&&(currentHeights[cnt] > MINHT)&&(currentHeights[cnt] < MAXHT)) {
+        				System.out.println("2: WIDTHS: " + currentWidths[cnt] + "HEIGHTS: " + currentHeights[cnt]);
     					widest = currentWidths[cnt];
     					wideidx = cnt;
    	        	    	// pixelsToTurn = currentCenterXs[wideidx] - CENTERX;
@@ -640,18 +656,23 @@ public class RobotDrive extends Subsystem {
         				if (retrycount < 5) { // give up after 5 re-tries
         	    			currentCenterXs = grip.getNumberArray("myContoursReport/centerX", new double[]{});
         	    			currentCenterYs = grip.getNumberArray("myContoursReport/centerY", new double[]{});
+        	    			currentWidths = grip.getNumberArray("myContoursReport/width",new double[]{});
+        	    			currentHeights = grip.getNumberArray("myContoursReport/height",new double[]{});
           					// Find the CenterX closest to CENTERX and see how close we are.
         	    			closecnt = 0;
         	    			closest = 10000.0;
-        	    			while((closecnt < currentCenterXs.length) && (closecnt < currentCenterYs.length)) {
+        	    			closeidx = -1;
+        	    			while((closecnt < currentCenterXs.length) && (closecnt < currentCenterYs.length) &&(closecnt < currentWidths.length)&&(closecnt < currentHeights.length)) {
+        	    				System.out.println("03: WIDTH: " + currentWidths[closecnt]);
         	    				double tmp = Math.abs(currentCenterXs[closecnt] - CENTERX);
-        	    				if ((tmp < closest)&&(currentCenterYs[closecnt] < 200)) {
+        	    				if ((tmp < closest)&&(currentCenterYs[closecnt] > MAXCENTERY)&&(currentWidths[closecnt] > MINWID)&&(currentWidths[closecnt]<MAXWID)&&(currentHeights[closecnt] > MINHT)&&(currentHeights[closecnt] < MAXHT)) {
+            	    				System.out.println("3: WIDTH: " + currentWidths[closecnt]);
         	    					closest = tmp;
         	    					closeidx = closecnt;
         	    				}
         	    				closecnt++;
         	    			}
-        	    			if (currentCenterXs.length > 0) {
+        	    			if (currentCenterXs.length > 0 &&(closeidx >= 0)) {
 	        	    			double tmp = Math.abs(currentCenterXs[closeidx] - CENTERX);
 	        	    			if (tmp > 3) { // Not Close enough.  Let's try again.
 	           	        	    	pixelsToTurn = currentCenterXs[closeidx] - CENTERX; // Here's how far we need to turn
@@ -805,7 +826,7 @@ public class RobotDrive extends Subsystem {
     	switch(chevalState) {
     	case 0:
     		goToDistance(-150, -150, 0.35, 5, 5, 0.3, 0.2);
-    		if (getLeftSpeed() < 30 && count > 5) {
+    		if (getLeftSpeed() < 30 && count > 15) {
     			chevalState++;
     			count = 0;
     			resetGyro();

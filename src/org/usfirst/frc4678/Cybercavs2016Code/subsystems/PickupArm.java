@@ -157,7 +157,7 @@ public class PickupArm extends Subsystem {
 	int elbowPickupPosition = Robot.holdElbowPosition() + 36712; //was 34712
 	int elbowSpitOutPosition = Robot.holdElbowPosition() + 10270;
 	int elbowLowBarPosition = Robot.holdElbowPosition() + 43646;
-	int elbowShootPosition = Robot.holdElbowPosition() + 25938;
+	int elbowShootPosition = Robot.holdElbowPosition() + 27501;
 
 	// Put methods for controlling this subsystem
 	// here. Call these from Commands.

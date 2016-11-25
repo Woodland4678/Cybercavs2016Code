@@ -57,9 +57,9 @@ public class SetManipulatorArm extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() { // this is the default command of manipulator arm it is always called unless something interrupts it.
-    	if (Robot.oi.operatorGamepad.getPOV() == 0) {
-    		Robot.manipulatorArm.setManipulatorMode("StraightUp");
-    	}
+    	//if (Robot.oi.operatorGamepad.getPOV() == 0) {
+    	//	Robot.manipulatorArm.setManipulatorMode("StraightUp");
+    	//}
     	if (Robot.oi.operatorGamepad.getPOV() == 180) {
     		Robot.manipulatorArm.resetCount();
     		Robot.manipulatorArm.setManipulatorMode("Rest");
